@@ -7,33 +7,51 @@ BigCalendar.momentLocalizer(moment);
 
 const { Component } = React;
 
-// Basically when the modal launches then need to have the z-index change
-// of the calendar component
-
 class Login extends Component {
 
   constructor(p) {
     super(p);
-    this.state = {username: '', password:''};
+    this.state = {
+      username: '',
+      password:'',
+      email_valid: false
+    };
   }
 
-  try_login = e => {
+  form_action = (register_account, e) => {
     e.preventDefault();
-    this.setState({username:'', password:''});
+    if (register_account)
+      console.log('register button pushed');
+    else
+      console.log('sign in button pushed');
+
+    this.setState({username:'', password:'', email_valid: false});
+    this.props.close_modal();
   };
+
+  username_changed = e => {
+    const s = this.state;
+    s.username = e.target.value;
+    // Returns true if the element's value
+    // has no validity problems; false otherwise.
+    s.email_valid = e.target.validity.valid;
+    this.setState(s);
+  }
 
   render () {
     return (
       <form>
-        <p>Login so that you can write blog posts or add tech events.</p>
+        <p>
+          Login so that you can add tech events, do not use
+          anything serious for your password.
+        </p>
         <hr/>
         <div>
           <label>Username</label>
-          <input type={'text'}
+          <input type={'email'}
                  value={this.state.username}
                  placeholder={'someusername'}
-                 onChange={e =>
-            this.setState({...this.state, username:e.target.value})}
+                 onChange={this.username_changed}
             />
         </div>
         <div>
@@ -47,9 +65,11 @@ class Login extends Component {
         </div>
         <div>
           <input type={'button'}
-                 onClick={this.try_login}
+                 onClick={this.form_action.bind(this, true)}
                  value={'Register an account'}/>
-          <input type={'submit'} value={'Sign in'}/>
+          <input type={'submit'}
+                 onClick={this.form_action.bind(this, false)}
+                 value={'Sign in'}/>
         </div>
       </form>
     );
@@ -58,7 +78,7 @@ class Login extends Component {
 
 class Banner extends Component {
 
-  state = {open:false}
+  state = {open:true}
 
   static defaultProps = {
     header_s: {
@@ -74,7 +94,7 @@ class Banner extends Component {
     this.setState({open:!this.state.open});
   }
 
-  request_close = e => this.setState({open:!this.state.open});
+  // request_close = e => this.setState({open:!this.state.open});
 
   render () {
     const login_s = {
@@ -91,6 +111,7 @@ class Banner extends Component {
       },
       content:{ }
     };
+
     return (
       <div>
         <header style={this.props.header_s}>
@@ -99,7 +120,7 @@ class Banner extends Component {
           </h1>
           <div>
             <p>
-              All the tech events in Armenia
+              All the tech events in Armenia  🇦🇲
             </p>
             <p>
               <span onClick={this.login_handler}
@@ -107,9 +128,8 @@ class Banner extends Component {
             </p>
             <Modal
               style={modal_s}
-              onRequestClose={this.request_close}
               isOpen={this.state.open}>
-              <Login/>
+              <Login close_modal={() => this.setState({open:false})}/>
             </Modal>
           </div>
         </header>
@@ -138,7 +158,7 @@ class TechCalendar extends Component {
       backgroundColor:'white',
       minHeight:'80vh',
       minWidth:'100%',
-      zIndex:'-100'
+      zIndex:this.props.z_value
     };
 
     return (
@@ -157,11 +177,19 @@ class TechCalendar extends Component {
 
 export default
 class _ extends Component {
+  state = {calendar_z_value: '0'}
+
   render () {
     return (
       <div>
-        <Banner/>
-        <TechCalendar/>
+        <Banner push_calendar={should_push => {
+            if (should_push) {
+              this.setState({calendar_z_value:'-100'});
+            } else {
+              this.setState({calendar_z_value:'0'});
+            }
+          }}/>
+          <TechCalendar z_value={this.state.calendar_z_value}/>
       </div>
     );
   }
