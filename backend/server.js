@@ -2,7 +2,7 @@
 
 const express = require('express');
 const createElement = require('react').createElement;
-const renderToString  = require('react-dom/server').renderToString;
+const render = require('react-dom/server').renderToString;
 const frontend = require('../lib/silicondzor').default;
 const body_parser = require('body-parser');
 const session = require('express-session');
@@ -22,12 +22,10 @@ silicon_dzor.use(session({
 // This needs to come from a database
 const tech_events = [];
 
-const rendered = renderToString(createElement(frontend, null));
+const rendered = render(createElement(frontend, null));
 const font =
       'https://fonts.googleapis.com/css?family=Poppins';
 
-// Could also add all the chat messages, turn this into a function call,
-// which is what will probably happen anyway.
 const site =`
 <!doctype html>
 <meta charset="utf-8">

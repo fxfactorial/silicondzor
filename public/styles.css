@@ -1,0 +1,21 @@
+/*  Basic resets for modern browsers */
+* { margin:0; padding:0; }
+html { box-sizing: border-box; }
+*, *:before, *:after { box-sizing: inherit; }
+/*  Basic resets for modern browsers */
+
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+
+* { font-family: 'Raleway', sans-serif; }
+
+@media (max-width: 600px) {
+  header {
+    font-size:medium;
+  }
+}
+
+@media (min-width: 601px) {
+  header {
+    font-size:xx-large;
+  }
+}
