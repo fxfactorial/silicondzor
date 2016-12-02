@@ -27,29 +27,27 @@ silicon_dzor.use(session({
 if (process.env.NODE_ENV === 'DEBUG') {
   setImmediate(() => {
     db
-      .run(`insert into account 
+      .run(`
+insert into account 
 (email, hashed_password, is_verified) 
 values ($email, $hashed, $is_verified)`, {
-	$email: 'edgar.factorial@gmail.com',
-	$hashed: bcrypt.hashSync('hello', 10),
-	$is_verified: 1
+  $email: 'edgar.factorial@gmail.com',
+  $hashed: bcrypt.hashSync('hello', 10),
+  $is_verified: 1})
+      .run(`
+insert into event values ($title, $all_day, $start, $end, $description, 0)`, {
+  $title: 'Hour of Code Yerevan mentor meetup',
+  $all_day: true,
+  $start: (new Date(2016, 11, 18)).getTime(),
+  $end: (new Date(2016, 11, 19)).getTime(),
+  $description: 'Mentor kids with code!'
 });
-      // .run(`insert into event values ($title, $all_day, $start, $end, $description, 0)`, {
-      // 	$title: 'Hour of Code Yerevan mentor meetup',
-      // 	$all_day: true,
-      // 	$start: (new Date(2016, 12, 18)).getTime(),
-      // 	$end: (new Date(2016, 12, 19)).getTime(),
-      // 	$description: 'Mentor kids with code!'
-      // });
   });
 }
 
-let tech_events = [];
-setImmediate(() => db.all('select * from account', (_, d) => tech_events = d));
-
 const rendered = render(createElement(frontend, null));
 
-const site = () => `
+const site = tech_events => `
 <!doctype html>
 <meta charset="utf-8">
 <head>
@@ -69,8 +67,19 @@ const site = () => `
 
 silicon_dzor.get('/', (req, res) => {
   res.setHeader('content-type', 'text/html');
-  console.log(tech_events);
-  res.end(site());
+  db.all('select * from event', (_, d) => {
+    const transformed = d.map(item => {
+      return {
+	title:item.title,
+	allDay: item.all_day ? true : false,
+	start: new Date(item.start),
+	end: new Date(item.end),
+	desc: item.description
+      };
+    });
+    console.log(transformed);
+    res.end(site(transformed));
+  });
 });
 
 silicon_dzor.post('/new-account', json_parser, form_parser, (req, res) => {

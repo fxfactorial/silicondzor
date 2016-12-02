@@ -153,6 +153,10 @@ class Banner extends Component {
 
 class TechCalendar extends Component {
 
+  state = {
+    events: []
+  }
+
   static defaultProps = {
     tech_calendar_s: {
       minHeight: '80vh',
@@ -160,6 +164,10 @@ class TechCalendar extends Component {
       alignItems: 'center',
       justifyContent: 'center'
     }
+  }
+
+  componentDidMount() {
+    this.setState({events: window.__ALL_TECH_EVENTS__});
   }
 
   selectedDate = e => {
@@ -182,7 +190,7 @@ class TechCalendar extends Component {
           popup
           timeslots={1}
           onSelectSlot={this.selectedDate}
-          events={[]}
+          events={this.state.events}
           />
       </div>
     );
