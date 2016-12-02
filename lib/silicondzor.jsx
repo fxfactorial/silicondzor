@@ -23,7 +23,7 @@ const modal_s = {
     top:'15vh',
     left:'20vw',
     right:'20vw',
-    bottom:'40vh'
+    bottom:'35vh'
   },
   content:{ }
 };
@@ -163,6 +163,14 @@ class TechEvent extends Component {
     event_description:''
   }
 
+  submit_event = () => {
+    this.props.submit_event({
+	...this.state,
+      start:this.props.start,
+      end:this.props.end
+    });
+  }
+
   render() {
     const tech_s = {
       display:'flex',
@@ -171,10 +179,9 @@ class TechEvent extends Component {
     return (
       <div>
 	<form>
-	  <p>
-	    Tech event starting from
-	    {this.props.start.toLocaleString()} to {this.props.end.toLocaleString()}
-	  </p>
+	  <p> Tech event starting from </p>
+	  <p> {this.props.start.toLocaleString()} to </p>
+	  <p> {this.props.end.toLocaleString()} </p>
 	  <hr/>
 	  <div style={tech_s} className={'modal-inputs'}>
 	    <label> Event title </label>
@@ -190,8 +197,7 @@ class TechEvent extends Component {
 		this.setState({...this.state, event_description:e.target.value})}/>
 		<input type={'submit'}
 		       value={'Create Event'}
-		       onClick={_ => this.props.submit_event(this.state)}
-		       />
+		       onClick={_ => this.submit_event()}/>
 	  </div>
 	</form>
       </div>
@@ -223,16 +229,26 @@ class TechCalendar extends Component {
 
   selectedDate = e => {
     console.log(e);
-    this.setState({...this.state,
-		   start_date: e.start,
-		   end_date:e.end,
-		   modal_show:true});
-    // fetch('/add-tech-event', request_opts(JSON.stringify(e)))
-    //   .then(resp => resp.json())
-    //   .then(result => {
-    // 	// Need to add to the total events
-    // 	console.log(result);
-    //   });
+    this.setState({...this.state, modal_show:true});
+  }
+
+  submit_event = event_details => {
+    console.log('Ping!', event_details);
+
+    fetch('/add-tech-event', request_opts(JSON.stringify(event_details)))
+      .then(resp => resp.json())
+      .then(result => {
+	const s = this.state;
+	s.events.push({
+	  title:event_details.event_title,
+	  start:event_details.start,
+	  desc:event_details.event_description,
+	  end:event_details.end
+	});
+	this.setState(s);
+    	// Need to add to the total events
+    	console.log(result);
+      });
   }
 
   render () {
@@ -258,7 +274,7 @@ class TechCalendar extends Component {
 	  style={modal_s}
 	  isOpen={this.state.modal_show}>
 	  <TechEvent
-	    submit_event={o => console.log(o)}
+	    submit_event={this.submit_event}
 	    start={this.state.start_date}
 	    end={this.state.end_date}/>
 	</Modal>

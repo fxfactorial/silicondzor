@@ -77,20 +77,20 @@ silicon_dzor.get('/', (req, res) => {
 	desc: item.description
       };
     });
-    console.log(transformed);
+    // console.log(transformed);
     res.end(site(transformed));
   });
 });
 
 silicon_dzor.post('/new-account', json_parser, form_parser, (req, res) => {
   const {username, password} = req.body;
-  console.log(username);
+  // console.log(username);
   res.end(JSON.stringify({result:'success'}));
 });
 
 silicon_dzor.post('/sign-in', json_parser, form_parser, (req, res) => {
   const {username, password} = req.body;
-  console.log(username);
+  // console.log(username);
   res.end(JSON.stringify({result:'success'}));
 });
 
