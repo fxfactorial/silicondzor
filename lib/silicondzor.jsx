@@ -7,6 +7,27 @@ BigCalendar.momentLocalizer(moment);
 
 const { Component } = React;
 
+const request_opts = body => {
+  return {
+    method:'post',
+    headers: new Headers({
+      'content-type':'application/json'
+    }),
+    body
+  };
+};
+
+const modal_s = {
+  overlay: {
+    position:'fixed',
+    top:'15vh',
+    left:'20vw',
+    right:'20vw',
+    bottom:'40vh'
+  },
+  content:{ }
+};
+
 class Login extends Component {
 
   constructor(p) {
@@ -22,16 +43,11 @@ class Login extends Component {
     e.preventDefault();
     const query =
           register_account ? '/new-account' : '/sign-in';
-    const request_opts = {
-      method:'post',
-      headers: new Headers({
-        'content-type':'application/json'
-      }),
-      body:JSON.stringify({username:this.state.username,
-			   password: this.state.password})
-    };
+    const opts =
+	  request_opts(JSON.stringify({username:this.state.username,
+				       password: this.state.password}));
 
-    fetch(query, request_opts)
+    fetch(query, opts)
       .then(resp => resp.json())
       .then(answer => {
         console.log(`Got reply: ${JSON.stringify(answer)}`);
@@ -62,14 +78,13 @@ class Login extends Component {
           anything serious for your password.
         </p>
         <hr/>
-        <div style={form_s} className={'login-inputs'}>
+        <div style={form_s} className={'modal-inputs'}>
           <label>Username</label>
           <input type={'email'}
                  value={this.state.username}
                  placeholder={'must be an email address'}
                  onChange={this.username_changed}
                  />
-
           <label>Password</label>
           <input type={'password'}
                  placeholder={'not a serious password'}
@@ -91,7 +106,7 @@ class Login extends Component {
 
 class Banner extends Component {
 
-  state = {open:true}
+  state = {open:false}
 
   static defaultProps = {
     header_s: {
@@ -113,16 +128,6 @@ class Banner extends Component {
     const login_s = {
       cursor:'pointer',
       textDecoration:'underline'
-    };
-    const modal_s = {
-      overlay: {
-        position:'fixed',
-        top:'15vh',
-        left:'20vw',
-        right:'20vw',
-        bottom:'40vh'
-      },
-      content:{ }
     };
 
     return (
@@ -151,10 +156,56 @@ class Banner extends Component {
   }
 };
 
+class TechEvent extends Component {
+
+  state = {
+    event_title:'',
+    event_description:''
+  }
+
+  render() {
+    const tech_s = {
+      display:'flex',
+      flexDirection:'column'
+    };
+    return (
+      <div>
+	<form>
+	  <p>
+	    Tech event starting from
+	    {this.props.start.toLocaleString()} to {this.props.end.toLocaleString()}
+	  </p>
+	  <hr/>
+	  <div style={tech_s} className={'modal-inputs'}>
+	    <label> Event title </label>
+	    <input type={'text'}
+		   value={this.state.event_title}
+		   onChange={e =>
+	      this.setState({...this.state, event_title:e.target.value})}/>
+	      <label> Event Description </label>
+	      <textarea type={'text'}
+			rows={8}
+			value={this.state.event_description}
+			onChange={e =>
+		this.setState({...this.state, event_description:e.target.value})}/>
+		<input type={'submit'}
+		       value={'Create Event'}
+		       onClick={_ => this.props.submit_event(this.state)}
+		       />
+	  </div>
+	</form>
+      </div>
+    );
+  }
+};
+
 class TechCalendar extends Component {
 
   state = {
-    events: []
+    events: [],
+    modal_show: false,
+    start_date: new Date,
+    end_date: new Date
   }
 
   static defaultProps = {
@@ -167,11 +218,21 @@ class TechCalendar extends Component {
   }
 
   componentDidMount() {
-    this.setState({events: window.__ALL_TECH_EVENTS__});
+    this.setState({...this.state, events: window.__ALL_TECH_EVENTS__});
   }
 
   selectedDate = e => {
     console.log(e);
+    this.setState({...this.state,
+		   start_date: e.start,
+		   end_date:e.end,
+		   modal_show:true});
+    // fetch('/add-tech-event', request_opts(JSON.stringify(e)))
+    //   .then(resp => resp.json())
+    //   .then(result => {
+    // 	// Need to add to the total events
+    // 	console.log(result);
+    //   });
   }
 
   render () {
@@ -186,12 +247,21 @@ class TechCalendar extends Component {
       <div style={this.props.tech_calendar_s}>
         <BigCalendar
           selectable
+	  defaultView={'day'}
           style={s}
           popup
-          timeslots={1}
+          timeslots={5}
           onSelectSlot={this.selectedDate}
           events={this.state.events}
           />
+	<Modal
+	  style={modal_s}
+	  isOpen={this.state.modal_show}>
+	  <TechEvent
+	    submit_event={o => console.log(o)}
+	    start={this.state.start_date}
+	    end={this.state.end_date}/>
+	</Modal>
       </div>
     );
   }

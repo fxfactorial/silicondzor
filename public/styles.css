@@ -21,4 +21,4 @@ html { box-sizing: border-box; }
 }
 
 .login-form > * { margin-bottom: 1.0rem; }
-.login-inputs > * { margin-bottom: 0.3rem; }
+.modal-inputs > * { margin-bottom: 0.3rem; }

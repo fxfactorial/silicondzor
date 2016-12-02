@@ -95,6 +95,7 @@ silicon_dzor.post('/sign-in', json_parser, form_parser, (req, res) => {
 });
 
 silicon_dzor.post('/add-tech-event', json_parser, (req, res) => {
+  console.log(req.body);
   res.end(JSON.stringify({result:'success'}));
 });
 
