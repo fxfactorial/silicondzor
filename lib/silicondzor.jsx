@@ -22,9 +22,22 @@ class Login extends Component {
     e.preventDefault();
     const query =
           register_account ? '/new-account' : '/sign-in';
+    const request_opts = {
+      method:'post',
+      headers: new Headers({
+        'content-type':'application/json'
+      }),
+      body:JSON.stringify({username:this.state.username,
+			   password: this.state.password})
+    };
 
-    this.setState({username:'', password:'', email_valid: false});
-    this.props.close_modal();
+    fetch(query, request_opts)
+      .then(resp => resp.json())
+      .then(answer => {
+        console.log(`Got reply: ${JSON.stringify(answer)}`);
+        this.setState({username:'', password:'', email_valid: false});
+        // this.props.close_modal();
+      });
   };
 
   username_changed = e => {
@@ -37,22 +50,26 @@ class Login extends Component {
   }
 
   render () {
+    const form_s = {
+      display:'flex',
+      flexDirection:'column'
+    };
+
     return (
-      <form>
+      <form className={'login-form'}>
         <p>
           Login so that you can add tech events, do not use
           anything serious for your password.
         </p>
         <hr/>
-        <div>
+        <div style={form_s} className={'login-inputs'}>
           <label>Username</label>
           <input type={'email'}
                  value={this.state.username}
-                 placeholder={'someusername'}
+                 placeholder={'must be an email address'}
                  onChange={this.username_changed}
-            />
-        </div>
-        <div>
+                 />
+
           <label>Password</label>
           <input type={'password'}
                  placeholder={'not a serious password'}
@@ -60,14 +77,12 @@ class Login extends Component {
                  onChange={e =>
             this.setState({...this.state, password:e.target.value})}
             />
-        </div>
-        <div>
-          <input type={'button'}
-                 onClick={this.form_action.bind(this, true)}
-                 value={'Register an account'}/>
-          <input type={'submit'}
-                 onClick={this.form_action.bind(this, false)}
-                 value={'Sign in'}/>
+            <input type={'button'}
+                   onClick={this.form_action.bind(this, true)}
+                   value={'Register an account'}/>
+            <input type={'submit'}
+                   onClick={this.form_action.bind(this, false)}
+                   value={'Sign in'}/>
         </div>
       </form>
     );
@@ -102,10 +117,10 @@ class Banner extends Component {
     const modal_s = {
       overlay: {
         position:'fixed',
-        top:'20vh',
+        top:'15vh',
         left:'20vw',
         right:'20vw',
-        bottom:'20vh'
+        bottom:'40vh'
       },
       content:{ }
     };

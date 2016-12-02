@@ -19,3 +19,6 @@ html { box-sizing: border-box; }
     font-size:xx-large;
   }
 }
+
+.login-form > * { margin-bottom: 1.0rem; }
+.login-inputs > * { margin-bottom: 0.3rem; }

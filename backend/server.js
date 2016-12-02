@@ -4,12 +4,17 @@ const express = require('express');
 const createElement = require('react').createElement;
 const render = require('react-dom/server').renderToString;
 const frontend = require('../lib/silicondzor').default;
+const uuid_v4 = require('uuid/v4');
 const body_parser = require('body-parser');
 const session = require('express-session');
 const silicon_dzor = express();
+const sqlite3 = require('sqlite3');
+const bcrypt = require('bcrypt');
 const json_parser = body_parser.json();
 const form_parser = body_parser.urlencoded({extended: true});
 const port = process.env.NODE_ENV === 'DEBUG' ? 8080 : 80;
+// Assumes that such a database exists, make sure it does.
+const db = new sqlite3.Database('silicondzor.db');
 
 silicon_dzor.use(require('helmet')());
 silicon_dzor.use(express.static('public'));
@@ -19,18 +24,35 @@ silicon_dzor.use(session({
   saveUninitialized: true
 }));
 
-// This needs to come from a database
-const tech_events = [];
+if (process.env.NODE_ENV === 'DEBUG') {
+  setImmediate(() => {
+    db
+      .run(`insert into account 
+(email, hashed_password, is_verified) 
+values ($email, $hashed, $is_verified)`, {
+	$email: 'edgar.factorial@gmail.com',
+	$hashed: bcrypt.hashSync('hello', 10),
+	$is_verified: 1
+});
+      // .run(`insert into event values ($title, $all_day, $start, $end, $description, 0)`, {
+      // 	$title: 'Hour of Code Yerevan mentor meetup',
+      // 	$all_day: true,
+      // 	$start: (new Date(2016, 12, 18)).getTime(),
+      // 	$end: (new Date(2016, 12, 19)).getTime(),
+      // 	$description: 'Mentor kids with code!'
+      // });
+  });
+}
+
+let tech_events = [];
+setImmediate(() => db.all('select * from account', (_, d) => tech_events = d));
 
 const rendered = render(createElement(frontend, null));
-const font =
-      'https://fonts.googleapis.com/css?family=Poppins';
 
-const site =`
+const site = () => `
 <!doctype html>
 <meta charset="utf-8">
 <head>
-  <link href="${font}" rel="stylesheet">
   <link rel="shortcut icon" type="image/x-icon" href="public/favicon.ico">
   <link href="styles.css" rel="stylesheet" type="text/css">
   <link href="react-big-calendar.css" rel="stylesheet" type="text/css">
@@ -47,10 +69,17 @@ const site =`
 
 silicon_dzor.get('/', (req, res) => {
   res.setHeader('content-type', 'text/html');
-  res.end(site);
+  console.log(tech_events);
+  res.end(site());
 });
 
-silicon_dzor.post('/login', json_parser, form_parser, (req, res) => {
+silicon_dzor.post('/new-account', json_parser, form_parser, (req, res) => {
+  const {username, password} = req.body;
+  console.log(username);
+  res.end(JSON.stringify({result:'success'}));
+});
+
+silicon_dzor.post('/sign-in', json_parser, form_parser, (req, res) => {
   const {username, password} = req.body;
   console.log(username);
   res.end(JSON.stringify({result:'success'}));

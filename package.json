@@ -3,16 +3,20 @@
   "version": "0.0.1",
   "description": "The code behind silicondzor.com",
   "dependencies": {
+    "bcrypt": "^0.8.7",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "express-session": "^1.14.2",
     "helmet": "^3.1.0",
     "moment": "^2.16.0",
+    "nodemailer": "^2.6.4",
     "pg-promise": "^5.4.1",
     "react": "^15.4.0",
     "react-big-calendar": "^0.11.0",
     "react-dom": "^15.4.0",
     "react-modal": "^1.5.2",
+    "sqlite3": "^3.1.8",
+    "uuid": "^3.0.1",
     "whatwg-fetch": "^2.0.1"
   },
   "devDependencies": {
@@ -41,7 +45,8 @@
     "babel-watch": "NODE_ENV='DEBUG' babel lib/*.jsx --watch --out-dir .",
     "webpack-watch": "NODE_ENV='DEBUG' webpack --progress --colors --watch",
     "server-watch": "NODE_ENV='DEBUG' nodemon backend/server.js",
-    "app-compile": "NODE_ENV='PRODUCTION' webpack --progress --colors"
+    "app-compile": "NODE_ENV='PRODUCTION' webpack --progress --colors",
+    "create-db": "cat backend/setup_database.sql | sqlite3 silicondzor.db"
   },
   "author": "Edgar Aroutiounian <edgar.factorial@gmail.com>",
   "license": "GPL-3"
