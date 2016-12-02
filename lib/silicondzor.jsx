@@ -20,10 +20,8 @@ class Login extends Component {
 
   form_action = (register_account, e) => {
     e.preventDefault();
-    if (register_account)
-      console.log('register button pushed');
-    else
-      console.log('sign in button pushed');
+    const query =
+          register_account ? '/new-account' : '/sign-in';
 
     this.setState({username:'', password:'', email_valid: false});
     this.props.close_modal();
@@ -167,6 +165,7 @@ class TechCalendar extends Component {
           selectable
           style={s}
           popup
+          timeslots={1}
           onSelectSlot={this.selectedDate}
           events={[]}
           />
