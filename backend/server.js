@@ -12,7 +12,7 @@ const silicon_dzor = express();
 const sqlite3 =
       process.env.NODE_ENV === 'debug'
       ? require('sqlite3').verbose() : require('sqlite3');
-const bcrypt = require('bcrypt');
+const bcrypt_promises = require('./bcrypt-promise');
 const json_parser = body_parser.json();
 const form_parser = body_parser.urlencoded({extended: true});
 const nodemailer = require('nodemailer');
@@ -58,7 +58,7 @@ insert into account
 (email, hashed_password, is_verified) 
 values ($email, $hashed, $is_verified)`, {
   $email: 'edgar.factorial@gmail.com',
-  $hashed: bcrypt.hashSync('hello', 10),
+  $hashed: bcrypt_promises.hashSync('hello', 10),
   $is_verified: 0})
       .run(`
 insert into event values ($title, $all_day, $start, $end, $description, 0)`, {
@@ -114,20 +114,28 @@ silicon_dzor.post(Routes.new_account, json_parser, form_parser, (req, res) => {
   const identifier = uuid_v4();
   register_email_users[identifier] = {username, identifier}; 
   const verify_link = email_verify_link(identifier);
-  
-  const mail_opts = {
-    from:'Silicondzor.com <iteratehackerspace@gmail.com> ',
-    to:username,
-    subject:'Verify account -- Silicondzor.com',
-    text:'Plain text version',
-    html: email_message(username, verify_link)
-  };
-  console.log(mail_opts);
-  email_transporter.sendMail(mail_opts, (err, other) => {
-    console.log(err, other);
-    res.end(JSON.stringify({result:'success'}));
-  });
 
+  bcrypt_promises.hash(password, 10)
+    .then(hash => {
+      db.run(`insert into account (email, hashed_password) values ($e, $h)`,
+	     { $e: username, $h: hash},
+	     err => {
+	       if (err === null) {
+		 const mail_opts = {
+		   from:'Silicondzor.com <iteratehackerspace@gmail.com> ',
+		   to:username,
+		   subject:'Verify account -- Silicondzor.com',
+		   text:'Plain text version',
+		   html: email_message(username, verify_link)
+		 };
+		 console.log(mail_opts);
+		 email_transporter.sendMail(mail_opts, (err, other) => {
+		   console.log(err, other);
+		   res.end(JSON.stringify({result:'success'}));
+		 });
+	       }
+	     });
+    });
 });
 
 silicon_dzor.post(Routes.sign_in, json_parser, form_parser, (req, res) => {
