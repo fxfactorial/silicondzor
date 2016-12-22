@@ -5,6 +5,7 @@ const createElement = require('react').createElement;
 const render = require('react-dom/server').renderToString;
 const frontend = require('../lib/silicondzor').default;
 const email_message = require('../lib/email-form').default;
+const replies = require('../lib/replies').default;
 const uuid_v4 = require('uuid/v4');
 const body_parser = require('body-parser');
 const session = require('express-session');
@@ -131,7 +132,7 @@ silicon_dzor.post(Routes.new_account, json_parser, form_parser, (req, res) => {
 		 console.log(mail_opts);
 		 email_transporter.sendMail(mail_opts, (err, other) => {
 		   console.log(err, other);
-		   res.end(JSON.stringify({result:'success'}));
+		   res.end(replies.ok());
 		 });
 	       }
 	     });
@@ -147,13 +148,13 @@ silicon_dzor.post(Routes.sign_in,
 	 {$e:username},
 	 (err, row) => {
 	   if (err) {
-	     res.end(JSON.stringify({result: 'failure'}));
+	     res.end(replies.fail('Email address not known'));
 	   } else {
 	     bcrypt_promises.compare(password, row.hashed_password)
 	       .then(correct => {
 		 req.session.logged_in = true;
 		 req.session.username = username;
-		 res.end(JSON.stringify({result:'success'}));
+		 res.end(replies.ok());
 	       });
 	   }
 	 });
@@ -200,17 +201,17 @@ insert into event values ($title, $all_day, $start, $end, $description, $creator
 		    },
 		    err => {
 		      if (err === null)
-			res.end(JSON.stringify({result:'success'}));
+			res.end(replies.ok());
 		      else {
 			console.error(err);
-			res.end(JSON.stringify({result:'failure', reason:err.msg}));
+			res.end(replies.fail(err.msg));
 		      }
 		    }
 		   );    
 	   }
 	  );
   } else {
-    res.end(JSON.stringify({result:'failure', reason:'not logged in'}));
+    res.end(replies.fail('not logged in'));
   }
 });
 

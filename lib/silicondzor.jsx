@@ -3,6 +3,8 @@ import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import Modal from 'react-modal';
 import Routes from './routes';
+import results from './replies';
+
 
 BigCalendar.momentLocalizer(moment);
 
@@ -48,11 +50,14 @@ class Login extends Component {
     fetch(query, opts)
       .then(resp => resp.json())
       .then(answer => {
-	// Check reply from server, get rid of the modal
-	// give some kind of error handling
-        console.log(`Got reply: ${JSON.stringify(answer)}`);
-        this.setState({username:'', password:'', email_valid: false});
-        // this.props.close_modal();
+	if (answer.result === results.success) {
+	  this.props.close_modal();
+	} else if (answer.result === results.failure) {
+	  console.log(`Couldn't login correctly`);
+	  // Need to give some visual que
+	} else {
+	  console.error(`Completely unknown answer ${JSON.stringify(answer)}`);
+	}
       })
       .catch(oops => console.error(oops));
   };
