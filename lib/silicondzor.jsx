@@ -30,6 +30,15 @@ const modal_s = {
   content:{ }
 };
 
+const close_btn_s = {
+  position:'absolute',
+  top:'0.25em',
+  right:'0.25em',
+  fontSize:'large',
+  width:'10px',
+  cursor:'pointer'
+};
+
 class Login extends Component {
 
   state = {
@@ -86,13 +95,6 @@ class Login extends Component {
     const form_s = {
       display:'flex',
       flexDirection:'column'
-    };
-    const close_btn_s = {
-      position:'absolute',
-      top:0,
-      right:0,
-      width:'10px',
-      cursor:'pointer'
     };
     const message_color = {
       backgroundColor:''
@@ -207,10 +209,8 @@ class TechEvent extends Component {
     return (
       <div>
 	<form>
-	  <p style={centered}> Tech event from: </p>
-	  <p style={centered}> {this.props.start.toLocaleString()} </p>
-	  <p style={centered}> to </p>
-	  <p style={centered}> {this.props.end.toLocaleString()} </p>
+	  <p style={close_btn_s} onClick={_ => this.props.close_modal()}> x </p>
+	  {this.props.prompt_msg(this.props.start, this.props.end)}
 	  <hr/>
 	  <div style={tech_s} className={'modal-inputs'}>
 	    <label> Event title </label>
@@ -240,7 +240,19 @@ class TechCalendar extends Component {
     events: [],
     modal_show: false,
     start_date: new Date,
-    end_date: new Date
+    end_date: new Date,
+    prompt_message: (start, end) => {
+      const centered = { textAlign:'center'};
+      return (
+	<div>
+	  <p style={centered}> Tech event from: </p>
+	  <p style={centered}> {start.toLocaleString()} </p>
+	  <p style={centered}> to </p>
+	  <p style={centered}> {end.toLocaleString()} </p>
+	  <br/>
+	</div>
+      );
+    }
   }
 
   static defaultProps = {
@@ -271,7 +283,22 @@ class TechCalendar extends Component {
       .then(resp => resp.json())
       .then(resp => {
 	if (resp.result === 'failure') {
+	  const s = this.state;
+	  s.prompt_message = (_, __) => {
+	    const style_em = {
+	      textAlign:'center',
+	      fontStyle:'italic'
+	    };
+	    return (
+	      <div>
+		<p style={style_em}>Could not create an event</p>
+		<p style={style_em}>{resp.reason}</p>
+		<br/>
+	      </div>
+	    );
+	  };
 	  console.error(`Could not submit event: ${resp.reason}`);
+	  this.setState(s);
 	} else {
 	  const s = this.state;
 	  s.events.push({
@@ -302,7 +329,7 @@ class TechCalendar extends Component {
 	  defaultView={'day'}
           style={s}
           popup
-          timeslots={5}
+          timeslots={2}
           onSelectSlot={this.selectedDate}
           events={this.state.events}
           />
@@ -311,6 +338,12 @@ class TechCalendar extends Component {
 	  isOpen={this.state.modal_show}>
 	  <TechEvent
 	    submit_event={this.submit_event}
+	    close_modal={() => {
+	      const s = this.state;
+	      s.modal_show = false;
+	      this.setState(s);
+	    }}
+	    prompt_msg={(start, end) => this.state.prompt_message(start, end)}
 	    start={this.state.start_date}
 	    end={this.state.end_date}/>
 	</Modal>
