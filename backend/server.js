@@ -138,10 +138,25 @@ silicon_dzor.post(Routes.new_account, json_parser, form_parser, (req, res) => {
     });
 });
 
-silicon_dzor.post(Routes.sign_in, json_parser, form_parser, (req, res) => {
+silicon_dzor.post(Routes.sign_in,
+		  json_parser,
+		  form_parser,
+		  (req, res) => {
   const {username, password} = req.body;
+  db.get('select hashed_password from account where email = $e',
+	 {$e:username},
+	 (err, row) => {
+	   if (err) {
+	     res.end(JSON.stringify({result: 'failure'}));
+	   } else {
+	     bcrypt_promises.compare(password, row.hashed_password)
+	       .then(correct => {
+		 req.session.logged_in = true;
+		 res.end(JSON.stringify({result:'success'}));
+	       });
+	   }
+	 });
   // console.log(username);
-  res.end(JSON.stringify({result:'success'}));
 });
 
 silicon_dzor.get(Routes.new_account_verify, (req, res) => {
