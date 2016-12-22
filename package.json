@@ -15,6 +15,8 @@
     "react-big-calendar": "^0.11.0",
     "react-dom": "^15.4.0",
     "react-modal": "^1.5.2",
+    "react-redux": "^4.4.6",
+    "redux": "^3.6.0",
     "sqlite3": "^3.1.8",
     "uuid": "^3.0.1",
     "whatwg-fetch": "^2.0.1"
@@ -42,10 +44,10 @@
     ]
   },
   "scripts": {
-    "babel-watch": "NODE_ENV='DEBUG' babel lib/*.jsx --watch --out-dir .",
-    "webpack-watch": "NODE_ENV='DEBUG' webpack --progress --colors --watch",
-    "server-watch": "NODE_ENV='DEBUG' nodemon backend/server.js",
-    "app-compile": "NODE_ENV='PRODUCTION' webpack --progress --colors",
+    "babel-watch": "NODE_ENV='debug' babel lib/*.jsx --watch --out-dir .",
+    "webpack-watch": "NODE_ENV='debug' webpack --progress --colors --watch",
+    "server-watch": "NODE_ENV='debug' nodemon backend/server.js",
+    "app-compile": "NODE_ENV='production' webpack --progress --colors",
     "create-db": "cat backend/setup_database.sql | sqlite3 silicondzor.db"
   },
   "author": "Edgar Aroutiounian <edgar.factorial@gmail.com>",

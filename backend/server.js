@@ -4,17 +4,43 @@ const express = require('express');
 const createElement = require('react').createElement;
 const render = require('react-dom/server').renderToString;
 const frontend = require('../lib/silicondzor').default;
+const email_message = require('../lib/email-form').default;
 const uuid_v4 = require('uuid/v4');
 const body_parser = require('body-parser');
 const session = require('express-session');
 const silicon_dzor = express();
-const sqlite3 = require('sqlite3');
+const sqlite3 =
+      process.env.NODE_ENV === 'debug'
+      ? require('sqlite3').verbose() : require('sqlite3');
 const bcrypt = require('bcrypt');
 const json_parser = body_parser.json();
 const form_parser = body_parser.urlencoded({extended: true});
-const port = process.env.NODE_ENV === 'DEBUG' ? 8080 : 80;
+const nodemailer = require('nodemailer');
+
+const email_account = 'iteratehackerspace@gmail.com';
+const email_password =
+      process.env.NODE_ENV === 'debug'
+      ? process.env.ITERATE_EMAIL_PASSWORD : null;
+
+const email_verify_link = identifier =>
+      process.env.NODE_ENV === 'debug'
+      ? `http://localhost:8080/verify-account/${identifier}`
+      : `https://silicondzor.com/verify-account/${identifier}`;
+
+const email_transporter =
+      email_password !== null
+      ? nodemailer
+      .createTransport(`smtps://${email_account}:${email_password}@smtp.gmail.com`)
+      : null;
+
+const port = process.env.NODE_ENV === 'debug' ? 8080 : 80;
 // Assumes that such a database exists, make sure it does.
 const db = new sqlite3.Database('silicondzor.db');
+const Routes = require('../lib/routes').default;
+
+let register_email_users = {};
+// Drop everyone left every 1 hour, aka link is only good for 1 hour
+setTimeout(() => register_email_users = {}, 60 * 1000 * 60);
 
 silicon_dzor.use(require('helmet')());
 silicon_dzor.use(express.static('public'));
@@ -24,7 +50,7 @@ silicon_dzor.use(session({
   saveUninitialized: true
 }));
 
-if (process.env.NODE_ENV === 'DEBUG') {
+if (process.env.NODE_ENV === 'debug') {
   setImmediate(() => {
     db
       .run(`
@@ -33,7 +59,7 @@ insert into account
 values ($email, $hashed, $is_verified)`, {
   $email: 'edgar.factorial@gmail.com',
   $hashed: bcrypt.hashSync('hello', 10),
-  $is_verified: 1})
+  $is_verified: 0})
       .run(`
 insert into event values ($title, $all_day, $start, $end, $description, 0)`, {
   $title: 'Hour of Code Yerevan mentor meetup',
@@ -82,19 +108,55 @@ silicon_dzor.get('/', (req, res) => {
   });
 });
 
-silicon_dzor.post('/new-account', json_parser, form_parser, (req, res) => {
+silicon_dzor.post(Routes.new_account, json_parser, form_parser, (req, res) => {
+  const {username, password} = req.body;
+
+  const identifier = uuid_v4();
+  register_email_users[identifier] = {username, identifier}; 
+  const verify_link = email_verify_link(identifier);
+  
+  const mail_opts = {
+    from:'Silicondzor.com <iteratehackerspace@gmail.com> ',
+    to:username,
+    subject:'Verify account -- Silicondzor.com',
+    text:'Plain text version',
+    html: email_message(username, verify_link)
+  };
+  console.log(mail_opts);
+  email_transporter.sendMail(mail_opts, (err, other) => {
+    console.log(err, other);
+    res.end(JSON.stringify({result:'success'}));
+  });
+
+});
+
+silicon_dzor.post(Routes.sign_in, json_parser, form_parser, (req, res) => {
   const {username, password} = req.body;
   // console.log(username);
   res.end(JSON.stringify({result:'success'}));
 });
 
-silicon_dzor.post('/sign-in', json_parser, form_parser, (req, res) => {
-  const {username, password} = req.body;
-  // console.log(username);
-  res.end(JSON.stringify({result:'success'}));
+silicon_dzor.get(Routes.new_account_verify, (req, res) => {
+  const { identifier } = req.params;
+  const { username } = register_email_users[identifier];
+  db.run(`update account set is_verified = 1 where email = $username`,
+	 { $username:username },
+	 err => {
+	   if (err) {
+	     console.error(err);
+	     // Need to tell user that email couldn't be verified
+	     res.redirect('/');
+	   }
+	   else {
+	     // Then everything worked yay!
+	     delete register_email_users[username];
+	     req.session.logged_in = true;
+	     res.redirect('/');
+	   }
+	 });
 });
 
-silicon_dzor.post('/add-tech-event', json_parser, (req, res) => {
+silicon_dzor.post(Routes.add_tech_event, json_parser, (req, res) => {
   console.log(req.body);
   res.end(JSON.stringify({result:'success'}));
 });

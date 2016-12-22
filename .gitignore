@@ -39,3 +39,4 @@ bundle.js
 silicondzor.js
 .tern-port
 silicondzor.db
+lib/*.js

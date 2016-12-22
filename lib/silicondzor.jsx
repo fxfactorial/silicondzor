@@ -2,6 +2,7 @@ import React from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import Modal from 'react-modal';
+import Routes from './routes';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -30,19 +31,16 @@ const modal_s = {
 
 class Login extends Component {
 
-  constructor(p) {
-    super(p);
-    this.state = {
-      username: '',
-      password:'',
-      email_valid: false
-    };
-  }
+  state = {
+    username: '',
+    password:'',
+    email_valid: false
+  };
 
   form_action = (register_account, e) => {
     e.preventDefault();
     const query =
-          register_account ? '/new-account' : '/sign-in';
+          register_account ? Routes.new_account : Routes.sign_in;
     const opts =
 	  request_opts(JSON.stringify({username:this.state.username,
 				       password: this.state.password}));
@@ -53,7 +51,8 @@ class Login extends Component {
         console.log(`Got reply: ${JSON.stringify(answer)}`);
         this.setState({username:'', password:'', email_valid: false});
         // this.props.close_modal();
-      });
+      })
+      .catch(oops => console.error(oops));
   };
 
   username_changed = e => {
@@ -165,7 +164,7 @@ class TechEvent extends Component {
 
   submit_event = () => {
     this.props.submit_event({
-	...this.state,
+	      ...this.state,
       start:this.props.start,
       end:this.props.end
     });
@@ -178,28 +177,28 @@ class TechEvent extends Component {
     };
     return (
       <div>
-	<form>
-	  <p> Tech event starting from </p>
-	  <p> {this.props.start.toLocaleString()} to </p>
-	  <p> {this.props.end.toLocaleString()} </p>
-	  <hr/>
-	  <div style={tech_s} className={'modal-inputs'}>
-	    <label> Event title </label>
-	    <input type={'text'}
-		   value={this.state.event_title}
-		   onChange={e =>
-	      this.setState({...this.state, event_title:e.target.value})}/>
-	      <label> Event Description </label>
-	      <textarea type={'text'}
-			rows={8}
-			value={this.state.event_description}
-			onChange={e =>
-		this.setState({...this.state, event_description:e.target.value})}/>
-		<input type={'submit'}
-		       value={'Create Event'}
-		       onClick={_ => this.submit_event()}/>
-	  </div>
-	</form>
+	      <form>
+	        <p> Tech event starting from </p>
+	        <p> {this.props.start.toLocaleString()} to </p>
+	        <p> {this.props.end.toLocaleString()} </p>
+	        <hr/>
+	        <div style={tech_s} className={'modal-inputs'}>
+	          <label> Event title </label>
+	          <input type={'text'}
+		               value={this.state.event_title}
+		               onChange={e =>
+	            this.setState({...this.state, event_title:e.target.value})}/>
+	            <label> Event Description </label>
+	            <textarea type={'text'}
+			                  rows={8}
+			                  value={this.state.event_description}
+			                  onChange={e =>
+		            this.setState({...this.state, event_description:e.target.value})}/>
+		            <input type={'submit'}
+		                   value={'Create Event'}
+		                   onClick={_ => this.submit_event()}/>
+	        </div>
+	      </form>
       </div>
     );
   }
@@ -235,19 +234,19 @@ class TechCalendar extends Component {
   submit_event = event_details => {
     console.log('Ping!', event_details);
 
-    fetch('/add-tech-event', request_opts(JSON.stringify(event_details)))
+    fetch(Routes.add_tech_event, request_opts(JSON.stringify(event_details)))
       .then(resp => resp.json())
       .then(result => {
-	const s = this.state;
-	s.events.push({
-	  title:event_details.event_title,
-	  start:event_details.start,
-	  desc:event_details.event_description,
-	  end:event_details.end
-	});
-	this.setState(s);
-    	// Need to add to the total events
-    	console.log(result);
+	      const s = this.state;
+	      s.events.push({
+	        title:event_details.event_title,
+	        start:event_details.start,
+	        desc:event_details.event_description,
+	        end:event_details.end
+	      });
+	      this.setState(s);
+    	  // Need to add to the total events
+    	  console.log(result);
       });
   }
 
@@ -263,21 +262,21 @@ class TechCalendar extends Component {
       <div style={this.props.tech_calendar_s}>
         <BigCalendar
           selectable
-	  defaultView={'day'}
+	        defaultView={'day'}
           style={s}
           popup
           timeslots={5}
           onSelectSlot={this.selectedDate}
           events={this.state.events}
           />
-	<Modal
-	  style={modal_s}
-	  isOpen={this.state.modal_show}>
-	  <TechEvent
-	    submit_event={this.submit_event}
-	    start={this.state.start_date}
-	    end={this.state.end_date}/>
-	</Modal>
+	      <Modal
+	        style={modal_s}
+	        isOpen={this.state.modal_show}>
+	        <TechEvent
+	          submit_event={this.submit_event}
+	          start={this.state.start_date}
+	          end={this.state.end_date}/>
+	      </Modal>
       </div>
     );
   }
@@ -288,6 +287,7 @@ class _ extends Component {
   state = {calendar_z_value: '0'}
 
   render () {
+
     return (
       <div>
         <Banner push_calendar={should_push => {
