@@ -122,10 +122,10 @@ silicon_dzor.post(Routes.new_account, json_parser, form_parser, (req, res) => {
 	     err => {
 	       if (err === null) {
 		 const mail_opts = {
-		   from:'Silicondzor.com <iteratehackerspace@gmail.com> ',
-		   to:username,
-		   subject:'Verify account -- Silicondzor.com',
-		   text:'Plain text version',
+		   from: 'Silicondzor.com <iteratehackerspace@gmail.com> ',
+		   to: username,
+		   subject: 'Verify account -- Silicondzor.com',
+		   text: email_message(username, verify_link, false),
 		   html: email_message(username, verify_link)
 		 };
 		 email_transporter.sendMail(mail_opts, (err, other) => {

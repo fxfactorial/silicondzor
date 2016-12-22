@@ -1,7 +1,8 @@
 const src_link = 'https://github.com/fxfactorial/silicondzor';
 
-export default (email_account, link) =>
-`
+export default (email_account, link, html=true) =>
+  html ?
+  `
 <!doctype html>
 <body>
   <h1> 🇦🇲 Barev dzes! ${email_account} </h1>
@@ -17,4 +18,10 @@ export default (email_account, link) =>
   </p>
 </body>
 </html>
+` : `
+Barev dzes! ${email_account}
+click on ${link} to verify your account,
+
+Thanks for being part of the Armenian tech community,
+see the source code of this project: ${src_link}
 `;
