@@ -48,6 +48,8 @@ class Login extends Component {
     fetch(query, opts)
       .then(resp => resp.json())
       .then(answer => {
+	// Check reply from server, get rid of the modal
+	// give some kind of error handling
         console.log(`Got reply: ${JSON.stringify(answer)}`);
         this.setState({username:'', password:'', email_valid: false});
         // this.props.close_modal();
@@ -240,19 +242,21 @@ class TechCalendar extends Component {
     fetch(Routes.add_tech_event,
 	  request_opts(JSON.stringify(event_details)))
       .then(resp => resp.json())
-      .then(result => {
-	const s = this.state;
-	s.events.push({
-	  title:event_details.event_title,
-	  start:event_details.start,
-	  desc:event_details.event_description,
-	  end:event_details.end
-	});
-	console.log('Submitted event');
-	s.modal_show = false;
-	// Need to add to the total events
-	this.setState(s);
-    	console.log(result);
+      .then(resp => {
+	if (resp.result === 'failure') {
+	  console.error(`Could not submit event: ${resp.reason}`);
+	} else {
+	  const s = this.state;
+	  s.events.push({
+	    title:event_details.event_title,
+	    start:event_details.start,
+	    desc:event_details.event_description,
+	    end:event_details.end
+	  });
+	  console.log('Submitted event');
+	  s.modal_show = false;
+	  this.setState(s);
+	}
       });
   }
 
@@ -290,6 +294,7 @@ class TechCalendar extends Component {
 
 export default
 class _ extends Component {
+
   state = {calendar_z_value: '0'}
 
   render () {

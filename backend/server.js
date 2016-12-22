@@ -152,6 +152,7 @@ silicon_dzor.post(Routes.sign_in,
 	     bcrypt_promises.compare(password, row.hashed_password)
 	       .then(correct => {
 		 req.session.logged_in = true;
+		 req.session.username = username;
 		 res.end(JSON.stringify({result:'success'}));
 	       });
 	   }
@@ -173,6 +174,7 @@ silicon_dzor.get(Routes.new_account_verify, (req, res) => {
 	     // Then everything worked yay!
 	     delete register_email_users[username];
 	     req.session.logged_in = true;
+	     req.session.username = username;
 	     res.redirect('/');
 	   }
 	 });
@@ -180,25 +182,33 @@ silicon_dzor.get(Routes.new_account_verify, (req, res) => {
 
 silicon_dzor.post(Routes.add_tech_event, json_parser, (req, res) => {
   if (req.session.logged_in) {
+    console.log(req.session);
     const b = req.body;
-    db.run(`
-insert into event values ($title, $all_day, $start, $end)
+    db.get(`select * from account where email = $username`,
+	   {$username: req.session.username},
+	   (err, result) => {
+	     db.run(`
+insert into event values ($title, $all_day, $start, $end, $description, $creator)
 `,
-	   {
-	     $title: b.event_title,
-	     $all_day: 0,
-	     $start:b.start,
-	     $end:b.end,
-	     $description: b.event_description
-	   },
-	   err => {
-	     if (err === null) res.end(JSON.stringify({result:'success'}));
-	     else {
-	       console.error(err);
-	       res.end(JSON.stringify({result:'failure', reason:err.msg}));
-	     }
+		    {
+		      $title: b.event_title,
+		      $all_day: 0,
+		      $start:b.start,
+		      $end:b.end,
+		      $description: b.event_description,
+		      $creator:result.id
+		    },
+		    err => {
+		      if (err === null)
+			res.end(JSON.stringify({result:'success'}));
+		      else {
+			console.error(err);
+			res.end(JSON.stringify({result:'failure', reason:err.msg}));
+		      }
+		    }
+		   );    
 	   }
-	  );    
+	  );
   } else {
     res.end(JSON.stringify({result:'failure', reason:'not logged in'}));
   }
