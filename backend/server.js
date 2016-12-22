@@ -104,7 +104,6 @@ silicon_dzor.get('/', (req, res) => {
 	desc: item.description
       };
     });
-    // console.log(transformed);
     res.end(site(transformed));
   });
 });
@@ -129,10 +128,13 @@ silicon_dzor.post(Routes.new_account, json_parser, form_parser, (req, res) => {
 		   text:'Plain text version',
 		   html: email_message(username, verify_link)
 		 };
-		 console.log(mail_opts);
 		 email_transporter.sendMail(mail_opts, (err, other) => {
-		   console.log(err, other);
-		   res.end(replies.ok());
+		   if (err) {
+		     console.error(err);
+		     res.end(replies.fail(err.msg));
+		   } else {
+		     res.end(replies.ok());
+		   }
 		 });
 	       }
 	     });
@@ -183,7 +185,6 @@ silicon_dzor.get(Routes.new_account_verify, (req, res) => {
 
 silicon_dzor.post(Routes.add_tech_event, json_parser, (req, res) => {
   if (req.session.logged_in) {
-    console.log(req.session);
     const b = req.body;
     db.get(`select * from account where email = $username`,
 	   {$username: req.session.username},
