@@ -182,12 +182,14 @@ class TechEvent extends Component {
       display:'flex',
       flexDirection:'column'
     };
+    const centered = { textAlign:'center'};
     return (
       <div>
 	<form>
-	  <p> Tech event starting from </p>
-	  <p> {this.props.start.toLocaleString()} to </p>
-	  <p> {this.props.end.toLocaleString()} </p>
+	  <p style={centered}> Tech event from: </p>
+	  <p style={centered}> {this.props.start.toLocaleString()} </p>
+	  <p style={centered}> to </p>
+	  <p style={centered}> {this.props.end.toLocaleString()} </p>
 	  <hr/>
 	  <div style={tech_s} className={'modal-inputs'}>
 	    <label> Event title </label>
