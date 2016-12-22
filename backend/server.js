@@ -189,13 +189,14 @@ silicon_dzor.post(Routes.add_tech_event, json_parser, (req, res) => {
 	   {$username: req.session.username},
 	   (err, result) => {
 	     db.run(`
-insert into event values ($title, $all_day, $start, $end, $description, $creator)
+insert into event values 
+($title, $all_day, $start, $end, $description, $creator)
 `,
 		    {
 		      $title: b.event_title,
-		      $all_day: 0,
-		      $start:b.start,
-		      $end:b.end,
+		      $all_day: false,
+		      $start:(new Date(b.start)).getTime(),
+		      $end:(new Date(b.end)).getTime(),
 		      $description: b.event_description,
 		      $creator:result.id
 		    },

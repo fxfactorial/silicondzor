@@ -5,7 +5,6 @@ import Modal from 'react-modal';
 import Routes from './routes';
 import results from './replies';
 
-
 BigCalendar.momentLocalizer(moment);
 
 const { Component } = React;
