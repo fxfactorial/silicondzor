@@ -4,7 +4,7 @@ export default (email_account, link) =>
 `
 <!doctype html>
 <body>
-  <h1> Barev dzes! ${email_account} </h1>
+  <h1> 🇦🇲 Barev dzes! ${email_account} </h1>
   <p> This email verifies your account on silicondzor.com,
       now you can post post events.
   </p>
