@@ -35,7 +35,9 @@ class Login extends Component {
   state = {
     username: '',
     password:'',
-    email_valid: false
+    email_valid: false,
+    top_prompt_message:
+    `Login so that you can add tech events, do not use anything serious for your password.`
   };
 
   form_action = (register_account, e) => {
@@ -46,14 +48,24 @@ class Login extends Component {
 	  request_opts(JSON.stringify({username:this.state.username,
 				       password: this.state.password}));
 
+    // Check if the email is valid?
+    console.log(this.state.email_valid);
+
     fetch(query, opts)
       .then(resp => resp.json())
       .then(answer => {
 	if (answer.result === results.success) {
 	  this.props.close_modal();
 	} else if (answer.result === results.failure) {
-	  console.log(`Couldn't login correctly`);
-	  // Need to give some visual que
+	  const s = this.state;
+	  if (answer.reason === results.invalid_email ||
+	      answer.reason === results.invalid_credentials) {
+	    console.log(`Something invalid ${JSON.stringify(answer)}`);
+	    s.top_prompt_message = answer.reason;
+	    this.setState(s);
+	  } else {
+	    console.error(`Unknown reply: ${JSON.stringify(answer)}`);
+	  }
 	} else {
 	  console.error(`Completely unknown answer ${JSON.stringify(answer)}`);
 	}
@@ -75,13 +87,22 @@ class Login extends Component {
       display:'flex',
       flexDirection:'column'
     };
-
+    const close_btn_s = {
+      position:'absolute',
+      top:0,
+      right:0,
+      width:'10px',
+      cursor:'pointer'
+    };
+    const message_color = {
+      backgroundColor:''
+    };
     return (
       <form className={'login-form'}>
-        <p>
-          Login so that you can add tech events, do not use
-          anything serious for your password.
-        </p>
+	<div>
+          <p> {this.state.top_prompt_message} </p>
+	  <p style={close_btn_s} onClick={_ => this.props.close_modal()}> x </p>
+	</div>
         <hr/>
         <div style={form_s} className={'modal-inputs'}>
           <label>Username</label>

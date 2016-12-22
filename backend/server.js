@@ -150,13 +150,18 @@ silicon_dzor.post(Routes.sign_in,
 	 {$e:username},
 	 (err, row) => {
 	   if (err) {
-	     res.end(replies.fail('Email address not known'));
+	     req.session.logged_in = false;
+	     res.end(replies.fail(replies.invalid_email));
 	   } else {
 	     bcrypt_promises.compare(password, row.hashed_password)
 	       .then(correct => {
 		 req.session.logged_in = true;
 		 req.session.username = username;
 		 res.end(replies.ok());
+	       })
+	       .catch(err => {
+		 req.session.logged_in = false;
+		 res.end(replies.fail(replies.invalid_credentials));
 	       });
 	   }
 	 });
@@ -213,8 +218,15 @@ insert into event values
 	   }
 	  );
   } else {
-    res.end(replies.fail('not logged in'));
+    res.end(replies.fail(replies.invalid_session));
   }
+});
+
+// No other handler picked it up yet, so this is our 404 handler
+silicon_dzor.use((req, res, next) => {
+  res
+    .status(404)
+    .send(replies.unknown_resource);
 });
 
 silicon_dzor.listen(port, () => console.log(`Started on ${port}`));
