@@ -165,7 +165,8 @@ silicon_dzor.get(Routes.new_account_verify, (req, res) => {
 });
 
 silicon_dzor.post(Routes.add_tech_event, json_parser, (req, res) => {
-  console.log(req.body);
+  const answer = req.session.logged_in;
+  console.log(`Is user logged in: ${answer}`);
   res.end(JSON.stringify({result:'success'}));
 });
 
