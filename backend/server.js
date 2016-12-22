@@ -156,7 +156,6 @@ silicon_dzor.post(Routes.sign_in,
 	       });
 	   }
 	 });
-  // console.log(username);
 });
 
 silicon_dzor.get(Routes.new_account_verify, (req, res) => {
@@ -180,9 +179,29 @@ silicon_dzor.get(Routes.new_account_verify, (req, res) => {
 });
 
 silicon_dzor.post(Routes.add_tech_event, json_parser, (req, res) => {
-  const answer = req.session.logged_in;
-  console.log(`Is user logged in: ${answer}`);
-  res.end(JSON.stringify({result:'success'}));
+  if (req.session.logged_in) {
+    const b = req.body;
+    db.run(`
+insert into event values ($title, $all_day, $start, $end)
+`,
+	   {
+	     $title: b.event_title,
+	     $all_day: 0,
+	     $start:b.start,
+	     $end:b.end,
+	     $description: b.event_description
+	   },
+	   err => {
+	     if (err === null) res.end(JSON.stringify({result:'success'}));
+	     else {
+	       console.error(err);
+	       res.end(JSON.stringify({result:'failure', reason:err.msg}));
+	     }
+	   }
+	  );    
+  } else {
+    res.end(JSON.stringify({result:'failure', reason:'not logged in'}));
+  }
 });
 
 silicon_dzor.listen(port, () => console.log(`Started on ${port}`));

@@ -229,12 +229,14 @@ class TechCalendar extends Component {
 
   selectedDate = e => {
     console.log(e);
-    this.setState({...this.state, modal_show:true});
+    const s = this.state;
+    s.start_date = e.start;
+    s.end_date = e.end;
+    s.modal_show = true;
+    this.setState(s);
   }
 
   submit_event = event_details => {
-    console.log('Ping!', event_details);
-
     fetch(Routes.add_tech_event,
 	  request_opts(JSON.stringify(event_details)))
       .then(resp => resp.json())
