@@ -40,3 +40,4 @@ silicondzor.js
 .tern-port
 silicondzor.db
 lib/*.js
+test.js
