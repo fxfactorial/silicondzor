@@ -199,7 +199,6 @@ silicon_dzor.get(Routes.new_account_verify, (req, res) => {
 });
 
 silicon_dzor.post(Routes.add_tech_event, json_pr, async (req, res) => {
-
   try {
     if (req.session.logged_in) {
       const b = req.body;
@@ -207,7 +206,6 @@ silicon_dzor.post(Routes.add_tech_event, json_pr, async (req, res) => {
 	    await db_promises
 	    .get(`select * from account where email = $username and is_verified = 1`,
 		 {$username: req.session.username});
-      console.log(query_result);
       await db_promises.run(`insert into event values 
 ($title, $all_day, $start, $end, $description, $creator)`, {
   $title: b.event_title,

@@ -58,9 +58,6 @@ do not use anything serious for your password.`
 	  request_opts(JSON.stringify({username:this.state.username,
 				       password: this.state.password}));
 
-    // Check if the email is valid?
-    // console.log(this.state.email_valid);
-
     fetch(query, opts)
       .then(resp => resp.json())
       .then(answer => {
@@ -70,7 +67,6 @@ do not use anything serious for your password.`
 	  const s = this.state;
 	  if (answer.reason === results.invalid_email ||
 	      answer.reason === results.invalid_credentials) {
-	    // console.log(`Something invalid ${JSON.stringify(answer)}`);
 	    s.top_prompt_message = answer.reason;
 	    this.setState(s);
 	  } else {
@@ -267,20 +263,21 @@ class TechCalendar extends Component {
   }
 
   componentDidMount() {
-    // console.log(window.__ALL_TECH_EVENTS__);
-    this.setState({
-      ...this.state,
-      events: window.__ALL_TECH_EVENTS__.map(event => {
-	return {...event, start:event.start, end:event.end};
-      })
-    });
+    window.__ALL_TECH_EVENTS__ =
+      window.__ALL_TECH_EVENTS__.map(event => {
+	return {
+	  ...event,
+	  start:new Date(event.start),
+	  end:new Date(event.end)
+	};
+      });
+    this.setState({...this.state, events: window.__ALL_TECH_EVENTS__});
   }
 
   selectedDate = e => {
-    // console.log({events: e});
     const s = this.state;
-    s.start_date = e.start;
-    s.end_date = e.end;
+    s.start_date = new Date(e.start);
+    s.end_date = new Date(e.end);
     s.modal_show = true;
     this.setState(s);
   }
@@ -309,7 +306,6 @@ class TechCalendar extends Component {
 	  this.setState(s);
 	} else {
 	  const s = this.state;
-
 	  window.__ALL_TECH_EVENTS__.push({
 	    allDay:false,
 	    title:event_details.event_title,
@@ -331,15 +327,12 @@ class TechCalendar extends Component {
       minWidth:'100%',
       zIndex:this.props.z_value
     };
-
     return (
       <div style={this.props.tech_calendar_s}>
         <BigCalendar
           selectable
 	  defaultView={'day'}
           style={s}
-	  startAccessor={d => console.log(d)}
-	  endAccessor={d => console.log(d)}
           popup={true}
           timeslots={2}
           onSelectSlot={this.selectedDate}
