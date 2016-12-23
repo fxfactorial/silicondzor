@@ -14,8 +14,8 @@ const sqlite3 =
       process.env.NODE_ENV === 'debug'
       ? require('sqlite3').verbose() : require('sqlite3');
 const bcrypt_promises = require('./bcrypt-promise');
-const json_parser = body_parser.json();
-const form_parser = body_parser.urlencoded({extended: true});
+const json_pr = body_parser.json();
+const form_pr = body_parser.urlencoded({extended: true});
 const nodemailer = require('nodemailer');
 
 const email_account = 'iteratehackerspace@gmail.com';
@@ -34,10 +34,21 @@ const email_transporter =
       .createTransport(`smtps://${email_account}:${email_password}@smtp.gmail.com`)
       : null;
 
+const send_mail = mail_opts => {
+  return new Promise((accept, reject) => {
+    email_transporter.sendMail(mail_opts, (err, other) => {
+      if (err) reject(err);
+      else accept();
+    });
+  });
+};
+
 const port = process.env.NODE_ENV === 'debug' ? 8080 : 80;
 // Assumes that such a database exists, make sure it does.
 const db = new sqlite3.Database('silicondzor.db');
 const Routes = require('../lib/routes').default;
+
+const db_promises = require('./sqlite-promises')(db);
 
 let register_email_users = {};
 // Drop everyone left every 1 hour, aka link is only good for 1 hour
@@ -92,133 +103,126 @@ const site = tech_events => `
 </body>
 `;
 
-silicon_dzor.get('/', (req, res) => {
-  res.setHeader('content-type', 'text/html');
-  db.all('select * from event', (_, d) => {
-    const transformed = d.map(item => {
+silicon_dzor.get('/', async (req, res) => {
+  req.session.logged_in = true;
+  req.session.username = 'edgar.factorial@gmail.com';
+
+  try {
+    const pulled = await db_promises.all(`select * from event`);
+    res.setHeader('content-type', 'text/html');
+    let transformed = pulled.map(item => {
       return {
 	title:item.title,
 	allDay: item.all_day ? true : false,
-	start: new Date(item.start),
-	end: new Date(item.end),
+	start: (new Date(item.start)).getTime(),
+	end: (new Date(item.end)).getTime(),
 	desc: item.description
       };
     });
     res.end(site(transformed));
-  });
+  } catch (e) {
+    console.error(e);
+  }
 });
 
-silicon_dzor.post(Routes.new_account, json_parser, form_parser, (req, res) => {
+silicon_dzor.post(Routes.new_account, json_pr, form_pr, async (req, res) => {
   const {username, password} = req.body;
 
+  // db_promises
+  //   .get(`select email from account where email = $email`,
+  // 	 {$email:username})
+  //   .then(d => {
+      
+  //   });
   const identifier = uuid_v4();
   register_email_users[identifier] = {username, identifier}; 
   const verify_link = email_verify_link(identifier);
 
-  bcrypt_promises.hash(password, 10)
-    .then(hash => {
-      db.run(`insert into account (email, hashed_password) values ($e, $h)`,
-	     { $e: username, $h: hash},
-	     err => {
-	       if (err === null) {
-		 const mail_opts = {
-		   from: 'Silicondzor.com <iteratehackerspace@gmail.com> ',
-		   to: username,
-		   subject: 'Verify account -- Silicondzor.com',
-		   text: email_message(username, verify_link, false),
-		   html: email_message(username, verify_link)
-		 };
-		 email_transporter.sendMail(mail_opts, (err, other) => {
-		   if (err) {
-		     console.error(err);
-		     res.end(replies.fail(err.msg));
-		   } else {
-		     res.end(replies.ok());
-		   }
-		 });
-	       }
-	     });
-    });
+  const hash = await bcrypt_promises.hash(password, 10);
+  try {
+    await db_promises
+      .run(`insert into account (email, hashed_password) values ($e, $h)`,
+	   { $e: username, $h: hash});
+    const mail_opts = {
+      from: 'Silicondzor.com <iteratehackerspace@gmail.com> ',
+      to: username,
+      subject: 'Verify account -- Silicondzor.com',
+      text: email_message(username, verify_link, false),
+      html: email_message(username, verify_link)
+    };
+    await send_mail(mail_opts);
+    res.end(replies.ok());
+  } catch (err) {
+    res.end(replies.fail(err.msg));
+  }
 });
 
-silicon_dzor.post(Routes.sign_in,
-		  json_parser,
-		  form_parser,
-		  (req, res) => {
+silicon_dzor.post(Routes.sign_in, json_pr, form_pr, async (req, res) => {
   const {username, password} = req.body;
-  db.get('select hashed_password from account where email = $e',
-	 {$e:username},
-	 (err, row) => {
-	   if (err) {
-	     req.session.logged_in = false;
-	     res.end(replies.fail(replies.invalid_email));
-	   } else {
-	     bcrypt_promises.compare(password, row.hashed_password)
-	       .then(correct => {
-		 req.session.logged_in = true;
-		 req.session.username = username;
-		 res.end(replies.ok());
-	       })
-	       .catch(err => {
-		 req.session.logged_in = false;
-		 res.end(replies.fail(replies.invalid_credentials));
-	       });
-	   }
-	 });
+  req.session.logged_in = false;
+  try {
+    const row =
+	  await db_promises
+	  .get('select hashed_password from account where email = $e',
+	       {$e:username});
+    try {
+      await bcrypt_promises.compare(password, row.hashed_password);
+      req.session.logged_in = true;
+      req.session.username = username;
+      res.end(replies.ok());
+    }
+    catch (err) {
+      res.end(replies.fail(replies.invalid_credentials));
+    }
+  } catch (err) {
+    res.end(replies.fail(replies.invalid_email));
+  }
 });
 
 silicon_dzor.get(Routes.new_account_verify, (req, res) => {
   const { identifier } = req.params;
   const { username } = register_email_users[identifier];
-  db.run(`update account set is_verified = 1 where email = $username`,
-	 { $username:username },
-	 err => {
-	   if (err) {
-	     console.error(err);
-	     // Need to tell user that email couldn't be verified
-	     res.redirect('/');
-	   }
-	   else {
-	     // Then everything worked yay!
-	     delete register_email_users[username];
-	     req.session.logged_in = true;
-	     req.session.username = username;
-	     res.redirect('/');
-	   }
-	 });
+  db_promises
+    .run(`update account set is_verified = 1 where email = $username`,
+	 { $username:username })
+    .then(() => {
+      delete register_email_users[username];
+      req.session.logged_in = true;
+      req.session.username = username;
+      res.redirect('/');
+    })
+    .catch(err => {
+      console.error(err);
+      // Need to tell user that email couldn't be verified
+      res.redirect('/');
+    });
 });
 
-silicon_dzor.post(Routes.add_tech_event, json_parser, (req, res) => {
-  if (req.session.logged_in) {
-    const b = req.body;
-    db.get(`select * from account where email = $username`,
-	   {$username: req.session.username},
-	   (err, result) => {
-	     db.run(`
-insert into event values 
-($title, $all_day, $start, $end, $description, $creator)
-`,
-		    {
-		      $title: b.event_title,
-		      $all_day: false,
-		      $start:(new Date(b.start)).getTime(),
-		      $end:(new Date(b.end)).getTime(),
-		      $description: b.event_description,
-		      $creator:result.id
-		    },
-		    err => {
-		      if (err === null)
-			res.end(replies.ok());
-		      else {
-			console.error(err);
-			res.end(replies.fail(err.msg));
-		      }
-		    }
-		   );    
-	   }
-	  );
-  } else {
-    res.end(replies.fail(replies.invalid_session));
+silicon_dzor.post(Routes.add_tech_event, json_pr, async (req, res) => {
+
+  try {
+    if (req.session.logged_in) {
+      const b = req.body;
+      const query_result =
+	    await db_promises
+	    .get(`select * from account where email = $username and is_verified = 1`,
+		 {$username: req.session.username});
+      console.log(query_result);
+      await db_promises.run(`insert into event values 
+($title, $all_day, $start, $end, $description, $creator)`, {
+  $title: b.event_title,
+  $all_day: false,
+  $start:(new Date(b.start)).getTime(),
+  $end:(new Date(b.end)).getTime(),
+  $description: b.event_description,
+  $creator:query_result.id
+});
+      res.end(replies.ok());
+    } else {
+      res.end(replies.fail(replies.invalid_session));
+    }
+  } catch (err) {
+    res.end(replies.fail(err.msg));
   }
 });
 

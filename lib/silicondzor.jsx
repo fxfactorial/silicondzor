@@ -46,7 +46,8 @@ class Login extends Component {
     password:'',
     email_valid: false,
     top_prompt_message:
-    `Login so that you can add tech events, do not use anything serious for your password.`
+    `Login so that you can add tech events, 
+do not use anything serious for your password.`
   };
 
   form_action = (register_account, e) => {
@@ -58,7 +59,7 @@ class Login extends Component {
 				       password: this.state.password}));
 
     // Check if the email is valid?
-    console.log(this.state.email_valid);
+    // console.log(this.state.email_valid);
 
     fetch(query, opts)
       .then(resp => resp.json())
@@ -69,7 +70,7 @@ class Login extends Component {
 	  const s = this.state;
 	  if (answer.reason === results.invalid_email ||
 	      answer.reason === results.invalid_credentials) {
-	    console.log(`Something invalid ${JSON.stringify(answer)}`);
+	    // console.log(`Something invalid ${JSON.stringify(answer)}`);
 	    s.top_prompt_message = answer.reason;
 	    this.setState(s);
 	  } else {
@@ -102,8 +103,8 @@ class Login extends Component {
     return (
       <form className={'login-form'}>
 	<div>
-          <p> {this.state.top_prompt_message} </p>
 	  <p style={close_btn_s} onClick={_ => this.props.close_modal()}> x </p>
+          <p> {this.state.top_prompt_message} </p>
 	</div>
         <hr/>
         <div style={form_s} className={'modal-inputs'}>
@@ -174,6 +175,7 @@ class Banner extends Component {
             </p>
             <Modal
               style={modal_s}
+	      contentLabel={'Some simple test'}
               isOpen={this.state.open}>
               <Login close_modal={() => this.setState({open:false})}/>
             </Modal>
@@ -265,11 +267,17 @@ class TechCalendar extends Component {
   }
 
   componentDidMount() {
-    this.setState({...this.state, events: window.__ALL_TECH_EVENTS__});
+    // console.log(window.__ALL_TECH_EVENTS__);
+    this.setState({
+      ...this.state,
+      events: window.__ALL_TECH_EVENTS__.map(event => {
+	return {...event, start:event.start, end:event.end};
+      })
+    });
   }
 
   selectedDate = e => {
-    console.log(e);
+    // console.log({events: e});
     const s = this.state;
     s.start_date = e.start;
     s.end_date = e.end;
@@ -301,13 +309,15 @@ class TechCalendar extends Component {
 	  this.setState(s);
 	} else {
 	  const s = this.state;
-	  s.events.push({
+
+	  window.__ALL_TECH_EVENTS__.push({
+	    allDay:false,
 	    title:event_details.event_title,
-	    start:event_details.start,
+	    start:new Date(event_details.start),
 	    desc:event_details.event_description,
-	    end:event_details.end
+	    end:new Date(event_details.end)
 	  });
-	  console.log('Submitted event');
+	  s.events = window.__ALL_TECH_EVENTS__;
 	  s.modal_show = false;
 	  this.setState(s);
 	}
@@ -328,13 +338,16 @@ class TechCalendar extends Component {
           selectable
 	  defaultView={'day'}
           style={s}
-          popup
+	  startAccessor={d => console.log(d)}
+	  endAccessor={d => console.log(d)}
+          popup={true}
           timeslots={2}
           onSelectSlot={this.selectedDate}
           events={this.state.events}
           />
 	<Modal
 	  style={modal_s}
+	  contentLabel={'Select dates'}
 	  isOpen={this.state.modal_show}>
 	  <TechEvent
 	    submit_event={this.submit_event}
