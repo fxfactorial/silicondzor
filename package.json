@@ -46,7 +46,7 @@
   "scripts": {
     "babel-watch": "NODE_ENV='debug' babel lib/*.jsx --watch --out-dir .",
     "webpack-watch": "NODE_ENV='debug' webpack --progress --colors --watch",
-    "server-watch": "NODE_ENV='debug' nodemon backend/server.js",
+    "server-watch": "NODE_ENV='debug' nodemon --harmony_async_await backend/server.js",
     "app-compile": "NODE_ENV='production' webpack --progress --colors",
     "create-db": "cat backend/setup_database.sql | sqlite3 silicondzor.db"
   },
