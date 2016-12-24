@@ -2,7 +2,7 @@
 Description=Silicondzor.com
 
 [Service]
-ExecStart=/root/silicondzor/backend/server.js
+ExecStart=/root/silicondzor/backend/server.js 
 Restart=always
 User=nobody
 Group=nobody
