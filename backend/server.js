@@ -76,6 +76,7 @@ const site = tech_events => `
 <meta charset="utf-8">
 <head>
   <link rel="shortcut icon" type="image/x-icon" href="public/favicon.ico">
+  <link rel="preload" href="bundle.js" as="script">
   <link href="styles.css" rel="stylesheet" type="text/css">
   <link href="react-big-calendar.css" rel="stylesheet" type="text/css">
   <script>
