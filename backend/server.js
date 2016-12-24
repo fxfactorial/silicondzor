@@ -116,7 +116,7 @@ silicon_dzor.post(Routes.new_account, json_pr, form_pr, async (req, res) => {
 	.get(`select email from account where email = $email`,
   	     {$email:username});
 
-  if (email_query.email) {
+  if (email_query) {
     res.end(replies.fail(replies.invalid_username_already_picked));
     return;
   }
