@@ -1,0 +1,14 @@
+[Unit]
+Description=Silicondzor.com
+
+[Service]
+ExecStart=/root/silicondzor/backend/server.js
+Restart=always
+User=nobody
+Group=nobody
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=NODE_ENV=production
+WorkingDirectory=/root/silicondzor/backend
+
+[Install]
+WantedBy=multi-user.target
