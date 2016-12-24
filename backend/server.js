@@ -65,27 +65,6 @@ silicon_dzor.use(session({
   saveUninitialized: true
 }));
 
-if (process.env.NODE_ENV === 'debug') {
-  setImmediate(() => {
-    db
-      .run(`
-insert into account 
-(email, hashed_password, is_verified) 
-values ($email, $hashed, $is_verified)`, {
-  $email: 'edgar.factorial@gmail.com',
-  $hashed: bcrypt_promises.hashSync('hello', 10),
-  $is_verified: 0})
-      .run(`
-insert into event values ($title, $all_day, $start, $end, $description, 0)`, {
-  $title: 'Hour of Code Yerevan mentor meetup',
-  $all_day: true,
-  $start: (new Date(2016, 11, 18)).getTime(),
-  $end: (new Date(2016, 11, 19)).getTime(),
-  $description: 'Mentor kids with code!'
-});
-  });
-}
-
 const rendered = render(createElement(frontend, null));
 
 const site = tech_events => `
@@ -107,9 +86,6 @@ const site = tech_events => `
 `;
 
 silicon_dzor.get('/', async (req, res) => {
-  req.session.logged_in = true;
-  req.session.username = 'edgar.factorial@gmail.com';
-
   try {
     const pulled = await db_promises.all(`select * from event`);
     res.setHeader('content-type', 'text/html');
