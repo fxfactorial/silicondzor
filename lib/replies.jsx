@@ -11,7 +11,7 @@ export default {
 <body>
   <h3> Sorry, I don't know what resource you're trying to access </h3>
   <p>
-    Head back to <a href='https://silicondzor.com'>silicondzor.com</a>
+    Head back to <a href='http://silicondzor.com'>silicondzor.com</a>
   </p>
 </body>
 `,

@@ -26,7 +26,7 @@ const email_password =
 const email_verify_link = identifier =>
       process.env.NODE_ENV === 'debug'
       ? `http://localhost:8080/verify-account/${identifier}`
-      : `https://silicondzor.com/verify-account/${identifier}`;
+      : `http://silicondzor.com/verify-account/${identifier}`;
 
 const email_transporter =
       email_password !== null
