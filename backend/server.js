@@ -20,7 +20,7 @@ const nodemailer = require('nodemailer');
 
 const email_account = 'iteratehackerspace@gmail.com';
 const email_password =
-      process.env.NODE_ENV === 'debug'
+      process.env.NODE_ENV === 'production'
       ? process.env.ITERATE_EMAIL_PASSWORD : null;
 
 const email_verify_link = identifier =>
