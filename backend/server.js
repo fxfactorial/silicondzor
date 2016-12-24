@@ -193,7 +193,7 @@ silicon_dzor.post(Routes.add_tech_event, json_pr, async (req, res) => {
       await db_promises.run(`insert into event values 
 ($title, $all_day, $start, $end, $description, $creator)`, {
   $title: b.event_title,
-  $all_day: false,
+  $all_day: new Date(b.start) === new Date(b.end),
   $start:(new Date(b.start)).getTime(),
   $end:(new Date(b.end)).getTime(),
   $description: b.event_description,

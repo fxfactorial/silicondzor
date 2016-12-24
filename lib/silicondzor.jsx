@@ -238,6 +238,7 @@ class TechCalendar extends Component {
   state = {
     events: [],
     modal_show: false,
+    allDay:false,
     start_date: new Date,
     end_date: new Date,
     prompt_message: (start, end) => {
@@ -277,6 +278,7 @@ class TechCalendar extends Component {
 
   selectedDate = e => {
     const s = this.state;
+    if (e.start === e.end) s.allDay = true;
     s.start_date = new Date(e.start);
     s.end_date = new Date(e.end);
     s.modal_show = true;
@@ -308,7 +310,7 @@ class TechCalendar extends Component {
 	} else {
 	  const s = this.state;
 	  window.__ALL_TECH_EVENTS__.push({
-	    allDay:false,
+	    allDay:event_details.start === event_details.end,
 	    title:event_details.event_title,
 	    start:new Date(event_details.start),
 	    desc:event_details.event_description,
