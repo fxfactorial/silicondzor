@@ -57,7 +57,10 @@ setTimeout(() => register_email_users = {}, 60 * 1000 * 60);
 silicon_dzor.use(require('helmet')());
 silicon_dzor.use(express.static('public'));
 silicon_dzor.use(session({
-  secret: 'keyboard cat',
+  secret:
+  process.env.NODE_ENV === 'debug'
+    ? 'keyboard cat' :
+    process.env.SD_SESSION_KEY,
   resave: false,
   saveUninitialized: true
 }));

@@ -41,3 +41,4 @@ silicondzor.js
 silicondzor.db
 lib/*.js
 test.js
+public/bundle.js.map
