@@ -60,7 +60,11 @@ silicon_dzor.use(session({
   secret:
   process.env.NODE_ENV === 'debug'
     ? 'keyboard cat' :
-    process.env.SD_SESSION_KEY,
+    (() => {
+      if (!process.env.SD_SESSION_KEY)
+	throw new Error('Running in prod and no SESSION_KEY!');
+      return process.env.SD_SESSION_KEY;
+    })(),
   resave: false,
   saveUninitialized: true
 }));
