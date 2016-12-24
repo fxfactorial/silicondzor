@@ -1,4 +1,3 @@
-#!/usr/bin/env node --harmony_async_await
 'use strict';
 
 const express = require('express');

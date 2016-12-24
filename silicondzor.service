@@ -2,13 +2,15 @@
 Description=Silicondzor.com
 
 [Service]
-ExecStart=/root/silicondzor/backend/server.js 
+ExecStart=/usr/bin/node --harmony_async_await /root/silicondzor/backend/server.js 
 Restart=always
 User=nobody
 Group=nobody
 Environment=PATH=/usr/bin:/usr/local/bin
+# For production add the correct value here: 
 Environment=NODE_ENV=production
-WorkingDirectory=/root/silicondzor/backend
+Environment=SD_SESSION_KEY=
+WorkingDirectory=/root/silicondzor
 
 [Install]
 WantedBy=multi-user.target
