@@ -343,6 +343,7 @@ class TechCalendar extends Component {
           selectable
 	  defaultView={'week'}
           style={s}
+          scrollToTime={new Date(1970, 1, 1, 10)}
           popup={true}
           timeslots={2}
           onSelectSlot={this.selectedDate}
