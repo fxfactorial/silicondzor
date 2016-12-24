@@ -46,7 +46,7 @@
     "babel-watch": "NODE_ENV='debug' babel lib/*.jsx --watch --out-dir .",
     "webpack-watch": "NODE_ENV='debug' webpack --progress -d --colors --watch",
     "server-watch": "NODE_ENV='debug' nodemon --harmony_async_await backend/server.js",
-    "prod-build": "NODE_ENV='production' webpack --config webpack.prod.js --progress --colors -p",
+    "prod-build": "NODE_ENV='production' webpack --config webpack.prod.js --progress --colors -p && babel lib/*.jsx --out-dir .",
     "create-db": "cat backend/setup_database.sql | sqlite3 silicondzor.db"
   },
   "author": "Edgar Aroutiounian <edgar.factorial@gmail.com>",
