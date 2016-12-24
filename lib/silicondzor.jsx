@@ -52,6 +52,13 @@ do not use anything serious for your password.`
 
   form_action = (register_account, e) => {
     e.preventDefault();
+    if (this.state.email_valid == false) {
+      if (!this.state.top_prompt_message.endsWith('Need to use a valid email address')) {
+	this.state.top_prompt_message += 'Need to use a valid email address';
+	this.setState(this.state);
+      }
+      return;
+    }
     const query =
           register_account ? Routes.new_account : Routes.sign_in;
     const opts =
