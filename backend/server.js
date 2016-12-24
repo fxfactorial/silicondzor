@@ -107,12 +107,16 @@ silicon_dzor.get('/', async (req, res) => {
 silicon_dzor.post(Routes.new_account, json_pr, form_pr, async (req, res) => {
   const {username, password} = req.body;
 
-  // db_promises
-  //   .get(`select email from account where email = $email`,
-  // 	 {$email:username})
-  //   .then(d => {
+  const email_query =
+	await db_promises
+	.get(`select email from account where email = $email`,
+  	     {$email:username});
+
+  if (email_query.email) {
+    res.end(replies.fail(replies.invalid_username_already_picked));
+    return;
+  }
       
-  //   });
   const identifier = uuid_v4();
   register_email_users[identifier] = {username, identifier}; 
   const verify_link = email_verify_link(identifier);
@@ -142,7 +146,8 @@ silicon_dzor.post(Routes.sign_in, json_pr, form_pr, async (req, res) => {
   try {
     const row =
 	  await db_promises
-	  .get('select hashed_password from account where email = $e',
+	  .get(`
+select hashed_password from account where email = $e and is_verified = 1`,
 	       {$e:username});
     try {
       await bcrypt_promises.compare(password, row.hashed_password);

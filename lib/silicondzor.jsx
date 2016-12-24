@@ -66,6 +66,7 @@ do not use anything serious for your password.`
 	} else if (answer.result === results.failure) {
 	  const s = this.state;
 	  if (answer.reason === results.invalid_email ||
+	      answer.reason === results.invalid_username_already_picked ||
 	      answer.reason === results.invalid_credentials) {
 	    s.top_prompt_message = answer.reason;
 	    this.setState(s);
@@ -100,7 +101,7 @@ do not use anything serious for your password.`
       <form className={'login-form'}>
 	<div>
 	  <p style={close_btn_s} onClick={_ => this.props.close_modal()}> x </p>
-          <p> {this.state.top_prompt_message} </p>
+          <p style={{textAlign:'center'}}> {this.state.top_prompt_message} </p>
 	</div>
         <hr/>
         <div style={form_s} className={'modal-inputs'}>
