@@ -2,6 +2,10 @@
   "name": "silicondzor",
   "version": "0.0.1",
   "description": "The code behind silicondzor.com",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/fxfactorial/silicondzor.git"
+  },
   "dependencies": {
     "bcrypt": "^0.8.7",
     "body-parser": "^1.15.2",
@@ -50,5 +54,5 @@
     "create-db": "cat backend/setup_database.sql | sqlite3 silicondzor.db"
   },
   "author": "Edgar Aroutiounian <edgar.factorial@gmail.com>",
-  "license": "GPL-3"
+  "license": "GPL-3.0"
 }
