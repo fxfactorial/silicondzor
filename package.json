@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "The code behind silicondzor.com",
   "repository": {
-      "type": "git",
-      "url": "https://github.com/fxfactorial/silicondzor.git"
+    "type": "git",
+    "url": "https://github.com/fxfactorial/silicondzor.git"
   },
   "dependencies": {
     "bcrypt": "^0.8.7",
@@ -12,6 +12,9 @@
     "express": "^4.14.0",
     "express-session": "^1.14.2",
     "helmet": "^3.1.0",
+    "le-challenge-fs": "^2.0.8",
+    "le-store-certbot": "^2.0.3",
+    "letsencrypt-express": "^2.0.5",
     "moment": "^2.16.0",
     "nodemailer": "^2.6.4",
     "pg-promise": "^5.4.1",
