@@ -223,20 +223,20 @@ silicon_dzor.use((req, res, next) => {
     .send(replies.unknown_resource);
 });
 
-function approveDomains(opts, certs, cb) {
+function approveDomains(options, certs, cb) {
   if (certs) {
-    opts.domains = certs.altnames;
+    options.domains = certs.altnames;
   }
   else {
-    opts.email = email_account;
-    opts.agreeTos = true;
+    options.email = email_account;
+    options.agreeTos = true;
   }
-  cb(null, { options: opts, certs: certs });
+  cb(null, {options, certs});
 }
 
 //letsencrypt https
-var lex = leExpress.create({
-  server: 'staging',
+const lex = leExpress.create({
+  server: 'https://acme-v01.api.letsencrypt.org/directory',
   approveDomains: approveDomains,
   challenges: { 'http-01': require('le-challenge-fs').create({ webrootPath: '/tmp/acme-challenges' }) },
   store: require('le-store-certbot').create({ webrootPath: '/tmp/acme-challenges' })
