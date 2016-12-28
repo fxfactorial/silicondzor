@@ -1,6 +1,8 @@
+/*jshint esversion: 6 */
 'use strict';
 
 const express = require('express');
+const leExpress = require('letsencrypt-express');
 const createElement = require('react').createElement;
 const render = require('react-dom/server').renderToString;
 const frontend = require('../lib/silicondzor').default;
@@ -44,6 +46,7 @@ const send_mail = mail_opts => {
 };
 
 const port = process.env.NODE_ENV === 'debug' ? 8080 : 80;
+const port_https = process.env.NODE_ENV === 'debug' ? 8443 : 443;
 // Assumes that such a database exists, make sure it does.
 const db = new sqlite3.Database('silicondzor.db');
 const Routes = require('../lib/routes').default;
@@ -96,11 +99,11 @@ silicon_dzor.get('/', async (req, res) => {
     res.setHeader('content-type', 'text/html');
     let transformed = pulled.map(item => {
       return {
-	title:item.title,
-	allDay: item.all_day ? true : false,
-	start: (new Date(item.start)).getTime(),
-	end: (new Date(item.end)).getTime(),
-	desc: item.description
+        title:item.title,
+        allDay: item.all_day ? true : false,
+        start: (new Date(item.start)).getTime(),
+        end: (new Date(item.end)).getTime(),
+        desc: item.description
       };
     });
     res.end(site(transformed));
@@ -220,4 +223,31 @@ silicon_dzor.use((req, res, next) => {
     .send(replies.unknown_resource);
 });
 
-silicon_dzor.listen(port, () => console.log(`Started on ${port}`));
+function approveDomains(opts, certs, cb) {
+  if (certs) {
+    opts.domains = certs.altnames;
+  }
+  else {
+    opts.email = email_account;
+    opts.agreeTos = true;
+  }
+  cb(null, { options: opts, certs: certs });
+}
+
+//letsencrypt https
+var lex = leExpress.create({
+  server: 'staging',
+  approveDomains: approveDomains,
+  challenges: { 'http-01': require('le-challenge-fs').create({ webrootPath: '/tmp/acme-challenges' }) },
+  store: require('le-store-certbot').create({ webrootPath: '/tmp/acme-challenges' })
+});
+
+// handles acme-challenge and redirects to https
+require('http')
+.createServer(lex.middleware(require('redirect-https')()))
+.listen(port, () => console.log("Listening for ACME http-01 challenges on", port));
+
+// handles silicon_dzor app
+require('https')
+.createServer(lex.httpsOptions, lex.middleware(silicon_dzor))
+.listen(port_https, () => console.log("Listening for ACME tls-sni-01 challenges and serve app on", port_https));
