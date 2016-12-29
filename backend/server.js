@@ -55,7 +55,7 @@ const db_promises = require('./sqlite-promises')(db);
 
 let register_email_users = {};
 // Drop everyone left every 1 hour, aka link is only good for 1 hour
-setTimeout(() => register_email_users = {}, 60 * 1000 * 60);
+setInterval(() => register_email_users = {}, 60 * 1000 * 60);
 
 silicon_dzor.use(require('helmet')());
 silicon_dzor.use(express.static('public'));
