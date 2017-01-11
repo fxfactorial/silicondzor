@@ -68,13 +68,14 @@ var groups = {iterate: 410797219090898, ArmTechCongress: 214940895208239, social
 setInterval(() => {
   for (var group_name in groups) {
     var group_id = groups[group_name];
-    FB.api(`${group_id}/events`, res => {
+    var now = Math.floor(Date.now() / 1000);
+    FB.api(`${group_id}/events?since=${now}`, res => {
       var metadata = res.data.map(each => {
         db_promises.run(`insert or replace into event values ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
           $title: each.name,
           $all_day: !each.end_time || each.start_time === each.end_time,
-          $start: Date.parse(each.start_time)/1000,
-          $end: each.end_time ? Date.parse(each.end_time)/1000 : 0,
+          $start: Math.floor(Date.parse(each.start_time)/1000),
+          $end: each.end_time ? Math.floor(Date.parse(each.end_time)/1000) : 0,
           $description: each.description,
           $creator: group_name,
           $url: `https://facebook.com/events/${each.id}`,
