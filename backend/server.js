@@ -15,6 +15,7 @@ const silicon_dzor = express();
 const sqlite3 =
       process.env.NODE_ENV === 'debug'
       ? require('sqlite3').verbose() : require('sqlite3');
+const crypto = require('crypto');
 const bcrypt_promises = require('./bcrypt-promise');
 const json_pr = body_parser.json();
 const form_pr = body_parser.urlencoded({extended: true});
@@ -69,15 +70,15 @@ setInterval(() => {
     var group_id = groups[group_name];
     FB.api(`${group_id}/events`, res => {
       var metadata = res.data.map(each => {
-        db_promises.run(`insert or replace into event values ($title, $all_day, $start, $end, $description, $creator)`, {
+        db_promises.run(`insert or replace into event values ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
           $title: each.name,
           $all_day: !each.end_time || each.start_time === each.end_time,
           $start: Date.parse(each.start_time)/1000,
           $end: each.end_time ? Date.parse(each.end_time)/1000 : 0,
           $description: each.description,
-          $creator: group_name
-          //$id: each.id,
-          //$url: `https://facebook.com/events/${each.id}`
+          $creator: group_name,
+          $url: `https://facebook.com/events/${each.id}`,
+          $id: `fb-${each.id}`
         });
       });
     });
@@ -225,14 +226,17 @@ silicon_dzor.post(Routes.add_tech_event, json_pr, async (req, res) => {
 	    await db_promises
 	    .get(`select * from account where email = $username and is_verified = 1`,
 		 {$username: req.session.username});
+      var id = crypto.createHash('sha256').update(b.event_title+b.start+query_result.id).digest('hex');
       await db_promises.run(`insert into event values 
-($title, $all_day, $start, $end, $description, $creator)`, {
+($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
   $title: b.event_title,
   $all_day: new Date(b.start) === new Date(b.end),
   $start:(new Date(b.start)).getTime(),
   $end:(new Date(b.end)).getTime(),
   $description: b.event_description,
-  $creator:query_result.id
+  $creator:query_result.id,
+  $url: `https://silicondzor.com/${id}`, // TODO: use the url for linking
+  $id: id
 });
       res.end(replies.ok());
     } else {
