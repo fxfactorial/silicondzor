@@ -17,5 +17,8 @@ CREATE TABLE event (
     end INTEGER NOT NULL,
     description TEXT NOT NULL,
     creator INTEGER NOT NULL,
-    FOREIGN KEY (creator) REFERENCES account(ID)
+    url TEXT NOT NULL,
+    id char(40) NOT NULL,
+    FOREIGN KEY (creator) REFERENCES account(ID),
+    UNIQUE (id)
 );

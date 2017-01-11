@@ -15,6 +15,7 @@ const silicon_dzor = express();
 const sqlite3 =
       process.env.NODE_ENV === 'debug'
       ? require('sqlite3').verbose() : require('sqlite3');
+const crypto = require('crypto');
 const bcrypt_promises = require('./bcrypt-promise');
 const json_pr = body_parser.json();
 const form_pr = body_parser.urlencoded({extended: true});
@@ -54,8 +55,36 @@ const Routes = require('../lib/routes').default;
 const db_promises = require('./sqlite-promises')(db);
 
 let register_email_users = {};
-// Drop everyone left every 1 hour, aka link is only good for 1 hour
+
+// daemons
+// 1. Drop everyone left every 1 hour, aka link is only good for 1 hour
 setInterval(() => register_email_users = {}, 60 * 1000 * 60);
+
+// 2. Fetch anything that is going on from FB for every 48 hours ( ͡° ͜ʖ ͡°)
+var FB = require('fb');
+FB.options({version: 'v2.8'});
+FB.setAccessToken(process.env.ITERATE_FB_TOKEN);
+var groups = {iterate: 410797219090898, ArmTechCongress: 214940895208239, socialbridgeapp: 629600800545917, MICArmenia:195461300492991};
+setInterval(() => {
+  for (var group_name in groups) {
+    var group_id = groups[group_name];
+    var now = Math.floor(Date.now() / 1000);
+    FB.api(`${group_id}/events?since=${now}`, res => {
+      var metadata = res.data.map(each => {
+        db_promises.run(`insert or replace into event values ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
+          $title: each.name,
+          $all_day: !each.end_time || each.start_time === each.end_time,
+          $start: Math.floor(Date.parse(each.start_time)/1000),
+          $end: each.end_time ? Math.floor(Date.parse(each.end_time)/1000) : 0,
+          $description: each.description,
+          $creator: group_name,
+          $url: `https://facebook.com/events/${each.id}`,
+          $id: `fb-${each.id}`
+        });
+      });
+    });
+  }
+}, 60 * 1000 * 60 * 48);
 
 silicon_dzor.use(require('helmet')());
 silicon_dzor.use(express.static('public'));
@@ -198,14 +227,17 @@ silicon_dzor.post(Routes.add_tech_event, json_pr, async (req, res) => {
 	    await db_promises
 	    .get(`select * from account where email = $username and is_verified = 1`,
 		 {$username: req.session.username});
+      var id = crypto.createHash('sha256').update(b.event_title+b.start+query_result.id).digest('hex');
       await db_promises.run(`insert into event values 
-($title, $all_day, $start, $end, $description, $creator)`, {
+($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
   $title: b.event_title,
   $all_day: new Date(b.start) === new Date(b.end),
   $start:(new Date(b.start)).getTime(),
   $end:(new Date(b.end)).getTime(),
   $description: b.event_description,
-  $creator:query_result.id
+  $creator:query_result.id,
+  $url: `https://silicondzor.com/${id}`, // TODO: use the url for linking
+  $id: id
 });
       res.end(replies.ok());
     } else {
