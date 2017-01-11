@@ -31,7 +31,7 @@ the commands in `package.json` in the `scripts` field.
     "prod-build": "NODE_ENV='production' webpack --config webpack.prod.js --progress --colors -p && babel lib/*.jsx --out-dir .",
     "create-db": "cat backend/setup_database.sql | sqlite3 silicondzor.db"
   },
-``
+```
 
 To get the best experience, open 3 terminals and in the 1st one do
 `npm run babel-watch`, then `npm run webpack-watch` in the 2nd, and in
