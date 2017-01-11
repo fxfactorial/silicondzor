@@ -54,8 +54,34 @@ const Routes = require('../lib/routes').default;
 const db_promises = require('./sqlite-promises')(db);
 
 let register_email_users = {};
-// Drop everyone left every 1 hour, aka link is only good for 1 hour
+
+// daemons
+// 1. Drop everyone left every 1 hour, aka link is only good for 1 hour
 setInterval(() => register_email_users = {}, 60 * 1000 * 60);
+
+// 2. Fetch anything that is going on from FB for every 48 hours ( ͡° ͜ʖ ͡°)
+var FB = require('fb');
+FB.options({version: 'v2.8'});
+FB.setAccessToken(process.env.ITERATE_FB_TOKEN);
+var groups = {iterate: 410797219090898, ArmTechCongress: 214940895208239, socialbridgeapp: 629600800545917, MICArmenia:195461300492991};
+setInterval(() => {
+  for (var group_name in groups) {
+    var group_id = groups[group_name];
+    FB.api(`${group_id}/events`, res => {
+      var metadata = res.data.map(each => {
+        console.log(each);
+        db_promises.run(`insert or replace into event values ($title, $all_day, $start, $end, $description, $creator)`, {
+          $title: each.name,
+          $all_day: !each.end_time || each.start_time === each.end_time,
+          $start: each.start_time,
+          $end: each.end_time || 0,
+          $description: each.description,
+          $creator: group_name
+        });
+      });
+    });
+  }
+}, 60 * 1000 * 60 * 48);
 
 silicon_dzor.use(require('helmet')());
 silicon_dzor.use(express.static('public'));
