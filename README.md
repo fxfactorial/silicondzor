@@ -12,6 +12,47 @@ code since this is licensed as GPL-3.0.
 Если вы используете этот код, то вы должны выпустить его на ряду с
 вашим кодом так, как это заверено в лицензии GPL-3.0.
 
+# Purpose 
+
+Use this codebase as a learning experience, to see how a professional 
+project is done and how a codebase is organized. 
+
+This project has examples of: 
+
+0. Making a modern Web application using node as the backend.
+1. Using webpack effectively for both development and production.
+2. Using package.json effectively for all your project build needs.
+3. Using HTTPS easily with `letsencrypt`.
+4. Using React for server side rendering.
+5. Using React for the front end with JSX.
+6. Using sqlite as the backing relational database.
+7. Using express as a server.
+8. Calling the Facebook API.
+9. Using Promises, wrapping callback APIs as Promises.
+10. Sharing code between the frontend and backend.
+11. Securely storing your users passwords with bcrypt.
+12. Using `ES7` features of `async`, `await`.
+13. Turning your app into a `systemd` service
+14. Sending enduser HTML emails with nodemailer.
+
+
+# On a server
+Once you deploy this project to a server, you often want to keep it up
+and alive. For you you should use the standard Linux process manager
+tool called `systemd`. This project include a `silicondzor.service`
+file mostly setup for this project. You can adjust this file and place
+it in `/etc/systemd/system`. `systemd` will watch your process and 
+restart it when it dies, monitors it for you.
+
+Now to start your app, do `systemctl start silicondzor.service`. To make
+sure your app starts whenever your server starts, do: 
+`systemctl enable silicondzor.service`. Other choices are `stop` and 
+`restart`.
+
+You'll probably want to see what's happening as well, your console.log 
+output will go to `/var/log/syslog`. See it update in real time with: 
+`tail -f /var/log/syslog`.
+
 # setup #
 
 To run in production then this assumes that you have the server keys 
