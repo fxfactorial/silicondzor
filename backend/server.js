@@ -72,7 +72,6 @@ const groups = { iterate: 410797219090898,
 
 // Getting the tech events every 48 Hours
 setInterval(() => {
-
   for (const group_name in groups) {
 
     FB.api('oauth/access_token', {
@@ -99,14 +98,15 @@ setInterval(() => {
 	}
 
         res.data.forEach(each => {
+          var start = Math.floor(Date.parse(each.start_time)/1000);
           db_promises
 	    .run(`
 insert or replace into event values 
 ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
   $title: each.name,
   $all_day: !each.end_time || each.start_time === each.end_time,
-  $start: Math.floor(Date.parse(each.start_time)/1000),
-  $end: each.end_time ? Math.floor(Date.parse(each.end_time)/1000) : 0,
+  $start: start,
+  $end: each.end_time ? Math.floor(Date.parse(each.end_time)/1000) : start,
   $description: each.description,
   $creator: group_name,
   $url: `https://facebook.com/events/${each.id}`,
