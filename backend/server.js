@@ -102,7 +102,7 @@ setInterval(() => {
       }
 
       res.data.forEach(each => {
-        var start = Math.floor(Date.parse(each.start_time)/1000);
+        const start = (new Date(each.start_time)).getTime();
         db_promises
         .run(`
              insert or replace into event values 
@@ -110,7 +110,7 @@ setInterval(() => {
                $title: each.name,
                $all_day: !each.end_time || each.start_time === each.end_time,
                $start: start,
-               $end: each.end_time ? Math.floor(Date.parse(each.end_time)/1000) : start,
+               $end: each.end_time ? (new Date(each.end_time)).getTime() : start,
                $description: each.description,
                $creator: group_name,
                $url: `https://facebook.com/events/${each.id}`,
