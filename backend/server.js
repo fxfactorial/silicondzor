@@ -58,43 +58,64 @@ let register_email_users = {};
 
 // daemons
 // 1. Drop everyone left every 1 hour, aka link is only good for 1 hour
-setInterval(() => register_email_users = {}, 60 * 1000 * 60);
+// setInterval(() => register_email_users = {}, 60 * 1000 * 60);
 
 // 2. Fetch anything that is going on from FB for every 48 hours ( ͡° ͜ʖ ͡°)
-var FB = require('fb');
+const FB = require('fb');
 FB.options({version: 'v2.8'});
-var groups = {iterate: 410797219090898, ArmTechCongress: 214940895208239, socialbridgeapp: 629600800545917, MICArmenia:195461300492991};
-setInterval(() => {
-  FB.api('oauth/access_token', {
-    client_id: process.env.ITERATE_FB_APP_ID,
-    client_secret: process.env.ITERATE_FB_APP_SECRET,
-    grant_type: 'client_credentials'
-  }, res => {
-    if (!res || res.error) {
-      console.log(!res ? 'error occurred' : res.error);
-      return;
-    }
-    FB.setAccessToken(res.access_token);
 
-    for (var group_name in groups) {
-      var group_id = groups[group_name];
-      var now = Math.floor(Date.now() / 1000);
-      FB.api(`${group_id}/events?since=${now}`, res => {
-        var metadata = res.data.map(each => {
-          db_promises.run(`insert or replace into event values ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
-            $title: each.name,
-            $all_day: !each.end_time || each.start_time === each.end_time,
-            $start: Math.floor(Date.parse(each.start_time)/1000),
-            $end: each.end_time ? Math.floor(Date.parse(each.end_time)/1000) : 0,
-            $description: each.description,
-            $creator: group_name,
-            $url: `https://facebook.com/events/${each.id}`,
-              $id: `fb-${each.id}`
-          });
-        });
+// This should come from a table.
+const groups = { iterate: 410797219090898, 
+		 ArmTechCongress: 214940895208239, 
+		 socialbridgeapp: 629600800545917, 
+		 MICArmenia:195461300492991 };
+
+// Getting the tech events every 48 Hours
+setInterval(() => {
+
+  for (const group_name in groups) {
+
+    FB.api('oauth/access_token', {
+      client_id: process.env.ITERATE_FB_APP_ID,
+      client_secret: process.env.ITERATE_FB_APP_SECRET,
+      grant_type: 'client_credentials'
+    }, res => {
+
+      if (res.error) {
+	console.log(!res ? 'error occurred' : res.error);
+	return;
+      }
+
+      const { access_token } = res;
+      FB.setAccessToken(access_token);
+
+      const group_id = groups[group_name];
+      const now = Math.floor(Date.now() / 1000);
+      FB.api(`${group_id}/events?since=${now}`, {access_token}, res => {
+
+	if (res.error) {
+	  console.log(!res ? 'error occurred' : res.error);
+	  return;
+	}
+
+        res.data.forEach(each => {
+          db_promises
+	    .run(`
+insert or replace into event values 
+($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
+  $title: each.name,
+  $all_day: !each.end_time || each.start_time === each.end_time,
+  $start: Math.floor(Date.parse(each.start_time)/1000),
+  $end: each.end_time ? Math.floor(Date.parse(each.end_time)/1000) : 0,
+  $description: each.description,
+  $creator: group_name,
+  $url: `https://facebook.com/events/${each.id}`,
+  $id: `fb-${each.id}`
+});
+	});
       });
-    }
-  });
+    });
+  };
 }, 60 * 1000 * 60 * 48);
 
 silicon_dzor.use(require('helmet')());
@@ -277,26 +298,26 @@ function approveDomains(options, certs, cb) {
   cb(null, {options, certs});
 }
 
-(() => {
-  if (process.env.NODE_ENV === 'debug') {
-    silicon_dzor.listen(8080, () => console.log('Started debug server, no HTTPS'));
-  } else {
-    //letsencrypt https
-    const lex = leExpress.create({
-      server: 'https://acme-v01.api.letsencrypt.org/directory',
-      approveDomains: approveDomains,
-      challenges: { 'http-01': require('le-challenge-fs').create({ webrootPath: '/tmp/acme-challenges' }) },
-      store: require('le-store-certbot').create({ webrootPath: '/tmp/acme-challenges' })
-    });
+// (() => {
+//   if (process.env.NODE_ENV === 'debug') {
+//     silicon_dzor.listen(8080, () => console.log('Started debug server, no HTTPS'));
+//   } else {
+//     //letsencrypt https
+//     const lex = leExpress.create({
+//       server: 'https://acme-v01.api.letsencrypt.org/directory',
+//       approveDomains: approveDomains,
+//       challenges: { 'http-01': require('le-challenge-fs').create({ webrootPath: '/tmp/acme-challenges' }) },
+//       store: require('le-store-certbot').create({ webrootPath: '/tmp/acme-challenges' })
+//     });
 
-    // handles acme-challenge and redirects to https
-    require('http')
-      .createServer(lex.middleware(require('redirect-https')()))
-      .listen(port, () => console.log("Listening for ACME http-01 challenges on", port));
+//     // handles acme-challenge and redirects to https
+//     require('http')
+//       .createServer(lex.middleware(require('redirect-https')()))
+//       .listen(port, () => console.log("Listening for ACME http-01 challenges on", port));
 
-    // handles silicon_dzor app
-    require('https')
-      .createServer(lex.httpsOptions, lex.middleware(silicon_dzor))
-      .listen(port_https, () => console.log("Listening for ACME tls-sni-01 challenges and serve app on", port_https));
-  }
-})();
+//     // handles silicon_dzor app
+//     require('https')
+//       .createServer(lex.httpsOptions, lex.middleware(silicon_dzor))
+//       .listen(port_https, () => console.log("Listening for ACME tls-sni-01 challenges and serve app on", port_https));
+//   }
+// })();
