@@ -70,7 +70,12 @@ setInterval(() => {
     client_secret: process.env.ITERATE_FB_APP_SECRET,
     grant_type: 'client_credentials'
   }, res => {
+    if (!res || res.error) {
+      console.log(!res ? 'error occurred' : res.error);
+      return;
+    }
     FB.setAccessToken(res.access_token);
+
     for (var group_name in groups) {
       var group_id = groups[group_name];
       var now = Math.floor(Date.now() / 1000);
