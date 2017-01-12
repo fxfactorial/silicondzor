@@ -74,6 +74,9 @@ the 3rd one `npm run server-watch`. This will automatically rebuild
 everything whenever you have a change in the source code and restart
 the server if something changed to the server side code.
 
+Note: You might get trouble with `sqlite3` not properly loading as a
+module, try doing: `npm install sqlite3 --build-from-source`
+
 Remember, you can see all the commands in `package.json` in the
 `scripts` field, these come up for `npm run <some_script_name>`.
 
