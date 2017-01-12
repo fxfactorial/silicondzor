@@ -343,7 +343,7 @@ class TechCalendar extends Component {
       <div style={this.props.tech_calendar_s}>
         <BigCalendar
           selectable
-	  defaultView={'week'}
+	  defaultView={'month'}
           style={s}
           scrollToTime={default_scroll_time}
           popup={true}
