@@ -298,26 +298,26 @@ function approveDomains(options, certs, cb) {
   cb(null, {options, certs});
 }
 
-// (() => {
-//   if (process.env.NODE_ENV === 'debug') {
-//     silicon_dzor.listen(8080, () => console.log('Started debug server, no HTTPS'));
-//   } else {
-//     //letsencrypt https
-//     const lex = leExpress.create({
-//       server: 'https://acme-v01.api.letsencrypt.org/directory',
-//       approveDomains: approveDomains,
-//       challenges: { 'http-01': require('le-challenge-fs').create({ webrootPath: '/tmp/acme-challenges' }) },
-//       store: require('le-store-certbot').create({ webrootPath: '/tmp/acme-challenges' })
-//     });
+(() => {
+  if (process.env.NODE_ENV === 'debug') {
+    silicon_dzor.listen(8080, () => console.log('Started debug server, no HTTPS'));
+  } else {
+    //letsencrypt https
+    const lex = leExpress.create({
+      server: 'https://acme-v01.api.letsencrypt.org/directory',
+      approveDomains: approveDomains,
+      challenges: { 'http-01': require('le-challenge-fs').create({ webrootPath: '/tmp/acme-challenges' }) },
+      store: require('le-store-certbot').create({ webrootPath: '/tmp/acme-challenges' })
+    });
 
-//     // handles acme-challenge and redirects to https
-//     require('http')
-//       .createServer(lex.middleware(require('redirect-https')()))
-//       .listen(port, () => console.log("Listening for ACME http-01 challenges on", port));
+    // handles acme-challenge and redirects to https
+    require('http')
+      .createServer(lex.middleware(require('redirect-https')()))
+      .listen(port, () => console.log("Listening for ACME http-01 challenges on", port));
 
-//     // handles silicon_dzor app
-//     require('https')
-//       .createServer(lex.httpsOptions, lex.middleware(silicon_dzor))
-//       .listen(port_https, () => console.log("Listening for ACME tls-sni-01 challenges and serve app on", port_https));
-//   }
-// })();
+    // handles silicon_dzor app
+    require('https')
+      .createServer(lex.httpsOptions, lex.middleware(silicon_dzor))
+      .listen(port_https, () => console.log("Listening for ACME tls-sni-01 challenges and serve app on", port_https));
+  }
+})();
