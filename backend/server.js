@@ -63,27 +63,33 @@ setInterval(() => register_email_users = {}, 60 * 1000 * 60);
 // 2. Fetch anything that is going on from FB for every 48 hours ( ͡° ͜ʖ ͡°)
 var FB = require('fb');
 FB.options({version: 'v2.8'});
-FB.setAccessToken(process.env.ITERATE_FB_TOKEN);
 var groups = {iterate: 410797219090898, ArmTechCongress: 214940895208239, socialbridgeapp: 629600800545917, MICArmenia:195461300492991};
 setInterval(() => {
-  for (var group_name in groups) {
-    var group_id = groups[group_name];
-    var now = Math.floor(Date.now() / 1000);
-    FB.api(`${group_id}/events?since=${now}`, res => {
-      var metadata = res.data.map(each => {
-        db_promises.run(`insert or replace into event values ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
-          $title: each.name,
-          $all_day: !each.end_time || each.start_time === each.end_time,
-          $start: Math.floor(Date.parse(each.start_time)/1000),
-          $end: each.end_time ? Math.floor(Date.parse(each.end_time)/1000) : 0,
-          $description: each.description,
-          $creator: group_name,
-          $url: `https://facebook.com/events/${each.id}`,
-          $id: `fb-${each.id}`
+  FB.api('oauth/access_token', {
+    client_id: process.env.ITERATE_FB_APP_ID,
+    client_secret: process.env.ITERATE_FB_APP_SECRET,
+    grant_type: 'client_credentials'
+  }, res => {
+    FB.setAccessToken(res.access_token);
+    for (var group_name in groups) {
+      var group_id = groups[group_name];
+      var now = Math.floor(Date.now() / 1000);
+      FB.api(`${group_id}/events?since=${now}`, res => {
+        var metadata = res.data.map(each => {
+          db_promises.run(`insert or replace into event values ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
+            $title: each.name,
+            $all_day: !each.end_time || each.start_time === each.end_time,
+            $start: Math.floor(Date.parse(each.start_time)/1000),
+            $end: each.end_time ? Math.floor(Date.parse(each.end_time)/1000) : 0,
+            $description: each.description,
+            $creator: group_name,
+            $url: `https://facebook.com/events/${each.id}`,
+              $id: `fb-${each.id}`
+          });
         });
       });
-    });
-  }
+    }
+  });
 }, 60 * 1000 * 60 * 48);
 
 silicon_dzor.use(require('helmet')());
