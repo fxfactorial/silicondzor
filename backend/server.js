@@ -64,6 +64,23 @@ let register_email_users = {};
 const FB = require('fb');
 FB.options({version: 'v2.8'});
 
+// wrapper for the FB API to get access token each time
+const FBReq = (req, cb) => {
+  FB.api('oauth/access_token', {
+    client_id: process.env.ITERATE_FB_APP_ID,
+    client_secret: process.env.ITERATE_FB_APP_SECRET,
+    grant_type: 'client_credentials'
+  }, res => {
+    if (!res || res.error) {
+      console.log(!res ? 'error occurred during the token request' : res.error);
+      return;
+    }
+    const { access_token } = res;
+    FB.setAccessToken(access_token);
+    FB.api(req, {access_token}, cb);
+  });
+};
+
 // This should come from a table.
 const groups = { iterate: 410797219090898, 
 		 ArmTechCongress: 214940895208239, 
@@ -72,50 +89,36 @@ const groups = { iterate: 410797219090898,
 
 // Getting the tech events every 48 Hours
 setInterval(() => {
-
   for (const group_name in groups) {
-
-    FB.api('oauth/access_token', {
-      client_id: process.env.ITERATE_FB_APP_ID,
-      client_secret: process.env.ITERATE_FB_APP_SECRET,
-      grant_type: 'client_credentials'
-    }, res => {
-
-      if (res.error) {
-	console.log(!res ? 'error occurred' : res.error);
-	return;
+    const group_id = groups[group_name];
+    const now = Math.floor(Date.now() / 1000);
+    FBReq(`${group_id}/events?since=${now}`, res => {
+      if (!res || !res.data) {
+        console.log(`error occured when requesting a list of events for ${group_name}`);
+        return;
+      } else if (res.error) {
+        console.log(res.error);
+        return;
       }
 
-      const { access_token } = res;
-      FB.setAccessToken(access_token);
-
-      const group_id = groups[group_name];
-      const now = Math.floor(Date.now() / 1000);
-      FB.api(`${group_id}/events?since=${now}`, {access_token}, res => {
-
-	if (res.error) {
-	  console.log(!res ? 'error occurred' : res.error);
-	  return;
-	}
-
-        res.data.forEach(each => {
-          db_promises
-	    .run(`
-insert or replace into event values 
-($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
-  $title: each.name,
-  $all_day: !each.end_time || each.start_time === each.end_time,
-  $start: Math.floor(Date.parse(each.start_time)/1000),
-  $end: each.end_time ? Math.floor(Date.parse(each.end_time)/1000) : 0,
-  $description: each.description,
-  $creator: group_name,
-  $url: `https://facebook.com/events/${each.id}`,
-  $id: `fb-${each.id}`
-});
-	});
+      res.data.forEach(each => {
+        const start = (new Date(each.start_time)).getTime();
+        db_promises
+        .run(`
+             insert or replace into event values 
+             ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
+               $title: each.name,
+               $all_day: !each.end_time || each.start_time === each.end_time,
+               $start: start,
+               $end: each.end_time ? (new Date(each.end_time)).getTime() : start,
+               $description: each.description,
+               $creator: group_name,
+               $url: `https://facebook.com/events/${each.id}`,
+                 $id: `fb-${each.id}`
+             });
       });
     });
-  };
+  }
 }, 60 * 1000 * 60 * 48);
 
 silicon_dzor.use(require('helmet')());
@@ -259,7 +262,7 @@ silicon_dzor.post(Routes.add_tech_event, json_pr, async (req, res) => {
 	    await db_promises
 	    .get(`select * from account where email = $username and is_verified = 1`,
 		 {$username: req.session.username});
-      var id = crypto.createHash('sha256').update(b.event_title+b.start+query_result.id).digest('hex');
+      const id = crypto.createHash('sha256').update(b.event_title+b.start+query_result.id).digest('hex');
       await db_promises.run(`insert into event values 
 ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
   $title: b.event_title,
