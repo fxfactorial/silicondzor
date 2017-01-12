@@ -53,6 +53,9 @@ You'll probably want to see what's happening as well, your console.log
 output will go to `/var/log/syslog`. See it update in real time with: 
 `tail -f /var/log/syslog`.
 
+To see only the logs relevant to your service, do `journalctl -u
+silicondzor`
+
 # Setting up for development
 
 1. First fork this project, you can do that by click `fork` in the top
