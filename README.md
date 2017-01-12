@@ -1,5 +1,5 @@
 silicondzor 🇦🇲
-----------------
+-----------
 
 This is the source code of [silicondzor](http://silicondzor.com)
 
@@ -35,8 +35,8 @@ This project has examples of:
 13. Turning your app into a `systemd` service
 14. Sending enduser HTML emails with nodemailer.
 
-
 # On a server
+
 Once you deploy this project to a server, you often want to keep it up
 and alive. For you you should use the standard Linux process manager
 tool called `systemd`. This project include a `silicondzor.service`
@@ -53,16 +53,26 @@ You'll probably want to see what's happening as well, your console.log
 output will go to `/var/log/syslog`. See it update in real time with: 
 `tail -f /var/log/syslog`.
 
-# setup #
+# Setting up for development
 
-To run in production then this assumes that you have the server keys 
-and the database. To create the database, do: `npm run create-db`.
+1. First fork this project, you can do that by click `fork` in the top
+2. Then clone the project locally with `git`. (Will be `git clone
+   ...`)
+3. Once project is cloned locally do `npm run setup-dependencies` in
+   the root of the project. This assumes you're using
+   `Debian`/`Ubuntu` and it installed `sqlite3`
+4. Then do `npm install`, this downloads all the JavaScript needed for
+   this project.
+5. Now you can create a database, do that with `npm run create-db`.
 
-For `npm run create-db` to work, you need to have `sqlite3` installed
-on your computer, you can install it with `aptitude` on `Ubuntu` and
-`Debian`. After that you should do `npm install` to install all the
-dependencies that you need for this project. Remember, you can see all
-the commands in `package.json` in the `scripts` field. 
+To get the best experience, open 3 terminals and in the 1st one do
+`npm run babel-watch`, then `npm run webpack-watch` in the 2nd, and in
+the 3rd one `npm run server-watch`. This will automatically rebuild
+everything whenever you have a change in the source code and restart
+the server if something changed to the server side code.
+
+Remember, you can see all the commands in `package.json` in the
+`scripts` field, these come up for `npm run <some_script_name>`.
 
 ```
   "scripts": {
@@ -73,9 +83,3 @@ the commands in `package.json` in the `scripts` field.
     "create-db": "cat backend/setup_database.sql | sqlite3 silicondzor.db"
   },
 ```
-
-To get the best experience, open 3 terminals and in the 1st one do
-`npm run babel-watch`, then `npm run webpack-watch` in the 2nd, and in
-the 3rd one `npm run server-watch`. This will automatically rebuild
-everything whenever you have a change in the source code and restart
-the server if something changed to the server side code.
