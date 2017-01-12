@@ -262,7 +262,7 @@ silicon_dzor.post(Routes.add_tech_event, json_pr, async (req, res) => {
 	    await db_promises
 	    .get(`select * from account where email = $username and is_verified = 1`,
 		 {$username: req.session.username});
-      var id = crypto.createHash('sha256').update(b.event_title+b.start+query_result.id).digest('hex');
+      const id = crypto.createHash('sha256').update(b.event_title+b.start+query_result.id).digest('hex');
       await db_promises.run(`insert into event values 
 ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
   $title: b.event_title,
