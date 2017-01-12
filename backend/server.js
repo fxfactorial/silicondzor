@@ -77,7 +77,7 @@ const FBReq = (req, cb) => {
     }
     const { access_token } = res;
     FB.setAccessToken(access_token);
-    FB.api(req, {access_token}, cb);
+    FB.api(req, cb);
   });
 };
 
