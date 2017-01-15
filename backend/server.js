@@ -45,7 +45,6 @@ const send_mail = mail_opts => {
     });
   });
 };
-const request = require('request');
 const request_prom = require("request-promise");
 const port = process.env.NODE_ENV === 'debug' ? 8080 : 80;
 const port_https = process.env.NODE_ENV === 'debug' ? 8443 : 443;
@@ -69,7 +68,7 @@ FB.options({version: 'v2.8'});
 const FBReq = (req, cb) => {
   FB.api('oauth/access_token', {
     client_id: process.env.ITERATE_FB_APP_ID,
-      client_secret: process.env.ITERATE_FB_APP_SECRET,
+    client_secret: process.env.ITERATE_FB_APP_SECRET,
     grant_type: 'client_credentials'
   }, res => {
     if (!res || res.error) {
@@ -83,12 +82,12 @@ const FBReq = (req, cb) => {
 };
 
 // This should come from a table.
-const groups = { iterate: 410797219090898,
-		 ArmTechCongress: 214940895208239,
-		 socialbridgeapp: 629600800545917,
+const groups = { iterate: 410797219090898, 
+		 ArmTechCongress: 214940895208239, 
+		 socialbridgeapp: 629600800545917, 
 		 MICArmenia:195461300492991 };
 
-const endpoint = 'https://translate.yandex.net/api/v1.5/tr.json';
+const endpoint = `https://translate.yandex.net/api/v1.5/tr.json`;
 const yandexTranslatorApiKey = process.env.ITERATE_YANDEX_TRANSLATOR_API;
 let jsonRequest = async (url, params, cb) => {
   let handler = (err, res) => {
@@ -107,40 +106,28 @@ let jsonRequest = async (url, params, cb) => {
   else
     await request_prom.post(url, params, handler);
 };
-// let detect = function detect(text, opts, cb) {
-//   jsonRequest(endpoint + '/detect', {
-//         form: {
-//           text: text,
-//           key: opts.key,
-//           format: opts.format
-//         }
-//      }, cb);
-// };
 let translate = async (text, opts, cb) => {
-  await jsonRequest(endpoint + '/translate', {
+  await jsonRequest(endpoint + `/translate`, {
       form: {
         text: text,
-        key: opts.key,
-        format: opts.format,
-        lang: opts.from ? opts.from + '-' + opts.to : opts.to
+        key: yandexTranslatorApiKey, 
+        format: `text`,
+        lang: opts.from ? opts.from + `-` + opts.to : opts.to
       }
   }, cb);
 };
 let translateAll = async (textToTranslate) => {
-  let title_en;
-  let title_ru;
-  let title_hy;
-  await translate(textToTranslate, {to: 'en', format: 'text', key: yandexTranslatorApiKey}, (err, res) => {
+  let title_en, title_ru, title_hy;
+  await translate(textToTranslate, {to: `en`}, (err, res) => {
     title_en = res.text[0];
   });
-  await translate(textToTranslate, {to: 'ru', format: 'text', key: yandexTranslatorApiKey}, (err, res) => {
+  await translate(textToTranslate, {to: `ru`}, (err, res) => {
     title_ru = res.text[0];
   });
-  await translate(textToTranslate, {to: 'hy', format: 'text', key: yandexTranslatorApiKey}, (err, res) => {
+  await translate(textToTranslate, {to: `hy`}, (err, res) => {
     title_hy = res.text[0];
   });
-  let title = title_en + ' / ' + title_hy + ' / ' + title_ru;
-  return title;
+  return title_en + ` / ` + title_hy + ` / ` + title_ru;
 }
 // Getting the tech events every 48 Hours
 setInterval(() => {
@@ -155,29 +142,27 @@ setInterval(() => {
         console.log(res.error);
         return;
       }
-      res.data.forEach(each => {
+
+      res.data.forEach(async each => {
         const start = (new Date(each.start_time)).getTime();
-        let title = translateAll(each.name);
-        title.then((title) => {
-          console.log(title);
-          db_promises
-          .run(`
-               insert or replace into event values
-               ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
-                 $title: title,
-                 $all_day: !each.end_time || each.start_time === each.end_time,
-                 $start: start,
-                 $end: each.end_time ? (new Date(each.end_time)).getTime() : start,
-                 $description: each.description,
-                 $creator: group_name,
-                 $url: `https://facebook.com/events/${each.id}`,
-                   $id: `fb-${each.id}`
-               });
-        })
+        let title = await translateAll(each.name);
+        db_promises
+        .run(`
+             insert or replace into event values 
+             ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
+               $title: title,
+               $all_day: !each.end_time || each.start_time === each.end_time,
+               $start: start,
+               $end: each.end_time ? (new Date(each.end_time)).getTime() : start,
+               $description: each.description,
+               $creator: group_name,
+               $url: `https://facebook.com/events/${each.id}`,
+                 $id: `fb-${each.id}`
+             });
       });
     });
   }
-}, 5 * 1000);
+}, 60 * 1000 * 60 * 48);
 
 silicon_dzor.use(require('helmet')());
 silicon_dzor.use(express.static('public'));
@@ -246,9 +231,9 @@ silicon_dzor.post(Routes.new_account, json_pr, form_pr, async (req, res) => {
     res.end(replies.fail(replies.invalid_username_already_picked));
     return;
   }
-
+  
   const identifier = uuid_v4();
-  register_email_users[identifier] = {username, identifier};
+  register_email_users[identifier] = {username, identifier}; 
   const verify_link = email_verify_link(identifier);
 
   const hash = await bcrypt_promises.hash(password, 10);
@@ -321,7 +306,7 @@ silicon_dzor.post(Routes.add_tech_event, json_pr, async (req, res) => {
 	    .get(`select * from account where email = $username and is_verified = 1`,
 		 {$username: req.session.username});
       const id = crypto.createHash('sha256').update(b.event_title+b.start+query_result.id).digest('hex');
-      await db_promises.run(`insert into event values
+      await db_promises.run(`insert into event values 
 ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
   $title: b.event_title,
   $all_day: new Date(b.start) === new Date(b.end),
