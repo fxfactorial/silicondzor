@@ -301,6 +301,7 @@ silicon_dzor.post(Routes.add_tech_event, json_pr, async (req, res) => {
   try {
     if (req.session.logged_in) {
       const b = req.body;
+      let title = await translateAll(b.event_title);
       const query_result =
 	    await db_promises
 	    .get(`select * from account where email = $username and is_verified = 1`,
@@ -308,7 +309,7 @@ silicon_dzor.post(Routes.add_tech_event, json_pr, async (req, res) => {
       const id = crypto.createHash('sha256').update(b.event_title+b.start+query_result.id).digest('hex');
       await db_promises.run(`insert into event values 
 ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
-  $title: b.event_title,
+  $title: title,
   $all_day: new Date(b.start) === new Date(b.end),
   $start:(new Date(b.start)).getTime(),
   $end:(new Date(b.end)).getTime(),
