@@ -117,17 +117,13 @@ let translate = async (text, opts, cb) => {
   }, cb);
 };
 let translateAll = async (textToTranslate) => {
-  let title_en, title_ru, title_hy;
-  await translate(textToTranslate, {to: `en`}, (err, res) => {
-    title_en = res.text[0];
-  });
-  await translate(textToTranslate, {to: `ru`}, (err, res) => {
-    title_ru = res.text[0];
-  });
-  await translate(textToTranslate, {to: `hy`}, (err, res) => {
-    title_hy = res.text[0];
-  });
-  return title_en + ` / ` + title_hy + ` / ` + title_ru;
+  let title = [{lang:`en`},{lang:`ru`},{lang:`hy`}];
+  await Promise.all(title.map(async each => {
+    await translate(textToTranslate, {to: each.lang}, (err, res) => {
+      each.translate = res.text[0];
+    });
+  }));
+  return title[0].translate + ` / ` + title[1].translate + ` / ` + title[2].translate;
 }
 // Getting the tech events every 48 Hours
 setInterval(() => {
