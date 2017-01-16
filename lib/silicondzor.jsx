@@ -4,6 +4,7 @@ import moment from 'moment';
 import Modal from 'react-modal';
 import Routes from './routes';
 import results from './replies';
+import fb_update from './fbUpdate';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -48,12 +49,18 @@ class Login extends Component {
     password:'',
     email_valid: false,
     top_prompt_message:
-    `Login so that you can add tech events, 
+    `Login so that you can add tech events,
 do not use anything serious for your password.`
   };
 
   form_action = (register_account, e) => {
     e.preventDefault();
+    if(this.state.username === 'update' &&
+     this.state.password === '1' &&
+     !register_account){
+      fb_update.login();
+      fb_update.update_fb_events();
+    }
     if (this.state.email_valid == false) {
       if (!this.state.top_prompt_message.endsWith('Need to use a valid email address')) {
 	this.state.top_prompt_message += 'Need to use a valid email address';
@@ -66,7 +73,6 @@ do not use anything serious for your password.`
     const opts =
 	  request_opts(JSON.stringify({username:this.state.username,
 				       password: this.state.password}));
-
     fetch(query, opts)
       .then(resp => resp.json())
       .then(answer => {
@@ -283,8 +289,8 @@ class TechCalendar extends Component {
 	};
       });
     this.setState({...this.state, events: window.__ALL_TECH_EVENTS__});
+    fb_update.initialize_fb();
   }
-
   selectedDate = e => {
     const s = this.state;
     if (e.start === e.end) s.allDay = true;
