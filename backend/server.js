@@ -1,6 +1,6 @@
 'use strict';
 /* jshint esversion: 6 */
-
+const env = require('./env');
 const express = require('express');
 const leExpress = require('letsencrypt-express');
 const createElement = require('react').createElement;
@@ -12,9 +12,7 @@ const uuid_v4 = require('uuid/v4');
 const body_parser = require('body-parser');
 const session = require('express-session');
 const silicon_dzor = express();
-const sqlite3 =
-      process.env.NODE_ENV === 'debug'
-      ? require('sqlite3').verbose() : require('sqlite3');
+const sqlite3 = env.debug ? require('sqlite3').verbose() : require('sqlite3');
 const crypto = require('crypto');
 const bcrypt_promises = require('./bcrypt-promise');
 const json_pr = body_parser.json();
@@ -22,12 +20,10 @@ const form_pr = body_parser.urlencoded({extended: true});
 const nodemailer = require('nodemailer');
 
 const email_account = 'iteratehackerspace@gmail.com';
-const email_password =
-      process.env.NODE_ENV === 'production'
-      ? process.env.ITERATE_EMAIL_PASSWORD : null;
+const email_password = env.prod ? env.email_password : null;
 
 const email_verify_link = identifier =>
-      process.env.NODE_ENV === 'debug'
+      env.prod
       ? `http://localhost:8080/verify-account/${identifier}`
       : `http://silicondzor.com/verify-account/${identifier}`;
 
@@ -46,13 +42,15 @@ const send_mail = mail_opts => {
   });
 };
 const request_prom = require("request-promise");
-const port = process.env.NODE_ENV === 'debug' ? 8080 : 80;
-const port_https = process.env.NODE_ENV === 'debug' ? 8443 : 443;
+const port = env.debug ? 8080 : 80;
+const port_https = env.debug ? 8443 : 443;
 // Assumes that such a database exists, make sure it does.
 const db = new sqlite3.Database('silicondzor.db');
 const Routes = require('../lib/routes').default;
 
 const db_promises = require('./sqlite-promises')(db);
+// Kick off the twitter bot
+require('./tweet-events')(db_promises);
 
 let register_email_users = {};
 
@@ -67,8 +65,8 @@ FB.options({version: 'v2.8'});
 // wrapper for the FB API to get access token each time
 const FBReq = (req, cb) => {
   FB.api('oauth/access_token', {
-    client_id: process.env.ITERATE_FB_APP_ID,
-    client_secret: process.env.ITERATE_FB_APP_SECRET,
+    client_id: env.fb.client_id,
+    client_secret: env.fb.client_secret,
     grant_type: 'client_credentials'
   }, res => {
     if (!res || res.error) {
@@ -88,7 +86,7 @@ const groups = { iterate: 410797219090898,
 		 MICArmenia:195461300492991 };
 
 const endpoint = `https://translate.yandex.net/api/v1.5/tr.json`;
-const yandexTranslatorApiKey = process.env.ITERATE_YANDEX_TRANSLATOR_API;
+const yandexTranslatorApiKey = env.yandex.api_key;
 let jsonRequest = async (url, params, cb) => {
   let handler = (err, res) => {
     if (err)
@@ -99,7 +97,7 @@ let jsonRequest = async (url, params, cb) => {
     } catch(e) {
       cb(e);
     }
-    cb(null, obj);
+    return cb(null, obj);
   };
   if (params.get === true)
     await request_prom.get(url, handler);
@@ -108,23 +106,23 @@ let jsonRequest = async (url, params, cb) => {
 };
 let translate = async (text, opts, cb) => {
   await jsonRequest(endpoint + `/translate`, {
-      form: {
-        text: text,
-        key: yandexTranslatorApiKey, 
-        format: `text`,
-        lang: opts.from ? opts.from + `-` + opts.to : opts.to
-      }
+    form: {
+      text: text,
+      key: yandexTranslatorApiKey, 
+      format: `text`,
+      lang: opts.from ? opts.from + `-` + opts.to : opts.to
+    }
   }, cb);
 };
 let translateAll = async (textToTranslate) => {
   let title = [{lang:`en`},{lang:`ru`},{lang:`hy`}];
-  await Promise.all(title.map(async each => {
+  await Promise.all(title.map(async (each) => {
     await translate(textToTranslate, {to: each.lang}, (err, res) => {
       each.translate = res.text[0];
     });
   }));
   return title[0].translate + ` / ` + title[1].translate + ` / ` + title[2].translate;
-}
+};
 // Getting the tech events every 48 Hours
 setInterval(() => {
   for (const group_name in groups) {
@@ -139,11 +137,11 @@ setInterval(() => {
         return;
       }
 
-      res.data.forEach(async each => {
+      res.data.forEach(async (each) => {
         const start = (new Date(each.start_time)).getTime();
         let title = await translateAll(each.name);
         db_promises
-        .run(`
+          .run(`
              insert or replace into event values 
              ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
                $title: title,
@@ -153,7 +151,7 @@ setInterval(() => {
                $description: each.description,
                $creator: group_name,
                $url: `https://facebook.com/events/${each.id}`,
-                 $id: `fb-${each.id}`
+               $id: `fb-${each.id}`
              });
       });
     });
@@ -164,12 +162,11 @@ silicon_dzor.use(require('helmet')());
 silicon_dzor.use(express.static('public'));
 silicon_dzor.use(session({
   secret:
-  process.env.NODE_ENV === 'debug'
-    ? 'keyboard cat' :
+  env.debug ? 'keyboard cat' :
     (() => {
-      if (!process.env.SD_SESSION_KEY)
+      if (!env.session_key)
 	throw new Error('Running in prod and no SESSION_KEY!');
-      return process.env.SD_SESSION_KEY;
+      return env.session_key;
     })(),
   resave: false,
   saveUninitialized: true
@@ -302,7 +299,11 @@ silicon_dzor.post(Routes.add_tech_event, json_pr, async (req, res) => {
 	    await db_promises
 	    .get(`select * from account where email = $username and is_verified = 1`,
 		 {$username: req.session.username});
-      const id = crypto.createHash('sha256').update(b.event_title+b.start+query_result.id).digest('hex');
+      const id =
+	    crypto
+	    .createHash('sha256')
+	    .update(b.event_title + b.start + query_result.id)
+	    .digest('hex');
       await db_promises.run(`insert into event values 
 ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
   $title: title,
@@ -342,25 +343,36 @@ function approveDomains(options, certs, cb) {
 }
 
 (() => {
-  if (process.env.NODE_ENV === 'debug') {
-    silicon_dzor.listen(8080, () => console.log('Started debug server, no HTTPS'));
+  if (env.debug) {
+    silicon_dzor
+      .listen(port, () =>
+	      console.log(`Started debug server on ${port}, no HTTPS`));
   } else {
     //letsencrypt https
     const lex = leExpress.create({
       server: 'https://acme-v01.api.letsencrypt.org/directory',
       approveDomains: approveDomains,
-      challenges: { 'http-01': require('le-challenge-fs').create({ webrootPath: '/tmp/acme-challenges' }) },
-      store: require('le-store-certbot').create({ webrootPath: '/tmp/acme-challenges' })
+      challenges: {
+	'http-01':
+	require('le-challenge-fs')
+	  .create({ webrootPath: '/tmp/acme-challenges' })
+      },
+      store:
+      require('le-store-certbot')
+	.create({ webrootPath: '/tmp/acme-challenges' })
     });
 
     // handles acme-challenge and redirects to https
     require('http')
       .createServer(lex.middleware(require('redirect-https')()))
-      .listen(port, () => console.log("Listening for ACME http-01 challenges on", port));
+      .listen(port, () =>
+	      console.log("Listening for ACME http-01 challenges on", port));
 
     // handles silicon_dzor app
     require('https')
       .createServer(lex.httpsOptions, lex.middleware(silicon_dzor))
-      .listen(port_https, () => console.log("Listening for ACME tls-sni-01 challenges and serve app on", port_https));
+      .listen(port_https, () =>
+	      console.log("Listening for ACME tls-sni-01 challenges and serve app on",
+			  port_https));
   }
 })();

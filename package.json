@@ -17,6 +17,7 @@
     "le-store-certbot": "^2.0.3",
     "letsencrypt-express": "^2.0.5",
     "moment": "^2.16.0",
+    "node-schedule": "^1.2.0",
     "nodemailer": "^2.6.4",
     "pg-promise": "^5.4.1",
     "react": "^15.4.0",
@@ -26,6 +27,7 @@
     "redux": "^3.6.0",
     "request-promise": "^4.1.1",
     "sqlite3": "^3.1.8",
+    "twitter": "^1.7.0",
     "uuid": "^3.0.1",
     "whatwg-fetch": "^2.0.1"
   },
