@@ -18,6 +18,7 @@ const bcrypt_promises = require('./bcrypt-promise');
 const json_pr = body_parser.json();
 const form_pr = body_parser.urlencoded({extended: true});
 const nodemailer = require('nodemailer');
+const tweet = require('./tweet-events');
 
 const email_account = 'iteratehackerspace@gmail.com';
 const email_password = env.prod ? env.email_password : null;
@@ -50,7 +51,7 @@ const Routes = require('../lib/routes').default;
 
 const db_promises = require('./sqlite-promises')(db);
 // Kick off the twitter bot
-require('./tweet-events')(db_promises);
+require('./tweet-bot-service')(db_promises);
 
 let register_email_users = {};
 
