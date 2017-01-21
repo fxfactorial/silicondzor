@@ -16,9 +16,12 @@ module.exports = db => {
       let events =
 	  await db.all(`select * from event where start = DATE('now')`);
       Promise.all(
-	events.map(({title, description, url}) =>
-		   tweet({title, description, url }, false))
-      );
+	events
+	  .map(({title, description, url}) =>
+	       Promise.all(title.split('/')
+			   // We tweet out in 3 languages
+			   .map(in_lang =>
+				tweet({title:in_lang, description, url}, false)))));
     };
   });
 };
