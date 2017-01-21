@@ -41,7 +41,7 @@ const close_btn_s = {
   cursor:'pointer'
 };
 
-const default_scroll_time = new Date(1970, 1, 1, 16);
+const default_scroll_time = new Date(1970, 1, 1, 4);
 
 class Login extends Component {
 
