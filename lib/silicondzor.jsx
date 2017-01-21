@@ -387,12 +387,40 @@ function Eventbyline({event}) {
   );
 };
 
+class AgendaNote extends Component {
+
+  static langs = ['EN', 'RU', 'HYE'];
+  static colors = ['red', 'blue', 'orange']
+
+  render() {
+    return (
+      <div>
+        {this
+          .props
+          .event
+          .title
+          .split('/')
+          .map((i, idx) => {
+            return (
+              <p key={idx} style={{
+                   textAlign:'center',
+                   color:'white',
+                   backgroundColor:AgendaNote.colors[idx]
+                   }}>
+                {AgendaNote.langs[idx]} = {i}
+              </p>
+            );
+          })
+        }
+        <hr/>
+        <p> {this.props.event.desc} </p>
+      </div>
+    );
+  }
+};
+
 function EventAgenda({event}) {
-  return (
-    <p>
-      {event.desc}
-    </p>
-  );
+  return <AgendaNote event={event}/>;
 }
 
 
