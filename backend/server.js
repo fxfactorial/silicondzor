@@ -81,19 +81,21 @@ const FBReq = (req, cb) => {
 };
 
 // This should come from a table.
-const groups = { iterate: 410797219090898, 
-		 ArmTechCongress: 214940895208239,
-		 ISTC:715035435194434,
-		 YerevanNN2:1558194520864804,
-		 EIF:205893556097944,
-		 Hive:314569328690448,
-		 hyetech:696576753750189,
-		 MITArmenians:271619713774,
-		 Tumo:193484930689681,
-		 kolbalab: 345991032194522,
-		 Armath:1605746646409327,
-		 socialbridgeapp: 629600800545917,
-		 MICArmenia:195461300492991};
+const groups = {
+  iterate: 410797219090898, 
+  ArmTechCongress: 214940895208239,
+  ISTC:715035435194434,
+  YerevanNN2:1558194520864804,
+  EIF:205893556097944,
+  Hive:314569328690448,
+  hyetech:696576753750189,
+  MITArmenians:271619713774,
+  Tumo:193484930689681,
+  kolbalab: 345991032194522,
+  Armath:1605746646409327,
+  socialbridgeapp: 629600800545917,
+  MICArmenia:195461300492991
+};
 
 const endpoint = `https://translate.yandex.net/api/v1.5/tr.json`;
 const yandexTranslatorApiKey = env.yandex.api_key;
