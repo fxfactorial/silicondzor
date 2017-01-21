@@ -59,7 +59,8 @@
     "server-watch": "NODE_ENV='debug' nodemon --harmony_async_await backend/server.js",
     "prod-build": "NODE_ENV='production' webpack --config webpack.prod.js --progress --colors -p && babel lib/*.jsx --out-dir .",
     "setup-dependencies": "sudo aptitude update && sudo aptitude install sqlite3 libsqlite3-dev",
-    "create-db": "cat backend/setup_database.sql | sqlite3 silicondzor.db"
+    "create-db": "cat backend/setup_database.sql | sqlite3 silicondzor.db",
+    "deploy-restart" : "ssh silicondzor 'cd silicondzor; git pull; npm install; npm run prod-build; systemctl restart silicondzor.service'"
   },
   "author": "Edgar Aroutiounian <edgar.factorial@gmail.com>",
   "license": "GPL-3.0"

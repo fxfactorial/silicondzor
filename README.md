@@ -34,6 +34,7 @@ This project has examples of:
 12. Using `ES7` features of `async`, `await`.
 13. Turning your app into a `systemd` service
 14. Sending enduser HTML emails with nodemailer.
+15. Creating a simple tweet bot service ad-hoc and on schedule.
 
 # On a server
 
@@ -55,6 +56,11 @@ output will go to `/var/log/syslog`. See it update in real time with:
 
 To see only the logs relevant to your service, do `journalctl -u
 silicondzor`
+
+For convenience there is a `deploy-restart` option for pushing a
+project in a production flow, it assumes you have `silicondzor` as a
+named connection in your `~/.ssh/config` and that `silicondzor` is a
+directory in the home directory of the sshed in user.
 
 # Setting up for development
 
