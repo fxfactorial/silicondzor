@@ -39,7 +39,7 @@ const close_btn_s = {
   cursor:'pointer'
 };
 
-const default_scroll_time = new Date(1970, 1, 1, 11);
+const default_scroll_time = new Date(1970, 1, 1, 16);
 
 class Login extends Component {
 
@@ -276,10 +276,18 @@ class TechCalendar extends Component {
   componentDidMount() {
     window.__ALL_TECH_EVENTS__ =
       window.__ALL_TECH_EVENTS__.map(event => {
-	return {
-	  ...event,
-	  start:new Date(event.start),
-	  end:new Date(event.end)
+	      return {
+	        ...event,
+	        start:
+          new Date(
+            (new Date(event.start)
+             .toLocaleString('en-US', { timeZone: 'Asia/Yerevan' }))),
+	        end:
+          new Date(
+            new Date(event.end)
+              .toLocaleString('en-US', { timeZone: 'Asia/Yerevan' })
+          )
+
 	};
       });
     this.setState({...this.state, events: window.__ALL_TECH_EVENTS__});
@@ -321,9 +329,16 @@ class TechCalendar extends Component {
 	  window.__ALL_TECH_EVENTS__.push({
 	    allDay:event_details.start === event_details.end,
 	    title:event_details.event_title,
-	    start:new Date(event_details.start),
+	    start:
+      new Date(
+        (new Date(event_details.start)
+         .toLocaleString('en-US', { timeZone: 'Asia/Yerevan' }))),
 	    desc:event_details.event_description,
-	    end:new Date(event_details.end)
+	    end:
+      new Date(
+        new Date(event_details.end)
+          .toLocaleString('en-US', { timeZone: 'Asia/Yerevan' })
+      )
 	  });
 	  s.events = window.__ALL_TECH_EVENTS__;
 	  s.modal_show = false;
@@ -346,7 +361,7 @@ class TechCalendar extends Component {
           style={s}
           scrollToTime={default_scroll_time}
           popup={true}
-          timeslots={2}
+          timeslots={1}
           components={{
             event:Eventbyline,
             agenda:{event:EventAgenda}
