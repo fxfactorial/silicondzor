@@ -82,9 +82,10 @@ const FBReq = (req, cb) => {
 
 // This should come from a table.
 const groups = { iterate: 410797219090898, 
-		 ArmTechCongress: 214940895208239, 
-		 socialbridgeapp: 629600800545917, 
-		 MICArmenia:195461300492991 };
+		 ArmTechCongress: 214940895208239,
+		 istc:715035435194434,
+		 socialbridgeapp: 629600800545917,
+		 MICArmenia:195461300492991};
 
 const endpoint = `https://translate.yandex.net/api/v1.5/tr.json`;
 const yandexTranslatorApiKey = env.yandex.api_key;
