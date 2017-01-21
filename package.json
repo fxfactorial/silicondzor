@@ -16,7 +16,7 @@
     "le-challenge-fs": "^2.0.8",
     "le-store-certbot": "^2.0.3",
     "letsencrypt-express": "^2.0.5",
-    "moment": "^2.16.0",
+    "moment-timezone": "^0.5.11",
     "node-schedule": "^1.2.0",
     "nodemailer": "^2.6.4",
     "pg-promise": "^5.4.1",
@@ -39,6 +39,7 @@
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-3": "^6.17.0",
+    "json-loader": "^0.5.4",
     "nodemon": "^1.11.0",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2"
@@ -60,7 +61,7 @@
     "prod-build": "NODE_ENV='production' webpack --config webpack.prod.js --progress --colors -p && babel lib/*.jsx --out-dir .",
     "setup-dependencies": "sudo aptitude update && sudo aptitude install sqlite3 libsqlite3-dev",
     "create-db": "cat backend/setup_database.sql | sqlite3 silicondzor.db",
-    "deploy-restart" : "ssh silicondzor 'cd silicondzor && git reset --hard origin/master && git pull && npm install && npm run prod-build && systemctl restart silicondzor.service'"
+    "deploy-restart": "ssh silicondzor 'cd silicondzor && git reset --hard origin/master && git pull && npm install && npm run prod-build && systemctl restart silicondzor.service'"
   },
   "author": "Edgar Aroutiounian <edgar.factorial@gmail.com>",
   "license": "GPL-3.0"

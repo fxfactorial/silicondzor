@@ -1,11 +1,13 @@
 import React from 'react';
 import BigCalendar from 'react-big-calendar';
-import moment from 'moment';
+import moment_timezone from 'moment-timezone';
 import Modal from 'react-modal';
 import Routes from './routes';
 import results from './replies';
 
-BigCalendar.momentLocalizer(moment);
+moment_timezone.tz.setDefault('Asia/Yerevan');
+
+BigCalendar.momentLocalizer(moment_timezone);
 
 const { Component } = React;
 
@@ -413,12 +415,14 @@ class AgendaNote extends Component {
           })
         }
         <p style={{fontStyle:'italic', marginTop:'0.5rem'}}>
-        Hosted by {this.props.event.sourced_from}
-        <a href={this.props.event.url}> details </a>
+        Hosted by {this.props.event.sourced_from}{' '}
+        <a href={this.props.event.url}>details</a>
       </p>
         <hr style={{borderWidth:'0.1rem', borderColor:'black'}}/>
         <p style={{marginTop:'1rem',
                    textIndent:'2rem',
+                   boxShadow: 'inset 0 0 10px #000000',
+                   padding:'1.5em 1.5em 1.5em 1.5em',
                    marginBottom:'1rem'}}> {this.props.event.desc} </p>
       </div>
     );

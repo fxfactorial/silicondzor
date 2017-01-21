@@ -23,15 +23,16 @@ module.exports = {
     })
   ],
   module:{
-    loaders:[{
-      test: /\.jsx?$/,
-      loader: 'babel',
-      exclude:/node_modules/,
-      query: {
-        // Here you can put plugins, like plugins:['transform-runtime']
-        plugins:['transform-class-properties'],
-        presets: ['es2015', 'react', 'stage-3']
-      }
-    }]
+    loaders:[
+      { include: /\.json$/, loaders: ["json-loader"]},
+      { test: /\.jsx?$/,
+        loader: 'babel',
+        exclude:/node_modules/,
+        query: {
+          // Here you can put plugins, like plugins:['transform-runtime']
+          plugins:['transform-class-properties'],
+          presets: ['es2015', 'react', 'stage-3']
+        }
+      }]
   }
 };
