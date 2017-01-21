@@ -138,6 +138,9 @@ setInterval(() => {
         return;
       }
 
+      // Need to do a query to not spam the twitter bot with redundant
+      // tweets
+
       res.data.forEach(async (each) => {
         const start = (new Date(each.start_time)).getTime();
         let title = await translateAll(each.name);
