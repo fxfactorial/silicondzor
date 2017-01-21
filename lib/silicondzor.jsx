@@ -417,7 +417,9 @@ class AgendaNote extends Component {
         <a href={this.props.event.url}> details </a>
       </p>
         <hr style={{borderWidth:'0.2rem', borderColor:'black'}}/>
-        <p> {this.props.event.desc} </p>
+        <p style={{marginTop:'1rem',
+                   textIndent:'2rem',
+                   marginBottom:'1rem'}}> {this.props.event.desc} </p>
       </div>
     );
   }
