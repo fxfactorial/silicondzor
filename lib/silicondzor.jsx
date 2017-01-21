@@ -377,14 +377,21 @@ class TechCalendar extends Component {
 function Eventbyline({event}) {
   return (
     <span>
-      <p> {event.title}</p>
+      {event
+        .title
+        .split('/')
+      .map((i, idx) => <p key={idx}> {i} </p>)}
+      <br/>
+      <p style={{paddingLeft:'1rem'}}> Being held by {event.sourced_from} </p>
     </span>
   );
-}
+};
 
 function EventAgenda({event}) {
   return (
-    <p> {event.desc} </p>
+    <p>
+      {event.desc}
+    </p>
   );
 }
 
