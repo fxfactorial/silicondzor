@@ -407,6 +407,7 @@ class AgendaNote extends Component {
               <p key={idx} style={{
                    textAlign:'center',
                    color:'white',
+		    padding:'0.25rem',
                    backgroundColor:AgendaNote.colors[idx]
                    }}>
                 {AgendaNote.langs[idx]} = {i}
