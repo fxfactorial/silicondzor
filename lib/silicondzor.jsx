@@ -48,7 +48,7 @@ class Login extends Component {
     password:'',
     email_valid: false,
     top_prompt_message:
-    `Login so that you can add tech events, 
+    `Login so that you can add tech events,
 do not use anything serious for your password.`
   };
 
@@ -347,6 +347,10 @@ class TechCalendar extends Component {
           scrollToTime={default_scroll_time}
           popup={true}
           timeslots={2}
+          components={{
+            event:Eventbyline,
+            agenda:{event:EventAgenda}
+          }}
           onSelectSlot={this.selectedDate}
           events={this.state.events}
           />
@@ -369,6 +373,21 @@ class TechCalendar extends Component {
     );
   }
 };
+
+function Eventbyline({event}) {
+  return (
+    <span>
+      <p> {event.title}</p>
+    </span>
+  );
+}
+
+function EventAgenda({event}) {
+  return (
+    <p> {event.desc} </p>
+  );
+}
+
 
 export default
 class _ extends Component {

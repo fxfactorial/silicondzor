@@ -218,7 +218,9 @@ silicon_dzor.get('/', async (req, res) => {
         allDay: item.all_day ? true : false,
         start: (new Date(item.start)).getTime(),
         end: (new Date(item.end)).getTime(),
-        desc: item.description
+        desc: item.description,
+	url:item.url,
+	sourced_from:item.creator
       };
     });
     res.end(site(transformed));
