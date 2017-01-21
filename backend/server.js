@@ -93,7 +93,9 @@ const groups = {
   Tumo:193484930689681,
   kolbalab: 345991032194522,
   Armath:1605746646409327,
+  Noorgames:762161850578899,
   socialbridgeapp: 629600800545917,
+  PicsArt:333541910084978,
   MICArmenia:195461300492991
 };
 
