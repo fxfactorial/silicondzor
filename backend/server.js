@@ -85,6 +85,7 @@ const groups = { iterate: 410797219090898,
 		 ArmTechCongress: 214940895208239,
 		 istc:715035435194434,
 		 eif:205893556097944,
+		 kolbalab: 345991032194522,
 		 socialbridgeapp: 629600800545917,
 		 MICArmenia:195461300492991};
 
