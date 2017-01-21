@@ -14,10 +14,7 @@ module.exports = db => {
       // Need to read the DB for today's day, if any events then tweet
       // them
       let events =
-	  await db.all(`
-select * from event 
-    where start = (select max(start) from event WHERE start < DATE('now'))
-`);
+	  await db.all(`select * from event where start = DATE('now')`);
       Promise.all(
 	events.map(({title, description, url}) =>
 		   tweet({title, description, url }, false))
