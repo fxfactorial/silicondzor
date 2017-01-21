@@ -213,11 +213,14 @@ silicon_dzor.get('/', async (req, res) => {
     const pulled = await db_promises.all(`select * from event`);
     res.setHeader('content-type', 'text/html');
     let transformed = pulled.map(item => {
+      const start = new Date(item.start).getTime();
+      const end = new Date(item.end).getTime();
+
       return {
         title:item.title,
         allDay: item.all_day ? true : false,
-        start: (new Date(item.start)).getTime(),
-        end: (new Date(item.end)).getTime(),
+        start,
+        end,
         desc: item.description,
 	url:item.url,
 	sourced_from:item.creator

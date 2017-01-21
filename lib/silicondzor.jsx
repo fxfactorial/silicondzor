@@ -276,19 +276,9 @@ class TechCalendar extends Component {
   componentDidMount() {
     window.__ALL_TECH_EVENTS__ =
       window.__ALL_TECH_EVENTS__.map(event => {
-	      return {
-	        ...event,
-	        start:
-          new Date(
-            (new Date(event.start)
-             .toLocaleString('en-US', { timeZone: 'Asia/Yerevan' }))),
-	        end:
-          new Date(
-            new Date(event.end)
-              .toLocaleString('en-US', { timeZone: 'Asia/Yerevan' })
-          )
-
-	};
+        const start = new Date(event.start);
+        const end = new Date(event.end);
+	      return {...event, start, end };
       });
     this.setState({...this.state, events: window.__ALL_TECH_EVENTS__});
   }
@@ -326,19 +316,14 @@ class TechCalendar extends Component {
 	  this.setState(s);
 	} else {
 	  const s = this.state;
+    const start = new Date(event_details.start);
+    const end = new Date(event_details.end);
 	  window.__ALL_TECH_EVENTS__.push({
 	    allDay:event_details.start === event_details.end,
 	    title:event_details.event_title,
-	    start:
-      new Date(
-        (new Date(event_details.start)
-         .toLocaleString('en-US', { timeZone: 'Asia/Yerevan' }))),
+	    start,
 	    desc:event_details.event_description,
-	    end:
-      new Date(
-        new Date(event_details.end)
-          .toLocaleString('en-US', { timeZone: 'Asia/Yerevan' })
-      )
+	    end
 	  });
 	  s.events = window.__ALL_TECH_EVENTS__;
 	  s.modal_show = false;
