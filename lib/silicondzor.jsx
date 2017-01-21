@@ -412,7 +412,11 @@ class AgendaNote extends Component {
             );
           })
         }
-        <hr/>
+        <p style={{fontStyle:'italic'}}>
+        Hosted by {this.props.event.sourced_from}
+        <a href={this.props.event.url}> details </a>
+      </p>
+        <hr style={{borderWidth:'0.2rem', borderColor:'black'}}/>
         <p> {this.props.event.desc} </p>
       </div>
     );
