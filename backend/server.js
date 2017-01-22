@@ -56,8 +56,8 @@ require('./tweet-bot-service')(db_promises);
 let register_email_users = {};
 
 // daemons
-// 1. Drop everyone left every 1 hour, aka link is only good for 1 hour
-// setInterval(() => register_email_users = {}, 60 * 1000 * 60);
+// 1. Drop everyone left every 24 hour, aka link is only good for 24 hour
+setInterval(() => register_email_users = {}, 60 * 1000 * 60 * 24);
 
 // 2. Fetch anything that is going on from FB for every 48 hours ( ͡° ͜ʖ ͡°)
 const FB = require('fb');

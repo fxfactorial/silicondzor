@@ -51,7 +51,10 @@ class Login extends Component {
     email_valid: false,
     top_prompt_message:
     `Login so that you can add tech events,
-do not use anything serious for your password.`
+do not use anything serious for your password.
+If registering an email, then you have 24 hours to 
+verify your email account via an email sent to you.
+`
   };
 
   form_action = (register_account, e) => {
