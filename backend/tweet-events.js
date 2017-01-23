@@ -7,7 +7,7 @@ const client = env.production ? new Twitter(env.twitter) : null;
 
 module.exports =
   async ({title, description, url}, new_event=true) => {
-    if (env.prod) {
+    if (env.production) {
       client.post('statuses/update', {
 	status: new_event ?
 	  (() => {
