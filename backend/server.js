@@ -96,7 +96,8 @@ const groups = {
   Noorgames:762161850578899,
   socialbridgeapp: 629600800545917,
   PicsArt:333541910084978,
-  MICArmenia:195461300492991
+  MICArmenia:195461300492991,
+  AUA_zaven:139712699411097
 };
 
 const endpoint = `https://translate.yandex.net/api/v1.5/tr.json`;
