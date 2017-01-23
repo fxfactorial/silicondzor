@@ -130,34 +130,43 @@ let translate = async (text, opts, cb) => {
   }, cb);
 };
 let translateAll = async (textToTranslate) => {
-  let title = [{lang:`en`},{lang:`ru`},{lang:`hy`}];
+  let title = [{lang: `en`}, {lang: `ru`}, {lang: `hy`}];
   await Promise.all(title.map(async (each) => {
     await translate(textToTranslate, {to: each.lang}, (err, res) => {
       each.translate = res.text[0];
     });
   }));
-  return title[0].translate + ` / ` + title[1].translate + ` / ` + title[2].translate;
+  return `${title[0].translate}/${title[1].translate}/${title[2].translate}`;
 };
-// Getting the tech events every 48 Hours
+// Getting the tech events every 24 Hours
 setInterval(() => {
   for (const group_name in groups) {
     const group_id = groups[group_name];
     const now = Math.floor(Date.now() / 1000);
     FBReq(`${group_id}/events?since=${now}`, res => {
       if (!res || !res.data) {
-        console.log(`error occured when requesting a list of events for ${group_name}`);
+        console.log(`
+error occured when requesting a list 
+of events for ${group_name}, ${JSON.stringify(res)}
+`);
         return;
       } else if (res.error) {
         console.log(res.error);
         return;
       }
 
-      // Need to do a query to not spam the twitter bot with redundant
-      // tweets
-
       res.data.forEach(async (each) => {
         const start = (new Date(each.start_time)).getTime();
         let title = await translateAll(each.name);
+
+	const url = `https://facebook.com/events/${each.id}`;
+	// Gives back undefined if no result set
+	const record = await
+	db_promises
+	  .get(`select title from event where id = $id`,
+	       {$id:`fb-${each.id}`});
+	// If we've never seen it before, let's announce it.
+	if (record === undefined) await tweet({title, description:each.description, url});
         db_promises
           .run(`
              insert or replace into event values 
@@ -168,13 +177,13 @@ setInterval(() => {
                $end: each.end_time ? (new Date(each.end_time)).getTime() : start,
                $description: each.description,
                $creator: group_name,
-               $url: `https://facebook.com/events/${each.id}`,
+               $url: url,
                $id: `fb-${each.id}`
              });
       });
     });
   }
-}, 60 * 1000 * 60 * 48);
+}, 60 * 1000 * 60 * 24);
 
 silicon_dzor.use(require('helmet')());
 silicon_dzor.use(express.static('public'));
