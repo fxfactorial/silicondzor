@@ -83,6 +83,7 @@ const FBReq = (req, cb) => {
 // This should come from a table.
 const groups = {
   ArmTechCongress: 214940895208239,
+  ArmenianIndianCenter:261859337201788,
   ISTC:715035435194434,
   YerevanNN2:1558194520864804,
   EIF:205893556097944,
