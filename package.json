@@ -7,7 +7,7 @@
     "url": "https://github.com/fxfactorial/silicondzor.git"
   },
   "dependencies": {
-    "bcrypt": "^0.8.7",
+    "bcrypt": "^1.0.2",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "express-session": "^1.14.2",
@@ -18,10 +18,10 @@
     "letsencrypt-express": "^2.0.5",
     "moment-timezone": "^0.5.11",
     "node-schedule": "^1.2.0",
-    "nodemailer": "^2.6.4",
+    "nodemailer": "^3.0.0",
     "pg-promise": "^5.4.1",
     "react": "^15.4.0",
-    "react-big-calendar": "^0.11.0",
+    "react-big-calendar": "^0.12.3",
     "react-dom": "^15.4.0",
     "react-modal": "^1.5.2",
     "redux": "^3.6.0",
@@ -41,7 +41,7 @@
     "babel-preset-stage-3": "^6.17.0",
     "json-loader": "^0.5.4",
     "nodemon": "^1.11.0",
-    "webpack": "^1.13.3",
+    "webpack": "^2.2.1",
     "webpack-dev-server": "^1.16.2"
   },
   "babel": {
