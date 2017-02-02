@@ -169,13 +169,22 @@ class Banner extends Component {
       cursor:'pointer',
       textDecoration:'underline'
     };
-
+    const langs = (
+      <ul onClick={e => this.props.language_pick(e.target.value)}>
+	<li>Հայ</li>
+	<li>Eng</li>
+	<li>РУС</li>
+      </ul>
+    );
     return (
       <div>
         <header style={this.props.header_s}>
-          <h1 style={{paddingRight:'2rem'}}>
-            Silicondzor
-          </h1>
+	  <div>
+            <h1 style={{paddingRight:'2rem'}}>
+              Silicondzor
+            </h1>
+	    {langs}
+	  </div>
           <div>
             <p>
               All the tech events in Armenia  🇦🇲

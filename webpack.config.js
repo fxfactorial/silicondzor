@@ -11,13 +11,13 @@ module.exports = {
     filename: 'bundle.js'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: [' ', '.js', '.jsx']
   },
   module:{
     loaders:[
       { include: /\.json$/, loaders: ["json-loader"]},
       { test: /\.jsx?$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         exclude:/node_modules/,
         query: {
           // Here you can put plugins, like plugins:['transform-runtime']
