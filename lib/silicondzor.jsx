@@ -287,7 +287,7 @@ class TechCalendar extends Component {
 
   static defaultProps = {
     tech_calendar_s: {
-      minHeight: '80vh',
+      minHeight: '60vh',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center'
@@ -485,6 +485,19 @@ class _ extends Component {
           <TechCalendar 
 	    title_language={this.state.language}
 	    z_value={this.state.calendar_z_value}/>
+	  <footer style={{minHeight:'10vh', backgroundColor:'#ff5e12'}}>
+            <p style={{
+	       paddingTop:'1rem',
+	       textIndent:'2rem'
+               }}>
+	      Get the source code <a href={'https://github.com/fxfactorial/silicondzor'}>here</a>,
+              improvements provided via github pull requests are warmly appreciated.
+	    </p>
+            <p style={{textIndent:'2rem'}}>
+             Follow our <a href={'https://twitter.com/iteratehckrspac'}>twitter</a> account to get
+             automated tweets of these events.
+            </p>
+	  </footer>
       </div>
     );
   }
