@@ -170,10 +170,17 @@ class Banner extends Component {
       textDecoration:'underline'
     };
     const langs = (
-      <ul onClick={e => this.props.language_pick(e.target.value)}>
-	<li>Հայ</li>
-	<li>Eng</li>
-	<li>РУС</li>
+      <ul style={{display:'inline-flex', listStyleType:'none', cursor:'pointer'}}
+	  onClick={e => this.props.language_pick(e.target.textContent)}>
+	{['Հայ', 'Eng', 'РУС'].map((item, idx) => {
+	  return (
+	    <li key={idx}
+		style={{
+		  fontStyle:item === this.props.event_titles_language ? 'italic' : 'normal'
+		}}
+		>{item}</li>
+	  );
+	})}
       </ul>
     );
     return (
@@ -353,6 +360,7 @@ class TechCalendar extends Component {
       minWidth:'100%',
       zIndex:this.props.z_value
     };
+    // title_language is a prop
     return (
       <div style={this.props.tech_calendar_s}>
         <BigCalendar
@@ -362,7 +370,7 @@ class TechCalendar extends Component {
           popup={true}
           timeslots={1}
           components={{
-            event:Eventbyline,
+            event:event => Eventbyline({event, lang:this.props.title_language}),
             agenda:{event:EventAgenda}
           }}
           onSelectSlot={this.selectedDate}
@@ -388,15 +396,21 @@ class TechCalendar extends Component {
   }
 };
 
-function Eventbyline({event}) {
+function Eventbyline({event, lang}) {
+
+  const titles = event.title.split('/');
+  let title = null;
+
+  switch (lang) {
+  case 'Հայ': title = titles[2]; break;
+  case 'Eng': title = titles[0]; break;
+  case 'РУС': title = titles[1]; break;
+  default: throw new Error('Unknown language');
+  }
+
   return (
     <span>
-      {event
-        .title
-        .split('/')
-      .map((i, idx) => <p key={idx}> {i} </p>)}
-      <br/>
-      <p style={{paddingLeft:'1rem'}}> Being held by {event.sourced_from} </p>
+      <p>{title}</p>
     </span>
   );
 };
@@ -450,20 +464,27 @@ function EventAgenda({event}) {
 export default
 class _ extends Component {
 
-  state = {calendar_z_value: '0'}
+  state = {calendar_z_value: '0', language:'Eng'}
 
   render () {
 
     return (
       <div>
-        <Banner push_calendar={should_push => {
+        <Banner
+	  event_titles_language={this.state.language}
+	  language_pick={language => {
+	    this.setState({...this.state, language});
+	  }}
+	  push_calendar={should_push => {
             if (should_push) {
-              this.setState({calendar_z_value:'-100'});
+              this.setState({...this.state, calendar_z_value:'-100'});
             } else {
-              this.setState({calendar_z_value:'0'});
+              this.setState({...this.state, calendar_z_value:'0'});
             }
           }}/>
-          <TechCalendar z_value={this.state.calendar_z_value}/>
+          <TechCalendar 
+	    title_language={this.state.language}
+	    z_value={this.state.calendar_z_value}/>
       </div>
     );
   }

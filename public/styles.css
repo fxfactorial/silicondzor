@@ -22,3 +22,4 @@ html { box-sizing: border-box; }
 
 .login-form > * { margin-bottom: 1.0rem; }
 .modal-inputs > * { margin-bottom: 0.3rem; }
+ul > li { padding-left:1em; }
