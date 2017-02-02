@@ -97,6 +97,7 @@ const groups = {
   socialbridgeapp: 629600800545917,
   PicsArt:333541910084978,
   MICArmenia:195461300492991,
+  Mergelyan_Club:634322556669054,
   AUA_zaven:139712699411097
 };
 
