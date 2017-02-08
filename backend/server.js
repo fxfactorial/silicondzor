@@ -207,7 +207,10 @@ const rendered = render(createElement(frontend, null));
 const site = tech_events => `
 <!doctype html>
 <meta charset="utf-8">
+<meta name="Armenian tech calendar"
+      content="See all the tech events in Yerevan and all of Armenia in one place">
 <head>
+  <title>All the tech events in Armenia</title>
   <link rel="shortcut icon" type="image/x-icon" href="public/favicon.ico">
   <link rel="preload" href="bundle.js" as="script">
   <link href="styles.css" rel="stylesheet" type="text/css">
