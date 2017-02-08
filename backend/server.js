@@ -19,6 +19,7 @@ const json_pr = body_parser.json();
 const form_pr = body_parser.urlencoded({extended: true});
 const nodemailer = require('nodemailer');
 const tweet = require('./tweet-events');
+const xssFilters = require('xss-filters');
 
 const email_account = 'iteratehackerspace@gmail.com';
 const email_password = env.prod ? env.email_password : null;
@@ -124,7 +125,7 @@ let translate = async (text, opts, cb) => {
   await jsonRequest(endpoint + `/translate`, {
     form: {
       text: text,
-      key: yandexTranslatorApiKey, 
+      key: yandexTranslatorApiKey,
       format: `text`,
       lang: opts.from ? opts.from + `-` + opts.to : opts.to
     }
@@ -147,7 +148,7 @@ setInterval(() => {
     FBReq(`${group_id}/events?since=${now}`, res => {
       if (!res || !res.data) {
         console.log(`
-error occured when requesting a list 
+error occured when requesting a list
 of events for ${group_name}, ${JSON.stringify(res)}
 `);
         return;
@@ -170,7 +171,7 @@ of events for ${group_name}, ${JSON.stringify(res)}
 	if (record === undefined) await tweet({title, description:each.description, url});
         db_promises
           .run(`
-             insert or replace into event values 
+             insert or replace into event values
              ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
                $title: title,
                $all_day: !each.end_time || each.start_time === each.end_time,
@@ -202,6 +203,7 @@ silicon_dzor.use(session({
 
 const rendered = render(createElement(frontend, null));
 
+// Not a XSS because we already did XSS by time data comes into DB.
 const site = tech_events => `
 <!doctype html>
 <meta charset="utf-8">
@@ -257,9 +259,9 @@ silicon_dzor.post(Routes.new_account, json_pr, form_pr, async (req, res) => {
     res.end(replies.fail(replies.invalid_username_already_picked));
     return;
   }
-  
+
   const identifier = uuid_v4();
-  register_email_users[identifier] = {username, identifier}; 
+  register_email_users[identifier] = {username, identifier};
   const verify_link = email_verify_link(identifier);
 
   const hash = await bcrypt_promises.hash(password, 10);
@@ -337,13 +339,13 @@ silicon_dzor.post(Routes.add_tech_event, json_pr, async (req, res) => {
 	    .createHash('sha256')
 	    .update(b.event_title + b.start + query_result.id)
 	    .digest('hex');
-      await db_promises.run(`insert into event values 
+      await db_promises.run(`insert into event values
 ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
-  $title: title,
+  $title: xssFilters.inHTMLData(title),
   $all_day: new Date(b.start) === new Date(b.end),
   $start:(new Date(b.start)).getTime(),
   $end:(new Date(b.end)).getTime(),
-  $description: b.event_description,
+  $description: xssFilters.inHTMLData(b.event_description),
   $creator:query_result.id,
   $url: `https://silicondzor.com/${id}`, // TODO: use the url for linking
   $id: id
