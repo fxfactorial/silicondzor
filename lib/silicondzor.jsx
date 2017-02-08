@@ -368,6 +368,12 @@ class TechCalendar extends Component {
           style={s}
           scrollToTime={default_scroll_time}
           popup={true}
+	  onSelectEvent={event => alert(`
+Hosted by ${event.sourced_from}
+${event.url}
+
+${event.desc}
+`)}
           timeslots={1}
           components={{
             event:event => Eventbyline({event, lang:this.props.title_language}),
