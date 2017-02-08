@@ -26,6 +26,7 @@
     "react-modal": "^1.6.5",
     "redux": "^3.6.0",
     "request-promise": "^4.1.1",
+    "serve-favicon": "^2.3.2",
     "sqlite3": "^3.1.8",
     "twitter": "^1.7.0",
     "uuid": "^3.0.1",

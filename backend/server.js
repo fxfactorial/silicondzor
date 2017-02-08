@@ -20,6 +20,7 @@ const form_pr = body_parser.urlencoded({extended: true});
 const nodemailer = require('nodemailer');
 const tweet = require('./tweet-events');
 const xssFilters = require('xss-filters');
+const favicon = require('serve-favicon');
 
 const email_account = 'iteratehackerspace@gmail.com';
 const email_password = env.prod ? env.email_password : null;
@@ -189,6 +190,8 @@ of events for ${group_name}, ${JSON.stringify(res)}
 
 silicon_dzor.use(require('helmet')());
 silicon_dzor.use(express.static('public'));
+silicon_dzor.use(favicon('public/favicon.ico'));
+
 silicon_dzor.use(session({
   secret:
   env.debug ? 'keyboard cat' :
@@ -211,7 +214,8 @@ const site = tech_events => `
       content="See all the tech events in Yerevan and all of Armenia in one place">
 <head>
   <title>All the tech events in Armenia</title>
-  <link rel="shortcut icon" type="image/x-icon" href="public/favicon.ico">
+  <link rel="shortcut icon" href="favicon.ico" >
+  <link rel="icon" type="image/gif" href="animated_favicon1.gif" >
   <link rel="preload" href="bundle.js" as="script">
   <link href="styles.css" rel="stylesheet" type="text/css">
   <link href="react-big-calendar.css" rel="stylesheet" type="text/css">
