@@ -415,51 +415,36 @@ function Eventbyline({event, lang}) {
   );
 };
 
-class AgendaNote extends Component {
-
-  static langs = ['EN', 'RU', 'HYE'];
-  static colors = ['red', 'blue', 'orange']
-
-  render() {
-    return (
-      <div>
-        {this
-          .props
-          .event
-          .title
-          .split('/')
-          .map((i, idx) => {
-            return (
-              <p key={idx} style={{
-                   textAlign:'center',
-                   color:'white',
-		    padding:'0.25rem',
-                   backgroundColor:AgendaNote.colors[idx]
-                   }}>
-                {AgendaNote.langs[idx]} = {i}
-              </p>
-            );
-          })
-        }
-        <p style={{fontStyle:'italic', marginTop:'0.5rem'}}>
-        Hosted by {this.props.event.sourced_from}{' '}
-        <a href={this.props.event.url}>details</a>
-      </p>
-        <hr style={{borderWidth:'0.1rem', borderColor:'black'}}/>
-        <p style={{marginTop:'1rem',
-                   textIndent:'2rem',
-                   boxShadow: 'inset 0 0 10px #000000',
-                   padding:'1.5em 1.5em 1.5em 1.5em',
-                   marginBottom:'1rem'}}> {this.props.event.desc} </p>
-      </div>
-    );
-  }
-};
-
 function EventAgenda({event}) {
-  return <AgendaNote event={event}/>;
-}
-
+  const langs = ['EN', 'RU', 'HYE'];
+  const text_style = {
+    marginTop:'1rem',
+    textIndent:'2rem',
+    boxShadow: 'inset 0 0 10px #000000',
+    padding:'1.5em 1.5em 1.5em 1.5em',
+    marginBottom:'1rem'
+  };
+  const top = event.title.split('/').map((i, idx) => {
+    return (
+      <p key={idx} style={{paddingLeft:'0.25rem'}}>
+        {langs[idx]} = {i}
+      </p>
+    );
+  });
+  return (
+    <div>
+      {top}
+      <details style={{fontStyle:'italic', marginTop:'0.5rem'}}>
+	<summary>
+	  Hosted by {event.sourced_from}{' '}
+	  <a href={event.url}>details</a>
+	</summary>
+	<p style={text_style}>{event.desc}</p>
+      </details>
+      <hr/>
+    </div>
+  );
+};
 
 export default
 class _ extends Component {
