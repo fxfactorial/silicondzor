@@ -422,7 +422,7 @@ function Eventbyline({event, lang}) {
 };
 
 function EventAgenda({event}) {
-  const langs = ['EN', 'RU', 'HYE'];
+  const langs = ['Eng', 'РУС', 'Հայ'];
   const text_style = {
     marginTop:'1rem',
     textIndent:'2rem',
