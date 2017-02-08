@@ -10,7 +10,7 @@ rule.hour = 5;
 module.exports = db => {
   schedule.scheduleJob(rule, async function() {
 
-    if (env.prod) {
+    if (env.production) {
       // Need to read the DB for today's day, if any events then tweet
       // them
       let events =
