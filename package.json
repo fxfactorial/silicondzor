@@ -2,6 +2,11 @@
   "name": "silicondzor",
   "version": "0.0.1",
   "description": "The code behind silicondzor.com",
+  "engineStrict": true,
+  "engines": {
+    "node":"^7.5.0",
+    "npm":"^4.1.2"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/fxfactorial/silicondzor.git"
