@@ -100,6 +100,10 @@ const groups = {
   PicsArt:333541910084978,
   MICArmenia:195461300492991,
   Mergelyan_Club:634322556669054,
+  RAU_IT:690043814481474,
+  ArmenianBritishIT:688775444613806,
+  ArmenianElectronicSportFed:257730004590101,
+  ArmenianYouthAerospaceSociety:191305917581419,
   AUA_zaven:139712699411097
 };
 
