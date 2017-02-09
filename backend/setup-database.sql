@@ -22,3 +22,17 @@ CREATE TABLE event (
     FOREIGN KEY (creator) REFERENCES account(ID),
     UNIQUE (id)
 );
+
+CREATE TABLE comments (
+   creator INTEGER PRIMARY KEY NOT NULL,
+
+   --Make sure this goes through XSS Filter first before entering the
+   --DB
+   CONTENT TEXT NOT NULL,
+   parent INTEGER,
+   upvotes INTEGER NOT NULL DEFAULT 0,
+   downvotes INTEGER NOT NULL DEFAULT 0,
+
+   FOREIGN KEY (parent)  REFERENCES comments(id),
+   FOREIGN KEY (creator) REFERENCES account(ID)
+);
