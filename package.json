@@ -68,7 +68,7 @@
     "prod-build": "NODE_ENV='production' webpack --config webpack.prod.js --progress --colors -p && babel lib/*.jsx --out-dir .",
     "setup-dependencies": "sudo aptitude update && sudo aptitude install sqlite3 libsqlite3-dev",
     "create-db": "cat backend/setup_database.sql | sqlite3 silicondzor.db",
-    "pull-fb-events-now":"node --harmony_async_await scripts/query_events.js",
+    "pull-fb-events-now":"systemctl start fb-query-events",
     "deploy-restart": "ssh silicondzor 'cd silicondzor && git checkout master && git reset --hard origin/master && git pull && npm install && npm run prod-build && systemctl restart silicondzor.service'"
   },
   "author": "Edgar Aroutiounian <edgar.factorial@gmail.com>",
