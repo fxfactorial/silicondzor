@@ -146,7 +146,7 @@ verify your email account via an email sent to you.
 
 class Banner extends Component {
 
-  state = {open:false}
+  state = {open:false, event_count:0}
 
   static defaultProps = {
     header_s: {
@@ -159,28 +159,33 @@ class Banner extends Component {
   }
 
   login_handler = e => {
-    this.setState({open:!this.state.open});
+    this.setState({...this.state, open:!this.state.open});
   }
 
-  // request_close = e => this.setState({open:!this.state.open});
+  componentDidMount() {
+    this.setState({...this.state,
+		   event_count:window.__EVENT_COUNT_THIS_MONTH__});
+  }
 
   render () {
     const login_s = {
       cursor:'pointer',
       textDecoration:'underline'
     };
+    const choices = 
+	  ['Հայ', 'Eng', 'РУС'].map((item, idx) => {
+	    return (
+	      <li key={idx}
+		  style={{fontStyle:item === this.props.event_titles_language
+			  ? 'italic' : 'normal'
+		  }}
+		  >{item}</li>
+	    );
+	  });
     const langs = (
       <ul style={{display:'inline-flex', listStyleType:'none', cursor:'pointer'}}
 	  onClick={e => this.props.language_pick(e.target.textContent)}>
-	{['Հայ', 'Eng', 'РУС'].map((item, idx) => {
-	  return (
-	    <li key={idx}
-		style={{
-		  fontStyle:item === this.props.event_titles_language ? 'italic' : 'normal'
-		}}
-		>{item}</li>
-	  );
-	})}
+	{choices}
       </ul>
     );
     return (
@@ -194,7 +199,8 @@ class Banner extends Component {
 	  </div>
           <div>
             <p>
-              All the tech events in Armenia  🇦🇲
+              {this.state.event_count} tech events 
+	      this month in Armenia & Artsakh  🇦🇲
             </p>
             <p>
               <span onClick={this.login_handler}
