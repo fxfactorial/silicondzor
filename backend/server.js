@@ -104,6 +104,7 @@ const groups = {
   ArmenianBritishIT:688775444613806,
   ArmenianElectronicSportFed:257730004590101,
   ArmenianYouthAerospaceSociety:191305917581419,
+  LiveCodeYerevan:1237449446272856,
   AUA_zaven:139712699411097
 };
 
