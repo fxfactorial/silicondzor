@@ -107,7 +107,16 @@ const site = tech_events => `
 
 silicon_dzor.get('/', async (req, res) => {
   try {
-    const pulled = await db_promises.all(`select * from event`);
+    const pulled =
+	  // This way we eliminate duplicates, unlikely that
+	  // descriptions for some events will naturally be redundant
+	  // but quite likely that people copy paste titles from one
+	  // event to another
+	  await db_promises.all(`
+select title, all_day, start, end, url, creator, description from event
+group by description
+`);
+
     res.setHeader('content-type', 'text/html');
     let transformed = pulled.map(item => {
       const start = new Date(item.start).getTime();
