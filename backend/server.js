@@ -66,6 +66,7 @@ events_every(60 * 1000 * 60 * 24, db_promises, tweet);
 silicon_dzor.use(require('helmet')());
 silicon_dzor.use(express.static('public'));
 silicon_dzor.use(favicon('public/favicon.ico'));
+silicon_dzor.use(require('morgan')('combined'));
 
 silicon_dzor.use(session({
   secret:
