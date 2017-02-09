@@ -21,7 +21,7 @@ const nodemailer = require('nodemailer');
 const tweet = require('./tweet-events');
 const xssFilters = require('xss-filters');
 const favicon = require('serve-favicon');
-
+const {events_every} = require('./fb-events');
 const email_account = 'iteratehackerspace@gmail.com';
 const email_password = env.prod ? env.email_password : null;
 
@@ -52,146 +52,16 @@ const db = new sqlite3.Database('silicondzor.db');
 const Routes = require('../lib/routes').default;
 
 const db_promises = require('./sqlite-promises')(db);
-// Kick off the twitter bot
-require('./tweet-bot-service')(db_promises);
 
 let register_email_users = {};
 
 // daemons
-// 1. Drop everyone left every 24 hour, aka link is only good for 24 hour
+// Drop everyone left every 24 hour, aka link is only good for 24 hour
 setInterval(() => register_email_users = {}, 60 * 1000 * 60 * 24);
-
-// 2. Fetch anything that is going on from FB for every 48 hours ( ͡° ͜ʖ ͡°)
-const FB = require('fb');
-FB.options({version: 'v2.8'});
-
-// wrapper for the FB API to get access token each time
-const FBReq = (req, cb) => {
-  FB.api('oauth/access_token', {
-    client_id: env.fb.client_id,
-    client_secret: env.fb.client_secret,
-    grant_type: 'client_credentials'
-  }, res => {
-    if (!res || res.error) {
-      console.log(!res ? 'error occurred during the token request' : res.error);
-      return;
-    }
-    const { access_token } = res;
-    FB.setAccessToken(access_token);
-    FB.api(req, cb);
-  });
-};
-
-// This should come from a table.
-const groups = {
-  ArmTechCongress: 214940895208239,
-  ArmenianIndianCenter:261859337201788,
-  ISTC:715035435194434,
-  YerevanNN2:1558194520864804,
-  EIF:205893556097944,
-  Hive:314569328690448,
-  hyetech:696576753750189,
-  MITArmenians:271619713774,
-  Tumo:193484930689681,
-  kolbalab: 345991032194522,
-  Armath:1605746646409327,
-  Noorgames:762161850578899,
-  socialbridgeapp: 629600800545917,
-  PicsArt:333541910084978,
-  MICArmenia:195461300492991,
-  Mergelyan_Club:634322556669054,
-  RAU_IT:690043814481474,
-  ArmenianBritishIT:688775444613806,
-  ArmenianElectronicSportFed:257730004590101,
-  ArmenianYouthAerospaceSociety:191305917581419,
-  LiveCodeYerevan:1237449446272856,
-  AUA_zaven:139712699411097
-};
-
-const endpoint = `https://translate.yandex.net/api/v1.5/tr.json`;
-const yandexTranslatorApiKey = env.yandex.api_key;
-let jsonRequest = async (url, params, cb) => {
-  let handler = (err, res) => {
-    if (err)
-      return cb(err);
-    let obj;
-    try {
-      obj = JSON.parse(res.body);
-    } catch(e) {
-      cb(e);
-    }
-    return cb(null, obj);
-  };
-  if (params.get === true)
-    await request_prom.get(url, handler);
-  else
-    await request_prom.post(url, params, handler);
-};
-let translate = async (text, opts, cb) => {
-  await jsonRequest(endpoint + `/translate`, {
-    form: {
-      text: text,
-      key: yandexTranslatorApiKey,
-      format: `text`,
-      lang: opts.from ? opts.from + `-` + opts.to : opts.to
-    }
-  }, cb);
-};
-let translateAll = async (textToTranslate) => {
-  let title = [{lang: `en`}, {lang: `ru`}, {lang: `hy`}];
-  await Promise.all(title.map(async (each) => {
-    await translate(textToTranslate, {to: each.lang}, (err, res) => {
-      each.translate = res.text[0];
-    });
-  }));
-  return `${title[0].translate}/${title[1].translate}/${title[2].translate}`;
-};
+// Kick off the twitter bot
+require('./tweet-bot-service')(db_promises);
 // Getting the tech events every 24 Hours
-setInterval(() => {
-  for (const group_name in groups) {
-    const group_id = groups[group_name];
-    const now = Math.floor(Date.now() / 1000);
-    FBReq(`${group_id}/events?since=${now}`, res => {
-      if (!res || !res.data) {
-        console.log(`
-error occured when requesting a list
-of events for ${group_name}, ${JSON.stringify(res)}
-`);
-        return;
-      } else if (res.error) {
-        console.log(res.error);
-        return;
-      }
-
-      res.data.forEach(async (each) => {
-        const start = (new Date(each.start_time)).getTime();
-        let title = await translateAll(each.name);
-
-	const url = `https://facebook.com/events/${each.id}`;
-	// Gives back undefined if no result set
-	const record = await
-	db_promises
-	  .get(`select title from event where id = $id`,
-	       {$id:`fb-${each.id}`});
-	// If we've never seen it before, let's announce it.
-	if (record === undefined) await tweet({title, description:each.description, url});
-        db_promises
-          .run(`
-             insert or replace into event values
-             ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
-               $title: title,
-               $all_day: !each.end_time || each.start_time === each.end_time,
-               $start: start,
-               $end: each.end_time ? (new Date(each.end_time)).getTime() : start,
-               $description: each.description,
-               $creator: group_name,
-               $url: url,
-               $id: `fb-${each.id}`
-             });
-      });
-    });
-  }
-}, 60 * 1000 * 60 * 24);
+events_every(60 * 1000 * 60 * 24, db_promises, tweet);
 
 silicon_dzor.use(require('helmet')());
 silicon_dzor.use(express.static('public'));
