@@ -82,7 +82,7 @@ silicon_dzor.use(session({
 const rendered = render(createElement(frontend, null));
 
 // Not a XSS because we already did XSS by time data comes into DB.
-const site = tech_events => `
+const site = (tech_events, e_count) => `
 <!doctype html>
 <meta charset="utf-8">
 <meta name="Armenian tech calendar"
@@ -97,6 +97,7 @@ const site = tech_events => `
   <script>
     // This way we avoid needless HTTP requests
     window.__ALL_TECH_EVENTS__ = ${JSON.stringify(tech_events)}
+    window.__EVENT_COUNT_THIS_MONTH__ = ${e_count}
   </script>
 </head>
 <body>
@@ -132,7 +133,13 @@ group by description
 	sourced_from:item.creator
       };
     });
-    res.end(site(transformed));
+    const {event_count} = await db_promises.get(`
+select count(*) as event_count from 
+(select title from event 
+where (strftime('%m', datetime(end, 'unixepoch')) - 1) = 
+(strftime('%m', 'now') + 0) group by title);
+`);
+    res.end(site(transformed, event_count));
   } catch (e) {
     console.error(e);
   }
