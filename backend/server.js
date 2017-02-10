@@ -24,6 +24,7 @@ const favicon = require('serve-favicon');
 const {events_every} = require('./fb-events');
 const email_account = 'iteratehackerspace@gmail.com';
 const email_password = env.prod ? env.email_password : null;
+const translateAll = require('./yandex-translate');
 
 const email_verify_link = identifier =>
       env.prod
