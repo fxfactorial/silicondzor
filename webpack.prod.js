@@ -35,9 +35,7 @@ module.exports = {
     new webpack.optimize.AggressiveMergingPlugin,
     new webpack.optimize.OccurrenceOrderPlugin,
     new webpack.DefinePlugin({
-      'process.env': {
-	      'NODE_ENV': JSON.stringify('production')
-      }
+      'process.env': {'NODE_ENV': JSON.stringify('production')}
     })
   ],
   module:{
@@ -48,7 +46,11 @@ module.exports = {
         exclude:/node_modules/,
         query: {
           // Here you can put plugins, like plugins:['transform-runtime']
-          plugins:['transform-class-properties'],
+          plugins:[
+            'transform-class-properties',
+            'transform-react-inline-elements',
+            'transform-react-constant-elements'
+          ],
           presets: [['es2015', {modules: false}], 'react', 'stage-3']
         }
       }]

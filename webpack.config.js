@@ -1,4 +1,5 @@
 module.exports = {
+  devtool: 'inline-source-map',
   entry: ['whatwg-fetch', './frontend/app.jsx'],
   devServer:{
     inline:true,
