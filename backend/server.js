@@ -23,11 +23,11 @@ const xssFilters = require('xss-filters');
 const favicon = require('serve-favicon');
 const {events_every} = require('./fb-events');
 const email_account = 'iteratehackerspace@gmail.com';
-const email_password = env.prod ? env.email_password : null;
+const email_password = env.production ? env.email_password : null;
 const translateAll = require('./yandex-translate');
 
 const email_verify_link = identifier =>
-      env.prod
+      env.production
       ? `http://localhost:9090/verify-account/${identifier}`
       : `http://silicondzor.com/verify-account/${identifier}`;
 
