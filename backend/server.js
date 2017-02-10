@@ -28,7 +28,7 @@ const translateAll = require('./yandex-translate');
 
 const email_verify_link = identifier =>
       env.prod
-      ? `http://localhost:8080/verify-account/${identifier}`
+      ? `http://localhost:9090/verify-account/${identifier}`
       : `http://silicondzor.com/verify-account/${identifier}`;
 
 const email_transporter =
@@ -46,7 +46,7 @@ const send_mail = mail_opts => {
   });
 };
 const request_prom = require("request-promise");
-const port = env.debug ? 8080 : 80;
+const port = env.debug ? 9090 : 80;
 const port_https = env.debug ? 8443 : 443;
 // Assumes that such a database exists, make sure it does.
 const db = new sqlite3.Database('silicondzor.db');
@@ -86,16 +86,16 @@ const rendered = render(createElement(frontend, null));
 // Not a XSS because we already did XSS by time data comes into DB.
 const site = (tech_events, e_count) => `
 <!doctype html>
-<meta charset="utf-8">
+<meta charset="utf-8"/>
 <meta name="Armenian tech calendar"
-      content="See all the tech events in Yerevan and all of Armenia in one place">
+      content="See all the tech events in Yerevan and all of Armenia in one place"/>
 <head>
   <title>All the tech events in Armenia</title>
-  <link rel="shortcut icon" href="favicon.ico" >
-  <link rel="icon" type="image/gif" href="animated_favicon1.gif" >
-  <link rel="preload" href="bundle.js" as="script">
-  <link href="styles.css" rel="stylesheet" type="text/css">
-  <link href="react-big-calendar.css" rel="stylesheet" type="text/css">
+  <link rel="shortcut icon" href="favicon.ico" />
+  <link rel="icon" type="image/gif" href="animated_favicon1.gif" />
+  <link rel="preload" href="bundle.js" as="script"/>
+  <link href="styles.css" rel="stylesheet" type="text/css"/>
+  <link href="react-big-calendar.css" rel="stylesheet" type="text/css"/>
   <script>
     // This way we avoid needless HTTP requests
     window.__ALL_TECH_EVENTS__ = ${JSON.stringify(tech_events)}
@@ -136,9 +136,9 @@ group by description
       };
     });
     const {event_count} = await db_promises.get(`
-select count(*) as event_count from 
-(select title from event 
-where (strftime('%m', datetime(end, 'unixepoch')) - 1) = 
+select count(*) as event_count from
+(select title from event
+where (strftime('%m', datetime(end, 'unixepoch')) - 1) =
 (strftime('%m', 'now') + 0) group by title);
 `);
     res.end(site(transformed, event_count));
