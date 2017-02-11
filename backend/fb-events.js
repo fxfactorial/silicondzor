@@ -33,7 +33,7 @@ function events_every(time, db_promises, tweet) {
 
       // Small chance this is going off while we are editing the file.
       try       { groups = JSON.parse(d);}
-      catch (e) { /* Not a big deal, just wait for the next interval */ }
+      catch (_) { return;/* Not a big deal, just wait for the next interval */ }
 
       query_events(groups, db_promises, tweet);
 
