@@ -1,6 +1,6 @@
 export function homepage(html, tech_events, e_count) {
   return `
-  <!doctype html>
+<!doctype html>
 <meta charset="utf-8"/>
 <meta name="Armenian tech calendar"
       content="See all the tech events in Yerevan and all of Armenia in one place"/>
@@ -25,7 +25,7 @@ export function homepage(html, tech_events, e_count) {
 
 export function about(html, tech_events, e_count) {
   return `
-  <!doctype html>
+<!doctype html>
 <meta charset="utf-8"/>
 <meta name="About page for silicondzor"
       content="An elboration on silicondzor.com"/>

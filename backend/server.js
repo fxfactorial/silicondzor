@@ -22,6 +22,7 @@ const translateAll = require('./yandex-translate');
 const ui = require('../lib/http-routes').default.ui_routes;
 const html_replies = require('../lib/html-documents');
 const {email_account} = require('./email');
+const {event_count, events} = require('./data');
 
 // What is the RouterContext for?
 const {match, RouterContext} = require('react-router');
@@ -47,26 +48,28 @@ require('./middleware')(silicon_dzor);
 
 // Handle the UI requests
 silicon_dzor.use((req, res, next) => {
-  // console.log(routes);
   match({routes, location:req.url},
-	(err, redirect, props) => {
+	async (err, redirect, props) => {
 	  if (props) {
 	    res.setHeader('Content-Type', 'text/html');
 	    // Need to pull down all the latest stories?
 	    const html = render(createElement(RouterContext, props));
 	    let send_off = null;
+	    const e_count = await event_count(db_promises);
+	    const all_events = await events(db_promises);
+
 	    switch (req.url) {
 	    case ui.home.resource:
-	      send_off = html_replies.homepage(html, [], 53);
+	      send_off = html_replies.homepage(html, all_events, e_count);
 	      break;
 	    case ui.about.resource:
-	      send_off = html_replies.about(html, [], 53);
+	      send_off = html_replies.about(html, all_events, e_count);
 	      break;
 	    case ui.tech_calendar.resource:
-	      send_off = html_replies.calendar(html, [], 53);
+	      send_off = html_replies.calendar(html, all_events, e_count);
 	      break;
 	    case ui.login.resource:
-	      send_off = html_replies.login(html, [], 53);
+	      send_off = html_replies.login(html, all_events, e_count);
 	      break;
 	    default:
 	      console.log(req.url);

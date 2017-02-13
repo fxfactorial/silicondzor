@@ -34,6 +34,10 @@ const modal_s = {
 
 export default class TechCalendar extends Component {
 
+  static propTypes = {
+    title_language: React.PropTypes.string,
+  }
+
   state = {
     events: [],
     modal_show: false,
@@ -126,12 +130,12 @@ export default class TechCalendar extends Component {
     const s = {
       backgroundColor:'white',
       minHeight:'80vh',
-      minWidth:'100%',
-      zIndex:this.props.z_value
+      minWidth:'100%'
+      // zIndex:this.props.z_value
     };
     // title_language is a prop
     return (
-      <div style={this.props.tech_calendar_s}>
+      <div>
         <BigCalendar
           selectable
           style={s}
