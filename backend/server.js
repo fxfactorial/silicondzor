@@ -57,7 +57,6 @@ silicon_dzor.use((req, res, next) => {
 	    let send_off = null;
 	    const e_count = await event_count(db_promises);
 	    const all_events = await events(db_promises);
-
 	    switch (req.url) {
 	    case ui.home.resource:
 	      send_off = html_replies.homepage(html, all_events, e_count);
@@ -76,11 +75,9 @@ silicon_dzor.use((req, res, next) => {
 	      throw new Error('Unknown UI Route requested');
 	    }
 	    res.status(200).end(send_off);
+	  } else {
+	    next();
 	  }
-
-	  // Come back to this
-	  // res.status(302, '/');
-
 	});
 });
 
