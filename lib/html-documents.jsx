@@ -17,6 +17,7 @@ export function homepage(html, tech_events, e_count) {
   <link rel="icon" type="image/gif" href="animated_favicon1.gif" />
   <link rel="preload" href="bundle.js" as="script"/>
   <link href="homepage.css" rel="stylesheet" type="text/css"/>
+  <link href="react-big-calendar.css" rel="stylesheet" type="text/css"/>
   <script>
     // This way we avoid needless HTTP requests
     window.__ALL_TECH_EVENTS__ = ${JSON.stringify(tech_events)}
@@ -42,6 +43,7 @@ export function about(html, tech_events, e_count) {
   <link rel="icon" type="image/gif" href="animated_favicon1.gif" />
   <link rel="preload" href="bundle.js" as="script"/>
   <link href="about.css" rel="stylesheet" type="text/css"/>
+  <link href="react-big-calendar.css" rel="stylesheet" type="text/css"/>
   <script>
     // This way we avoid needless HTTP requests
     window.__ALL_TECH_EVENTS__ = ${JSON.stringify(tech_events)}
