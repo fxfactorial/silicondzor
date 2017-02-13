@@ -1,9 +1,13 @@
 'use strict';
+const debug = process.env.NODE_ENV === 'debug' ? true : false;
 
-// Single place to contain all credentials
+// Single place to contain all credentials, application wide
+// variables.
 module.exports = Object.freeze({
-  debug: process.env.NODE_ENV === 'debug' ? true : false,
+  debug,
   production: process.env.NODE_ENV === 'production' ? true : false,
+  port : debug ? 9090 : 80,
+  port_https : debug ? 8443 : 443,
   email_password : process.env.ITERATE_EMAIL_PASSWORD,
   session_key : process.env.SD_SESSION_KEY,
   fb : {

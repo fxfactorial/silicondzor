@@ -1,6 +1,11 @@
 'use strict';
 
-module.exports = db => {
+const env = require('./env');
+const sqlite3 = env.debug ? require('sqlite3').verbose() : require('sqlite3');
+
+module.exports = db_path => {
+  const db = new sqlite3.Database(db_path);
+
   return {
     get(query, params) {
       return new Promise((accept, reject) => {

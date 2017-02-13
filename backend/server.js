@@ -1,39 +1,30 @@
 'use strict';
 /* jshint esversion: 6 */
-const env = require('./env');
 const express = require('express');
 const leExpress = require('letsencrypt-express');
-const createElement = require('react').createElement;
-const render = require('react-dom/server').renderToString;
-const frontend = require('../lib/silicondzor').default;
-const replies = require('../lib/replies').default;
 const uuid_v4 = require('uuid/v4');
 const body_parser = require('body-parser');
-const silicon_dzor = express();
-const sqlite3 = env.debug ? require('sqlite3').verbose() : require('sqlite3');
 const crypto = require('crypto');
-const bcrypt_promises = require('./bcrypt-promise');
-const json_pr = body_parser.json();
-const form_pr = body_parser.urlencoded({extended: true});
-const tweet = require('./tweet-events');
 const xssFilters = require('xss-filters');
+const {match, RouterContext} = require('react-router');
+
+const env = require('./env');
+const frontend = require('../lib/silicondzor').default;
+const replies = require('../lib/replies').default;
+const bcrypt_promises = require('./bcrypt-promise');
+const tweet = require('./tweet-events');
 const {events_every} = require('./fb-events');
 const translateAll = require('./yandex-translate');
 const ui = require('../lib/http-routes').default.ui_routes;
 const html_replies = require('../lib/html-documents');
 const {email_account} = require('./email');
 const {event_count, events} = require('./data');
-
-// What is the RouterContext for?
-const {match, RouterContext} = require('react-router');
-
-const port = env.debug ? 9090 : 80;
-const port_https = env.debug ? 8443 : 443;
-// Assumes that such a database exists, make sure it does.
-const db = new sqlite3.Database('silicondzor.db');
 const routes = require('../lib/routes').default;
-const db_promises = require('./sqlite-promises')(db);
+const db_promises = require('./sqlite-promises')('silicondzor.db');
 
+const json_pr = body_parser.json();
+const form_pr = body_parser.urlencoded({extended: true});
+const silicon_dzor = express();
 let register_email_users = {};
 
 // daemons
@@ -53,7 +44,7 @@ silicon_dzor.use((req, res, next) => {
 	  if (props) {
 	    res.setHeader('Content-Type', 'text/html');
 	    // Need to pull down all the latest stories?
-	    const html = render(createElement(RouterContext, props));
+	    const html = html_replies.elem_to_string(RouterContext, props);
 	    let send_off = null;
 	    const e_count = await event_count(db_promises);
 	    const all_events = await events(db_promises);
@@ -80,45 +71,6 @@ silicon_dzor.use((req, res, next) => {
 	  }
 	});
 });
-
-// silicon_dzor.get('/', async (req, res) => {
-//   try {
-//     const pulled =
-	  // This way we eliminate duplicates, unlikely that
-	  // descriptions for some events will naturally be redundant
-	  // but quite likely that people copy paste titles from one
-	  // event to another
-// 	  await db_promises.all(`
-// select title, all_day, start, end, url, creator, description from event
-// group by description
-// `);
-
-//     res.setHeader('content-type', 'text/html');
-//     let transformed = pulled.map(item => {
-//       const start = new Date(item.start).getTime();
-//       const end = new Date(item.end).getTime();
-
-//       return {
-//         title:item.title,
-//         allDay: item.all_day ? true : false,
-//         start,
-//         end,
-//         desc: item.description,
-// 	url:item.url,
-// 	sourced_from:item.creator
-//       };
-//     });
-//     const {event_count} = await db_promises.get(`
-// select count(*) as event_count from
-// (select title from event
-// where (strftime('%m', datetime(end, 'unixepoch')) - 1) =
-// (strftime('%m', 'now') + 0) group by title);
-// `);
-//     res.end(site(transformed, event_count));
-//   } catch (e) {
-//     console.error(e);
-//   }
-// });
 
 // silicon_dzor.post(Routes.new_account, json_pr, form_pr, async (req, res) => {
 //   const {username, password} = req.body;
@@ -253,8 +205,8 @@ function approveDomains(options, certs, cb) {
 (() => {
   if (env.debug) {
     silicon_dzor
-      .listen(port, () =>
-	      console.log(`Started debug server on ${port}, no HTTPS`));
+      .listen(env.port, () =>
+	      console.log(`Started debug server on ${env.port}, no HTTPS`));
   } else {
     //letsencrypt https
     const lex = leExpress.create({
@@ -273,14 +225,14 @@ function approveDomains(options, certs, cb) {
     // handles acme-challenge and redirects to https
     require('http')
       .createServer(lex.middleware(require('redirect-https')()))
-      .listen(port, () =>
-	      console.log("Listening for ACME http-01 challenges on", port));
+      .listen(env.port, () =>
+	      console.log("Listening for ACME http-01 challenges on", env.port));
 
     // handles silicon_dzor app
     require('https')
       .createServer(lex.httpsOptions, lex.middleware(silicon_dzor))
-      .listen(port_https, () =>
+      .listen(env.port_https, () =>
 	      console.log("Listening for ACME tls-sni-01 challenges and serve app on",
-			  port_https));
+			  env.port_https));
   }
 })();

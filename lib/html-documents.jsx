@@ -1,3 +1,10 @@
+const createElement = require('react').createElement;
+const render = require('react-dom/server').renderToString;
+
+export function elem_to_string(elem, props) {
+  return render(createElement(elem, props));
+}
+
 export function homepage(html, tech_events, e_count) {
   return `
 <!doctype html>
