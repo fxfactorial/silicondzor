@@ -3,6 +3,11 @@ const session = require('express-session');
 const env = require('./env');
 
 module.exports = silicon_dzor => {
+  // silicon_dzor.use(require('compression'));
+  // silicon_dzor.use((_, res, next) => {
+  //   res.setHeader('Content-Encoding', 'gzip');
+  //   next();
+  // });
   silicon_dzor.use(require('helmet')());
   silicon_dzor.use(require('express').static('public'));
   silicon_dzor.use(favicon('public/favicon.ico'));

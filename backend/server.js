@@ -9,7 +9,6 @@ const xssFilters = require('xss-filters');
 const {match, RouterContext} = require('react-router');
 
 const env = require('./env');
-const frontend = require('../lib/silicondzor').default;
 const replies = require('../lib/replies').default;
 const bcrypt_promises = require('./bcrypt-promise');
 const tweet = require('./tweet-events');
@@ -17,9 +16,11 @@ const {events_every} = require('./fb-events');
 const translateAll = require('./yandex-translate');
 const ui = require('../lib/http-routes').default.ui_routes;
 const html_replies = require('../lib/html-documents');
-const {email_account} = require('./email');
+const {email_account, email_verify_link,
+       email_message, send_mail} = require('./email');
 const {event_count, events} = require('./data');
 const routes = require('../lib/routes').default;
+const REST = require('../lib/http-routes').default;
 const db_promises = require('./sqlite-promises')('silicondzor.db');
 
 const json_pr = body_parser.json();
@@ -72,117 +73,117 @@ silicon_dzor.use((req, res, next) => {
 	});
 });
 
-// silicon_dzor.post(Routes.new_account, json_pr, form_pr, async (req, res) => {
-//   const {username, password} = req.body;
+silicon_dzor.post(REST.new_account, json_pr, form_pr, async (req, res) => {
+  const {username, password} = req.body;
 
-//   const email_query =
-// 	await db_promises
-// 	.get(`select email from account where email = $email`,
-//   	     {$email:username});
+  const email_query =
+	await db_promises
+	.get(`select email from account where email = $email`,
+  	     {$email:username});
 
-//   if (email_query) {
-//     res.end(replies.fail(replies.invalid_username_already_picked));
-//     return;
-//   }
+  if (email_query) {
+    res.end(replies.fail(replies.invalid_username_already_picked));
+    return;
+  }
 
-//   const identifier = uuid_v4();
-//   register_email_users[identifier] = {username, identifier};
-//   const verify_link = email_verify_link(identifier);
+  const identifier = uuid_v4();
+  register_email_users[identifier] = {username, identifier};
+  const verify_link = email_verify_link(identifier);
 
-//   const hash = await bcrypt_promises.hash(password, 10);
-//   try {
-//     await db_promises
-//       .run(`insert into account (email, hashed_password) values ($e, $h)`,
-// 	   { $e: username, $h: hash});
-//     const mail_opts = {
-//       from: 'Silicondzor.com <iteratehackerspace@gmail.com> ',
-//       to: username,
-//       subject: 'Verify account -- Silicondzor.com',
-//       text: email_message(username, verify_link, false),
-//       html: email_message(username, verify_link)
-//     };
-//     await send_mail(mail_opts);
-//     res.end(replies.ok());
-//   } catch (err) {
-//     res.end(replies.fail(err.msg));
-//   }
-// });
+  const hash = await bcrypt_promises.hash(password, 10);
+  try {
+    await db_promises
+      .run(`insert into account (email, hashed_password) values ($e, $h)`,
+	   { $e: username, $h: hash});
+    const mail_opts = {
+      from: 'Silicondzor.com <iteratehackerspace@gmail.com> ',
+      to: username,
+      subject: 'Verify account -- Silicondzor.com',
+      text: email_message(username, verify_link, false),
+      html: email_message(username, verify_link)
+    };
+    await send_mail(mail_opts);
+    res.end(replies.ok());
+  } catch (err) {
+    res.end(replies.fail(err.msg));
+  }
+});
 
-// silicon_dzor.post(Routes.sign_in, json_pr, form_pr, async (req, res) => {
-//   const {username, password} = req.body;
-//   req.session.logged_in = false;
-//   try {
-//     const row =
-// 	  await db_promises
-// 	  .get(`
-// select hashed_password from account where email = $e and is_verified = 1`,
-// 	       {$e:username});
-//     try {
-//       await bcrypt_promises.compare(password, row.hashed_password);
-//       req.session.logged_in = true;
-//       req.session.username = username;
-//       res.end(replies.ok());
-//     }
-//     catch (err) {
-//       res.end(replies.fail(replies.invalid_credentials));
-//     }
-//   } catch (err) {
-//     res.end(replies.fail(replies.invalid_email));
-//   }
-// });
+silicon_dzor.post(REST.sign_in, json_pr, form_pr, async (req, res) => {
+  const {username, password} = req.body;
+  req.session.logged_in = false;
+  try {
+    const row =
+	  await db_promises
+	  .get(`
+select hashed_password from account where email = $e and is_verified = 1`,
+	       {$e:username});
+    try {
+      await bcrypt_promises.compare(password, row.hashed_password);
+      req.session.logged_in = true;
+      req.session.username = username;
+      res.end(replies.ok());
+    }
+    catch (err) {
+      res.end(replies.fail(replies.invalid_credentials));
+    }
+  } catch (err) {
+    res.end(replies.fail(replies.invalid_email));
+  }
+});
 
-// silicon_dzor.get(Routes.new_account_verify, (req, res) => {
-//   const { identifier } = req.params;
-//   const { username } = register_email_users[identifier];
-//   db_promises
-//     .run(`update account set is_verified = 1 where email = $username`,
-// 	 { $username:username })
-//     .then(() => {
-//       delete register_email_users[username];
-//       req.session.logged_in = true;
-//       req.session.username = username;
-//       res.redirect('/');
-//     })
-//     .catch(err => {
-//       console.error(err);
-//       // Need to tell user that email couldn't be verified
-//       res.redirect('/');
-//     });
-// });
+silicon_dzor.get(REST.new_account_verify, (req, res) => {
+  const { identifier } = req.params;
+  const { username } = register_email_users[identifier];
+  db_promises
+    .run(`update account set is_verified = 1 where email = $username`,
+	 { $username:username })
+    .then(() => {
+      delete register_email_users[username];
+      req.session.logged_in = true;
+      req.session.username = username;
+      res.redirect('/');
+    })
+    .catch(err => {
+      console.error(err);
+      // Need to tell user that email couldn't be verified
+      res.redirect('/');
+    });
+});
 
-// silicon_dzor.post(Routes.add_tech_event, json_pr, async (req, res) => {
-//   try {
-//     if (req.session.logged_in) {
-//       const b = req.body;
-//       let title = await translateAll(b.event_title);
-//       const query_result =
-// 	    await db_promises
-// 	    .get(`select * from account where email = $username and is_verified = 1`,
-// 		 {$username: req.session.username});
-//       const id =
-// 	    crypto
-// 	    .createHash('sha256')
-// 	    .update(b.event_title + b.start + query_result.id)
-// 	    .digest('hex');
-//       await db_promises.run(`insert into event values
-// ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
-//   $title: xssFilters.inHTMLData(title),
-//   $all_day: new Date(b.start) === new Date(b.end),
-//   $start:(new Date(b.start)).getTime(),
-//   $end:(new Date(b.end)).getTime(),
-//   $description: xssFilters.inHTMLData(b.event_description),
-//   $creator:query_result.id,
-//   $url: `https://silicondzor.com/${id}`, // TODO: use the url for linking
-//   $id: id
-// });
-//       res.end(replies.ok());
-//     } else {
-//       res.end(replies.fail(replies.invalid_session));
-//     }
-//   } catch (err) {
-//     res.end(replies.fail(err.msg));
-//   }
-// });
+silicon_dzor.post(REST.add_tech_event, json_pr, async (req, res) => {
+  try {
+    if (req.session.logged_in) {
+      const b = req.body;
+      let title = await translateAll(b.event_title);
+      const query_result =
+	    await db_promises
+	    .get(`select * from account where email = $username and is_verified = 1`,
+		 {$username: req.session.username});
+      const id =
+	    crypto
+	    .createHash('sha256')
+	    .update(b.event_title + b.start + query_result.id)
+	    .digest('hex');
+      await db_promises.run(`insert into event values
+($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
+  $title: xssFilters.inHTMLData(title),
+  $all_day: new Date(b.start) === new Date(b.end),
+  $start:(new Date(b.start)).getTime(),
+  $end:(new Date(b.end)).getTime(),
+  $description: xssFilters.inHTMLData(b.event_description),
+  $creator:query_result.id,
+  $url: `https://silicondzor.com/${id}`, // TODO: use the url for linking
+  $id: id
+});
+      res.end(replies.ok());
+    } else {
+      res.end(replies.fail(replies.invalid_session));
+    }
+  } catch (err) {
+    res.end(replies.fail(err.msg));
+  }
+});
 
 // No other handler picked it up yet, so this is our 404 handler
 silicon_dzor.use((req, res, next) => {

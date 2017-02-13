@@ -6,7 +6,10 @@ html { box-sizing: border-box; }
 
 @import url('https://fonts.googleapis.com/css?family=Raleway');
 
-* { font-family: 'Arian AMU', 'Raleway', sans-serif; }
+* {
+  font-family: 'Arian AMU', 'Raleway', sans-serif;
+  text-decoration:none;
+}
 
 @media (max-width: 600px) {
   header {
@@ -19,8 +22,6 @@ html { box-sizing: border-box; }
     font-size:large;
   }
 }
-
-header > a {text-decoration:none;}
 
 .modal-inputs > * { margin-bottom: 0.3rem; }
 
