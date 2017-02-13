@@ -88,10 +88,10 @@ export function login(html, tech_events, e_count) {
   return `
 <!doctype html>
 <meta charset="utf-8"/>
-<meta name="Armenian tech calendar"
-      content="See all the tech events in Yerevan and all of Armenia in one place"/>
+<meta name="silicondzor login screen"
+      content="Login to silicondzor, post events, comment on news articles"/>
 <head>
-  <title>All the tech events in Armenia</title>
+  <title>Login to silicondzor.com</title>
   <link rel="shortcut icon" href="favicon.ico" />
   <link rel="icon" type="image/gif" href="animated_favicon1.gif" />
   <link rel="preload" href="bundle.js" as="script"/>
