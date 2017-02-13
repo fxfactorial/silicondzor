@@ -11,14 +11,9 @@ const {match, RouterContext} = require('react-router');
 const env = require('./env');
 const replies = require('../lib/replies').default;
 const bcrypt_promises = require('./bcrypt-promise');
-const tweet = require('./tweet-events');
-const {events_every} = require('./fb-events');
 const translateAll = require('./yandex-translate');
-const ui = require('../lib/http-routes').default.ui_routes;
-const html_replies = require('../lib/html-documents');
 const {email_account, email_verify_link,
        email_message, send_mail} = require('./email');
-const {event_count, events} = require('./data');
 const routes = require('../lib/routes').default;
 const REST = require('../lib/http-routes').default;
 const db_promises = require('./sqlite-promises')('silicondzor.db');
@@ -34,7 +29,10 @@ setInterval(() => register_email_users = {}, 60 * 1000 * 60 * 24);
 // Kick off the twitter bot
 require('./tweet-bot-service')(db_promises);
 // Getting the tech events every 24 Hours
-events_every(60 * 1000 * 60 * 24, db_promises, tweet);
+require('./fb-events')
+  .events_every(60 * 1000 * 60 * 24,
+		db_promises,
+		require('./tweet-events'));
 // Add helmet, serve static in public, favicon, morgan, sessions
 require('./middleware')(silicon_dzor);
 
@@ -43,6 +41,9 @@ silicon_dzor.use((req, res, next) => {
   match({routes, location:req.url},
 	async (err, redirect, props) => {
 	  if (props) {
+	    const ui = require('../lib/http-routes').default.ui_routes;
+	    const html_replies = require('../lib/html-documents');
+	    const {event_count, events} = require('./data');
 	    res.setHeader('Content-Type', 'text/html');
 	    // Need to pull down all the latest stories?
 	    const html = html_replies.elem_to_string(RouterContext, props);
