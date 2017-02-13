@@ -1,13 +1,15 @@
 import React from 'react';
-import BigCalendar from 'react-big-calendar';
-import moment_timezone from 'moment-timezone';
+// import BigCalendar from 'react-big-calendar';
+// import moment_timezone from 'moment-timezone';
 import Modal from 'react-modal';
-import Routes from './routes';
+import Routes from './http-routes';
 import results from './replies';
+import News from './dzor-news';
+import { Link } from 'react-router';
 
-moment_timezone.tz.setDefault('Asia/Yerevan');
+// moment_timezone.tz.setDefault('Asia/Yerevan');
 
-BigCalendar.momentLocalizer(moment_timezone);
+// BigCalendar.momentLocalizer(moment_timezone);
 
 const { Component } = React;
 
@@ -52,7 +54,7 @@ class Login extends Component {
     top_prompt_message:
     `Login so that you can add tech events,
 do not use anything serious for your password.
-If registering an email, then you have 24 hours to 
+If registering an email, then you have 24 hours to
 verify your email account via an email sent to you.
 `
   };
@@ -146,7 +148,7 @@ verify your email account via an email sent to you.
 
 class Banner extends Component {
 
-  state = {open:false, event_count:0}
+  state = {event_count:0}
 
   static defaultProps = {
     header_s: {
@@ -158,13 +160,8 @@ class Banner extends Component {
     }
   }
 
-  login_handler = e => {
-    this.setState({...this.state, open:!this.state.open});
-  }
-
   componentDidMount() {
-    this.setState({...this.state,
-		   event_count:window.__EVENT_COUNT_THIS_MONTH__});
+    this.setState({event_count:window.__EVENT_COUNT_THIS_MONTH__});
   }
 
   render () {
@@ -172,7 +169,7 @@ class Banner extends Component {
       cursor:'pointer',
       textDecoration:'underline'
     };
-    const choices = 
+    const choices =
 	  ['Հայ', 'Eng', 'РУС'].map((item, idx) => {
 	    return (
 	      <li key={idx}
@@ -188,88 +185,31 @@ class Banner extends Component {
 	{choices}
       </ul>
     );
+    const s = {
+      display:'inline-flex',
+      paddingLeft:'0.2rem',
+      minHeight:'10vh'
+    };
     return (
-      <div>
-        <header style={this.props.header_s}>
-	  <div>
-            <h1 style={{paddingRight:'2rem'}}>
-              Silicondzor
-            </h1>
-	    {langs}
-	  </div>
-          <div>
-            <p>
-              {this.state.event_count} tech events 
-	      this month in Armenia & Artsakh  🇦🇲
-            </p>
-            <p>
-              <span onClick={this.login_handler}
-                    style={login_s}> Login</span> so that you can add your own
-            </p>
-            <Modal
-              style={modal_s}
-	      contentLabel={'Some simple test'}
-              isOpen={this.state.open}>
-              <Login close_modal={() => this.setState({open:false})}/>
-            </Modal>
-          </div>
+      <div style={s}>
+        <header>
+          <span style={{paddingRight:'0.5rem'}}>
+            Silicondzor
+          </span>
+	  <Link 
+	    title=
+	    {`${this.state.event_count} tech events this month in Armenia & Artsakh  🇦🇲`}
+	    to={'/'}> events ({this.state.event_count}) </Link>|
+	  <Link to={'/news'}> news </Link>|
+	  <Link to={'/login'}> login </Link>
+	  <span style={{marginRight:'auto'}}> {langs} </span>
         </header>
       </div>
     );
   }
 };
 
-class TechEvent extends Component {
-
-  state = {
-    event_title:'',
-    event_description:''
-  }
-
-  submit_event = e => {
-    e.preventDefault();
-    this.props.submit_event({
-      ...this.state,
-      start:this.props.start,
-      end:this.props.end
-    });
-  }
-
-  render() {
-    const tech_s = {
-      display:'flex',
-      flexDirection:'column'
-    };
-    const centered = { textAlign:'center'};
-    return (
-      <div>
-	<form>
-	  <p style={close_btn_s} onClick={_ => this.props.close_modal()}> x </p>
-	  {this.props.prompt_msg(this.props.start, this.props.end)}
-	  <hr/>
-	  <div style={tech_s} className={'modal-inputs'}>
-	    <label> Event title </label>
-	    <input type={'text'}
-		   value={this.state.event_title}
-		   onChange={e =>
-	      this.setState({...this.state, event_title:e.target.value})}/>
-	      <label> Event Description </label>
-	      <textarea type={'text'}
-			rows={8}
-			value={this.state.event_description}
-			onChange={e =>
-		this.setState({...this.state, event_description:e.target.value})}/>
-		<input type={'submit'}
-		       value={'Create Event'}
-		       onClick={this.submit_event}/>
-	  </div>
-	</form>
-      </div>
-    );
-  }
-};
-
-class TechCalendar extends Component {
+export class TechCalendar extends Component {
 
   state = {
     events: [],
@@ -458,10 +398,9 @@ function EventAgenda({event}) {
   );
 };
 
-export default
-class _ extends Component {
+export class Application extends Component {
 
-  state = {calendar_z_value: '0', language:'Eng'}
+  state = {language:'Eng'}
 
   render () {
 
@@ -471,28 +410,21 @@ class _ extends Component {
 	  event_titles_language={this.state.language}
 	  language_pick={language => {
 	    this.setState({...this.state, language});
-	  }}
-	  push_calendar={should_push => {
-            if (should_push) {
-              this.setState({...this.state, calendar_z_value:'-100'});
-            } else {
-              this.setState({...this.state, calendar_z_value:'0'});
-            }
-          }}/>
-          <TechCalendar 
-	    title_language={this.state.language}
-	    z_value={this.state.calendar_z_value}/>
+	  }}/>
+          <div>
+	    {this.props.children}
+          </div>
 	  <footer style={{minHeight:'10vh', backgroundColor:'#ff5e12'}}>
-            <p style={{
-	       paddingTop:'1rem',
-	       textIndent:'2rem'
-               }}>
-	      Get the source code <a href={'https://github.com/fxfactorial/silicondzor'}>here</a>,
-              improvements provided via github pull requests are warmly appreciated.
+            <p style={{paddingTop:'1rem',textIndent:'2rem'}}>
+	      Get the source code
+              <a href={'https://github.com/fxfactorial/silicondzor'}>here</a>
+              improvements provided via github pull requests are
+              warmly appreciated.
 	    </p>
             <p style={{textIndent:'2rem'}}>
-             Follow our <a href={'https://twitter.com/iteratehckrspac'}>twitter</a> account to get
-             automated tweets of these events.
+              Follow our
+              <a href={'https://twitter.com/iteratehckrspac'}>twitter</a>
+              account to get automated tweets of these events.
             </p>
 	  </footer>
       </div>
