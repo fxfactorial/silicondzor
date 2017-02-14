@@ -109,3 +109,5 @@ export function login(html, tech_events, e_count) {
 </body>
 `;
 }
+
+export const bug_exchange = login;

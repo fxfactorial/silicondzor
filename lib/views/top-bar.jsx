@@ -11,6 +11,7 @@ export default class _ extends Component {
       ui.home,
       ui.about, 
       ui.tech_calendar,
+      ui.bug_exchange,
       ui.login
     ].map(item => {
       return (

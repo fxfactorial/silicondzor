@@ -21,6 +21,9 @@ export default class _ extends Component {
     case ui.home.resource:
       child_props = {};
       break;
+    case ui.bug_exchange.resource:
+      child_props = {};
+      break;
     default:
       throw new Error(`Unknown UI route-request: ${this.props.location.pathname}`);
     };

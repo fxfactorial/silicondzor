@@ -63,6 +63,9 @@ silicon_dzor.use((req, res, next) => {
 	    case ui.login.resource:
 	      send_off = html_replies.login(html, all_events, e_count);
 	      break;
+	    case ui.bug_exchange.resource:
+	      send_off = html_replies.bug_exchange(html, all_events, e_count);
+	      break;
 	    default:
 	      console.log(req.url);
 	      throw new Error('Unknown UI Route requested');
