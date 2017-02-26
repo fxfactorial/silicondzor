@@ -1,10 +1,10 @@
 {
   "name": "silicondzor",
-  "version": "0.0.1",
-  "description": "The code behind silicondzor.com",
+  "version": "1.0.0",
+  "description": "The source code behind silicondzor.com",
   "engineStrict": true,
   "engines": {
-    "node": "^7.5.0",
+    "node": "^7.6.0",
     "npm": "^4.1.2"
   },
   "repository": {
@@ -66,9 +66,10 @@
     ]
   },
   "scripts": {
+    "watch": "node scripts/watch-project.js",
     "babel-watch": "NODE_ENV='debug' babel lib/views/*.jsx lib/*.jsx lib/containers/*.jsx --watch --out-dir .",
     "webpack-watch": "NODE_ENV='debug' webpack --progress -d --colors --watch",
-    "server-watch": "NODE_ENV='debug' nodemon --harmony_async_await backend/server.js",
+    "server-watch": "NODE_ENV='debug' nodemon backend/server.js",
     "prod-build": "NODE_ENV='production' webpack --config webpack.prod.js --progress --colors -p && babel lib/*.jsx --out-dir .",
     "setup-dependencies": "sudo aptitude update && sudo aptitude install sqlite3 libsqlite3-dev",
     "create-db": "cat backend/setup-database.sql | sqlite3 silicondzor.db",
