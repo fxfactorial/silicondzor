@@ -5,6 +5,9 @@
   "loadEagerly":[
     "node_modules/react-dom/dist/react-dom.js",
     "node_modules/react/dist/react.js",
+    "node_modules/core-decorators/lib/core-decorators.js",
+    "node_modules/mobx/lib/mobx.js",
+    "node_modules/mobx-react/lib/index.js",
     "node_modules/redux/lib/index.js",
     "node_modules/react-dom/dist/react-dom-server.js",
     "node_modules/twitter/twitter.js",
