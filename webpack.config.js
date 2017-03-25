@@ -23,11 +23,11 @@ module.exports = {
         query: {
           // Here you can put plugins, like plugins:['transform-runtime']
           plugins:[
-	    // This order matters, apparently decorators must come
-	    // before class properties
-	    'transform-decorators-legacy',
-	    'transform-class-properties'
-	  ],
+	          // This order matters, apparently decorators must come
+	          // before class properties
+	          'transform-decorators-legacy',
+	          'transform-class-properties'
+	        ],
           presets: ['es2015', 'react', 'stage-3']
         }
       }]

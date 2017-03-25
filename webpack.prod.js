@@ -47,7 +47,7 @@ module.exports = {
         query: {
           // Here you can put plugins, like plugins:['transform-runtime']
           plugins:[
-	    'transform-decorators-legacy',
+	          'transform-decorators-legacy',
             'transform-class-properties',
             'transform-react-inline-elements',
             'transform-react-constant-elements'
