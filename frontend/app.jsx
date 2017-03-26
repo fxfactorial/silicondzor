@@ -7,8 +7,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 // Solely because of Safari's fetch sucking
 import 'whatwg-fetch';
 
-render((
-  <Router>
-    <Application/>
-  </Router>
-), document.getElementById('container'));
+render((<Router>
+        <Application/>
+        </Router>),
+       document.getElementById('container'));
