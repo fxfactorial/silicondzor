@@ -1,15 +1,14 @@
-// import {Application, TechCalendar} from '../lib/silicondzor';
-import News from '../lib/dzor-news';
-import routes from '../lib/Routes';
+import Application from '../lib/silicondzor';
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import {autorun, observable} from 'mobx';
+import { autorun, observable } from 'mobx';
 
-import { Router, Route, Link, browserHistory, IndexRoute }
-from 'react-router';
+import { BrowserRouter as Router } from 'react-router-dom';
 // Solely because of Safari's fetch sucking
 import 'whatwg-fetch';
 
 render((
-  <Router routes={routes} history={browserHistory}/>
+  <BrowserRouter>
+    <Application/>
+  </BrowserRouter>
 ), document.getElementById('container'));

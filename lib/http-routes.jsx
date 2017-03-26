@@ -10,6 +10,6 @@ export default {
     tech_calendar: {resource: '/tech-calendar', link:'tech-calendar'},
     login:         {resource: '/login',         link:'login'},
     home:          {resource: '/',              link:'home'},
-    bug-exchange:  {resource: '/bug-exchange',  link:'bug-exchange'}
+    bug_exchange:  {resource: '/bug-exchange',  link:'bug-exchange'}
   }
 };

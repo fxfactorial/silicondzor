@@ -1,25 +1,42 @@
 'use strict';
-/* jshint esversion: 6 */
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
+
+var _server = require('react-dom/server');
+
+var _silicondzor = require('../lib/silicondzor');
+
+var _silicondzor2 = _interopRequireDefault(_silicondzor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 const express = require('express');
 const leExpress = require('letsencrypt-express');
 const uuid_v4 = require('uuid/v4');
 const body_parser = require('body-parser');
 const crypto = require('crypto');
 const xssFilters = require('xss-filters');
-const {match, RouterContext} = require('react-router');
 
 const env = require('./env');
 const replies = require('../lib/replies').default;
 const bcrypt_promises = require('./bcrypt-promise');
 const translateAll = require('./yandex-translate');
-const {email_account, email_verify_link,
-       email_message, send_mail} = require('./email');
+const { email_account, email_verify_link,
+  email_message, send_mail } = require('./email');
+
 const routes = require('../lib/routes').default;
 const REST = require('../lib/http-routes').default;
+
 const db_promises = require('./sqlite-promises')('silicondzor.db');
 
 const json_pr = body_parser.json();
-const form_pr = body_parser.urlencoded({extended: true});
+const form_pr = body_parser.urlencoded({ extended: true });
 const silicon_dzor = express();
 let register_email_users = {};
 
@@ -29,215 +46,169 @@ setInterval(() => register_email_users = {}, 60 * 1000 * 60 * 24);
 // Kick off the twitter bot
 require('./tweet-bot-service')(db_promises);
 // Getting the tech events every 24 Hours
-require('./fb-events')
-  .events_every(60 * 1000 * 60 * 24,
-		db_promises,
-		require('./tweet-events'));
+require('./fb-events').events_every(60 * 1000 * 60 * 24, db_promises, require('./tweet-events'));
 // Add helmet, serve static in public, favicon, morgan, sessions
 require('./middleware')(silicon_dzor);
 
 // Handle the UI requests
 silicon_dzor.use((req, res, next) => {
-  match({routes, location:req.url},
-	async (err, redirect, props) => {
-	  if (props) {
-	    const ui = require('../lib/http-routes').default.ui_routes;
-	    const html_replies = require('../lib/html-documents');
-	    const {event_count, events} = require('./data');
-	    res.setHeader('Content-Type', 'text/html');
-	    // Need to pull down all the latest stories?
-	    const html = html_replies.elem_to_string(RouterContext, props);
-	    let send_off = null;
-	    const e_count = await event_count(db_promises);
-	    const all_events = await events(db_promises);
-	    switch (req.url) {
-	    case ui.home.resource:
-	      send_off = html_replies.homepage(html, all_events, e_count);
-	      break;
-	    case ui.about.resource:
-	      send_off = html_replies.about(html, all_events, e_count);
-	      break;
-	    case ui.tech_calendar.resource:
-	      send_off = html_replies.calendar(html, all_events, e_count);
-	      break;
-	    case ui.login.resource:
-	      send_off = html_replies.login(html, all_events, e_count);
-	      break;
-	    case ui.bug_exchange.resource:
-	      send_off = html_replies.bug_exchange(html, all_events, e_count);
-	      break;
-	    default:
-	      console.log(req.url);
-	      throw new Error('Unknown UI Route requested');
-	    }
-	    res.status(200).end(send_off);
-	  } else {
-	    next();
-	  }
-	});
+  res.setHeader('Content-Type', 'text/html');
+  const context = {};
+  const events = [{ field: '123' }, { field: '1rrr' }];
+  const html = (0, _server.renderToString)(_react2.default.createElement(
+    _reactRouter.StaticRouter,
+    {
+      location: req.url,
+      context: context },
+    _react2.default.createElement(_silicondzor2.default, { event_data: events })
+  ));
+  console.log({ context, html });
+  res.end(html);
 });
 
-silicon_dzor.post(REST.new_account, json_pr, form_pr, async (req, res) => {
-  const {username, password} = req.body;
+silicon_dzor.post(REST.new_account, json_pr, form_pr, (() => {
+  var _ref = _asyncToGenerator(function* (req, res) {
+    const { username, password } = req.body;
 
-  const email_query =
-	await db_promises
-	.get(`select email from account where email = $email`,
-  	     {$email:username});
+    const email_query = yield db_promises.get(`select email from account where email = $email`, { $email: username });
 
-  if (email_query) {
-    res.end(replies.fail(replies.invalid_username_already_picked));
-    return;
-  }
+    if (email_query) {
+      res.end(replies.fail(replies.invalid_username_already_picked));
+      return;
+    }
 
-  const identifier = uuid_v4();
-  register_email_users[identifier] = {username, identifier};
-  const verify_link = email_verify_link(identifier);
+    const identifier = uuid_v4();
+    register_email_users[identifier] = { username, identifier };
+    const verify_link = email_verify_link(identifier);
 
-  const hash = await bcrypt_promises.hash(password, 10);
-  try {
-    await db_promises
-      .run(`insert into account (email, hashed_password) values ($e, $h)`,
-	   { $e: username, $h: hash});
-    const mail_opts = {
-      from: 'Silicondzor.com <iteratehackerspace@gmail.com> ',
-      to: username,
-      subject: 'Verify account -- Silicondzor.com',
-      text: email_message(username, verify_link, false),
-      html: email_message(username, verify_link)
-    };
-    await send_mail(mail_opts);
-    res.end(replies.ok());
-  } catch (err) {
-    res.end(replies.fail(err.msg));
-  }
-});
-
-silicon_dzor.post(REST.sign_in, json_pr, form_pr, async (req, res) => {
-  const {username, password} = req.body;
-  req.session.logged_in = false;
-  try {
-    const row =
-	  await db_promises
-	  .get(`
-select hashed_password from account where email = $e and is_verified = 1`,
-	       {$e:username});
+    const hash = yield bcrypt_promises.hash(password, 10);
     try {
-      await bcrypt_promises.compare(password, row.hashed_password);
-      req.session.logged_in = true;
-      req.session.username = username;
+      yield db_promises.run(`insert into account (email, hashed_password) values ($e, $h)`, { $e: username, $h: hash });
+      const mail_opts = {
+        from: 'Silicondzor.com <iteratehackerspace@gmail.com> ',
+        to: username,
+        subject: 'Verify account -- Silicondzor.com',
+        text: email_message(username, verify_link, false),
+        html: email_message(username, verify_link)
+      };
+      yield send_mail(mail_opts);
       res.end(replies.ok());
+    } catch (err) {
+      res.end(replies.fail(err.msg));
     }
-    catch (err) {
-      res.end(replies.fail(replies.invalid_credentials));
+  });
+
+  return function (_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+})());
+
+silicon_dzor.post(REST.sign_in, json_pr, form_pr, (() => {
+  var _ref2 = _asyncToGenerator(function* (req, res) {
+    const { username, password } = req.body;
+    req.session.logged_in = false;
+    try {
+      const row = yield db_promises.get(`
+select hashed_password from account where email = $e and is_verified = 1`, { $e: username });
+      try {
+        yield bcrypt_promises.compare(password, row.hashed_password);
+        req.session.logged_in = true;
+        req.session.username = username;
+        res.end(replies.ok());
+      } catch (err) {
+        res.end(replies.fail(replies.invalid_credentials));
+      }
+    } catch (err) {
+      res.end(replies.fail(replies.invalid_email));
     }
-  } catch (err) {
-    res.end(replies.fail(replies.invalid_email));
-  }
-});
+  });
+
+  return function (_x3, _x4) {
+    return _ref2.apply(this, arguments);
+  };
+})());
 
 silicon_dzor.get(REST.new_account_verify, (req, res) => {
   const { identifier } = req.params;
   const { username } = register_email_users[identifier];
-  db_promises
-    .run(`update account set is_verified = 1 where email = $username`,
-	 { $username:username })
-    .then(() => {
-      delete register_email_users[username];
-      req.session.logged_in = true;
-      req.session.username = username;
-      res.redirect('/');
-    })
-    .catch(err => {
-      console.error(err);
-      // Need to tell user that email couldn't be verified
-      res.redirect('/');
-    });
+  db_promises.run(`update account set is_verified = 1 where email = $username`, { $username: username }).then(() => {
+    delete register_email_users[username];
+    req.session.logged_in = true;
+    req.session.username = username;
+    res.redirect('/');
+  }).catch(err => {
+    console.error(err);
+    // Need to tell user that email couldn't be verified
+    res.redirect('/');
+  });
 });
 
-silicon_dzor.post(REST.add_tech_event, json_pr, async (req, res) => {
-  try {
-    if (req.session.logged_in) {
-      const b = req.body;
-      let title = await translateAll(b.event_title);
-      const query_result =
-	    await db_promises
-	    .get(`select * from account where email = $username and is_verified = 1`,
-		 {$username: req.session.username});
-      const id =
-	    crypto
-	    .createHash('sha256')
-	    .update(b.event_title + b.start + query_result.id)
-	    .digest('hex');
-      await db_promises.run(`insert into event values
+silicon_dzor.post(REST.add_tech_event, json_pr, (() => {
+  var _ref3 = _asyncToGenerator(function* (req, res) {
+    try {
+      if (req.session.logged_in) {
+        const b = req.body;
+        let title = yield translateAll(b.event_title);
+        const query_result = yield db_promises.get(`select * from account where email = $username and is_verified = 1`, { $username: req.session.username });
+        const id = crypto.createHash('sha256').update(b.event_title + b.start + query_result.id).digest('hex');
+        yield db_promises.run(`insert into event values
 ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
-  $title: xssFilters.inHTMLData(title),
-  $all_day: new Date(b.start) === new Date(b.end),
-  $start:(new Date(b.start)).getTime(),
-  $end:(new Date(b.end)).getTime(),
-  $description: xssFilters.inHTMLData(b.event_description),
-  $creator:query_result.id,
-  $url: `https://silicondzor.com/${id}`, // TODO: use the url for linking
-  $id: id
-});
-      res.end(replies.ok());
-    } else {
-      res.end(replies.fail(replies.invalid_session));
+          $title: xssFilters.inHTMLData(title),
+          $all_day: new Date(b.start) === new Date(b.end),
+          $start: new Date(b.start).getTime(),
+          $end: new Date(b.end).getTime(),
+          $description: xssFilters.inHTMLData(b.event_description),
+          $creator: query_result.id,
+          $url: `https://silicondzor.com/${id}`, // TODO: use the url for linking
+          $id: id
+        });
+        res.end(replies.ok());
+      } else {
+        res.end(replies.fail(replies.invalid_session));
+      }
+    } catch (err) {
+      res.end(replies.fail(err.msg));
     }
-  } catch (err) {
-    res.end(replies.fail(err.msg));
-  }
-});
+  });
+
+  return function (_x5, _x6) {
+    return _ref3.apply(this, arguments);
+  };
+})());
 
 // No other handler picked it up yet, so this is our 404 handler
 silicon_dzor.use((req, res, next) => {
-  res
-    .status(404)
-    .send(replies.unknown_resource);
+  res.status(404).send(replies.unknown_resource);
 });
 
 function approveDomains(options, certs, cb) {
   if (certs) {
     options.domains = certs.altnames;
-  }
-  else {
+  } else {
     options.email = email_account;
     options.agreeTos = true;
   }
-  cb(null, {options, certs});
+  cb(null, { options, certs });
 }
 
 (() => {
   if (env.debug) {
-    silicon_dzor
-      .listen(env.port, () =>
-	      console.log(`Started debug server on ${env.port}, no HTTPS`));
+    silicon_dzor.listen(env.port, () => console.log(`Started debug server on ${env.port}, no HTTPS`));
   } else {
     //letsencrypt https
     const lex = leExpress.create({
       server: 'https://acme-v01.api.letsencrypt.org/directory',
       approveDomains,
       challenges: {
-	'http-01':
-	require('le-challenge-fs')
-	  .create({ webrootPath: '/tmp/acme-challenges' })
+        'http-01': require('le-challenge-fs').create({ webrootPath: '/tmp/acme-challenges' })
       },
-      store:
-      require('le-store-certbot')
-	.create({ webrootPath: '/tmp/acme-challenges' })
+      store: require('le-store-certbot').create({ webrootPath: '/tmp/acme-challenges' })
     });
 
     // handles acme-challenge and redirects to https
-    require('http')
-      .createServer(lex.middleware(require('redirect-https')()))
-      .listen(env.port, () =>
-	      console.log("Listening for ACME http-01 challenges on", env.port));
+    require('http').createServer(lex.middleware(require('redirect-https')())).listen(env.port, () => console.log("Listening for ACME http-01 challenges on", env.port));
 
     // handles silicon_dzor app
-    require('https')
-      .createServer(lex.httpsOptions, lex.middleware(silicon_dzor))
-      .listen(env.port_https, () =>
-	      console.log("Listening for ACME tls-sni-01 challenges and serve app on",
-			  env.port_https));
+    require('https').createServer(lex.httpsOptions, lex.middleware(silicon_dzor)).listen(env.port_https, () => console.log("Listening for ACME tls-sni-01 challenges and serve app on", env.port_https));
   }
 })();
