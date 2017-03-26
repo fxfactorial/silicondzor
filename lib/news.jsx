@@ -32,9 +32,10 @@ const s = {
 
 const NewsItem = ({author, title, comment_count, link, vote_count, idx}) => (
   <div style={s}>
-    <i className={'material-icons'}>arrow_upward</i>
     <div>
-      <p>{idx} {title} ({link})</p>
+      <p>
+        <i className={'material-icons'}>arrow_upward</i>{idx} {title} ({link})
+      </p>
     </div>
     <div>
       <p>
