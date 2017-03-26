@@ -26,7 +26,6 @@ module.exports = {
 	          // This order matters, apparently decorators must come
 	          // before class properties
 	          'transform-decorators-legacy',
-            'styled-jsx/babel',
 	          'transform-class-properties'
 	        ],
           presets: ['es2015', 'react', 'stage-3']

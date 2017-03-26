@@ -50,8 +50,7 @@ module.exports = {
 	          'transform-decorators-legacy',
             'transform-class-properties',
             'transform-react-inline-elements',
-            'transform-react-constant-elements',
-            "styled-jsx/babel"
+            'transform-react-constant-elements'
           ],
           presets: [['es2015', {modules: false}], 'react', 'stage-3']
         }
