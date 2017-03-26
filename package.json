@@ -66,6 +66,7 @@
     ],
     "plugins": [
       "transform-decorators-legacy",
+      "styled-jsx/babel",
       "transform-es2015-modules-commonjs",
       "transform-class-properties"
     ]
