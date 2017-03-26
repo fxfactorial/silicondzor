@@ -78,13 +78,13 @@ export default class Application extends Component {
           <hr/>
 
           <div style={content_s}>
-            <Route exact path={"/"} component={SDNews}/>
-            <Route path={"/submit"} component={SDSubmitNews}/>
+            <Route exact path={"/"}        component={SDNews}/>
+            <Route path={"/submit"}        component={SDSubmitNews}/>
             <Route path={"/tech-calendar"} component={SDCalendar}/>
-            <Route path={"/jobs-board"} component={SDJobs}/>
-            <Route path={"/bug-bounty"} component={SDBugBounty}/>
-            <Route path={"/resquared"} component={Resquared}/>
-            <Route path={"/login"} component={SDLogin}/>
+            <Route path={"/jobs-board"}    component={SDJobs}/>
+            <Route path={"/bug-bounty"}    component={SDBugBounty}/>
+            <Route path={"/resquared"}     component={Resquared}/>
+            <Route path={"/login"}         component={SDLogin}/>
           </div>
           <BottomFooter/>
         </div>
