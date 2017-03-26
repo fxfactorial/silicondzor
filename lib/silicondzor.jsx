@@ -31,7 +31,6 @@ const content_s = {
   justifyContent:'space-between'
 };
 
-
 export default class Application extends Component {
 
   state = {language:'Eng'}
