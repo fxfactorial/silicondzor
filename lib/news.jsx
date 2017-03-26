@@ -30,6 +30,14 @@ const s = {
 // Writing an OS in Rust: Handling Exceptions (phil-opp.com)
 // 68 points by adamnemecek 1 hour ago | flag | hide | 1 comment
 
+const arrow_style = {
+  cursor:'pointer'
+};
+
+const byline_style = {
+  fontSize:'x-large'
+};
+
 class NewsItem extends Component {
 
   up_vote = e => {
@@ -38,13 +46,16 @@ class NewsItem extends Component {
 
   render () {
     const {author, title, comment_count, link, vote_count, idx} = this.props;
+
     return (
       <div style={s}>
         <div>
-          <p>
+          <p style={byline_style}>
+            <span>{idx}</span>
             <i onClick={this.up_vote}
+               style={arrow_style}
                className={'material-icons'}>arrow_upward</i>
-            {idx} {title} ({link})
+             {title} ({link})
           </p>
         </div>
         <div>

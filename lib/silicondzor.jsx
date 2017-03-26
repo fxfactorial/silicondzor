@@ -9,6 +9,7 @@ import SDCalendar from './tech-calendar';
 import SDJobs from './job-board';
 import SDLogin from './login';
 import BottomFooter from './footer';
+import SDSubmitNews from './submit-news';
 
 const ul_s = {
   display:'flex',
@@ -42,6 +43,7 @@ export default class Application extends Component {
           <nav style={nav_s}>
             <ul style={ul_s}>
               <li><Link to={"/"}>news</Link></li>
+              <li><Link to={"/submit"}>submit</Link></li>
               <li><Link to={"/tech-calendar"}>tech calendar</Link></li>
               <li><Link to={"/jobs-board"}>jobs board</Link></li>
               <li><Link to={"/bug-bounty"}>bug bounty</Link></li>
@@ -54,6 +56,7 @@ export default class Application extends Component {
 
           <div style={content_s}>
             <Route exact path={"/"} component={SDNews}/>
+            <Route path={"/submit"} component={SDSubmitNews}/>
             <Route path={"/tech-calendar"} component={SDCalendar}/>
             <Route path={"/jobs-board"} component={SDJobs}/>
             <Route path={"/bug-bounty"} component={SDBugBounty}/>
