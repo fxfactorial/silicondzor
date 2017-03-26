@@ -67,9 +67,9 @@ silicon_dzor.use((req, res, next) => {
 </head>
 <body>
   <style>
-* { margin:0; padding:0; }
-html { box-sizing: border-box; }
-*, *:before, *:after { box-sizing: inherit; }
+  * { margin:0; padding:0; }
+  html { box-sizing: border-box; }
+  *, *:before, *:after { box-sizing: inherit; }
   </style>
   <div id='container'>${html}</div>
   <script src='bundle.js'></script>

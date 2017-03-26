@@ -52,9 +52,17 @@ const Resquared = () => (
   </div>
 );
 
-const nav_s = {
+const ul_s = {
+  display:'flex',
+  justifyContent:'space-between',
   listStyleType: 'none',
-  display:'inline'
+  paddingLeft:'10px',
+  paddingRight:'10px'
+};
+
+const nav_s = {
+  marginTop:'20px',
+  marginBottom:'20px'
 };
 
 export default class Application extends Component {
@@ -66,7 +74,7 @@ export default class Application extends Component {
       <Switch>
         <div>
           <nav style={nav_s}>
-            <ul>
+            <ul style={ul_s}>
               <li><Link to={"/"}>News</Link></li>
               <li><Link to={"/tech-calendar"}>Tech Calendar</Link></li>
               <li><Link to={"/jobs-board"}>Jobs Board</Link></li>
