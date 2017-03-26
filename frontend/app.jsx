@@ -8,7 +8,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import 'whatwg-fetch';
 
 render((
-  <BrowserRouter>
+  <Router>
     <Application/>
-  </BrowserRouter>
+  </Router>
 ), document.getElementById('container'));

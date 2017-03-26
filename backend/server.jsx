@@ -57,8 +57,24 @@ silicon_dzor.use((req, res, next) => {
       <Application event_data={events}/>
     </StaticRouter>
   );
-  console.log({context});
-  res.end(html);
+
+  res.end(`
+<!doctype html>
+<head>
+  <title>Silicondzor.com</title>
+  <link href="react-big-calendar.css" rel="stylesheet" type="text/css"/>
+  <link rel="preload" href="bundle.js" as="script"/>
+</head>
+<body>
+  <style>
+* { margin:0; padding:0; }
+html { box-sizing: border-box; }
+*, *:before, *:after { box-sizing: inherit; }
+  </style>
+  <div id='container'>${html}</div>
+  <script src='bundle.js'></script>
+</body>
+`);
 });
 
 silicon_dzor.post(REST.new_account, json_pr, form_pr, async (req, res) => {
