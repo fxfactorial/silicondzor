@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-// Later pick what we actually need to avoid code bloat.
-
 import subDays from 'date-fns/sub_days';
+
+import colors from './colors';
 
 // Data model should include timestamp
 const news_stories = [
@@ -22,8 +22,9 @@ const news_stories = [
 
 ];
 
+
 const s = {
-  backgroundColor:'red',
+  backgroundColor:`#${colors.site_colors.d}`,
   marginTop:'15px'
 };
 
@@ -51,7 +52,7 @@ class NewsItem extends Component {
       <div style={s}>
         <div>
           <p style={byline_style}>
-            <span>{idx}</span>
+            <span>{idx}).</span>
             <i onClick={this.up_vote}
                style={arrow_style}
                className={'material-icons'}>arrow_upward</i>
