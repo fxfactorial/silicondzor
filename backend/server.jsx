@@ -57,7 +57,7 @@ silicon_dzor.use((req, res, next) => {
       <Application event_data={events}/>
     </StaticRouter>
   );
-  console.log({context, html});
+  console.log({context});
   res.end(html);
 });
 

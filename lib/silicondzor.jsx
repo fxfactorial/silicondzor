@@ -18,27 +18,19 @@ import { Route, Link } from 'react-router-dom';
 //   };
 // };
 
-const BasicExample = () => (
-  <div>
-    <ul>
-      <li><Link to="/">Home</Link></li>
-      <li><Link to="/about">About</Link></li>
-      <li><Link to="/topics">Topics</Link></li>
-    </ul>
+// const BasicExample = () => (
+// );
 
-    <hr/>
-
-    <Route exact path="/" component={Home}/>
-    <Route path="/about" component={About}/>
-    <Route path="/topics" component={Topics}/>
-  </div>
-);
-
-const Home = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
-);
+class TechNews extends Component {
+  render() {
+    console.log(this.props);
+    return (
+      <div>
+        <h2>News</h2>
+      </div>
+    );
+  }
+};
 
 const About = () => (
   <div>
@@ -68,6 +60,7 @@ const Topics = ({ match }) => (
     </ul>
 
     <Route path={`${match.url}/:topicId`} component={Topic}/>
+
     <Route exact path={match.url} render={() => (
       <h3>Please select a topic.</h3>
     )}/>
@@ -86,7 +79,23 @@ export default class Application extends Component {
 
   render () {
     return (
-      <Switch>{BasicExample()}</Switch>
+      <Switch>
+        <div>
+          <nav>
+            <ul>
+              <li><Link to={"/"}>News</Link></li>
+              <li><Link to={"/about"}>About</Link></li>
+              <li><Link to={"/topics"}>Topics</Link></li>
+            </ul>
+          </nav>
+
+          <hr/>
+
+          <Route exact path={"/"} render={(p) => <TechNews extra={'123'} {...p}/>}/>
+          <Route path={"/about"} component={About}/>
+          <Route path={"/topics"} component={Topics}/>
+        </div>
+      </Switch>
     );
   }
 };
