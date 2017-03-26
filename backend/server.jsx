@@ -3,7 +3,6 @@
 import React from 'react';
 import { StaticRouter } from 'react-router';
 import { renderToString } from 'react-dom/server';
-import { flushToHTML } from 'styled-jsx/server';
 import Application from '../lib/silicondzor';
 
 const express = require('express');
@@ -59,7 +58,6 @@ silicon_dzor.use((req, res, next) => {
     </StaticRouter>
   );
 
-  const styles = flushToHTML();
   res.end(`
 <!doctype html>
 <meta charset="utf-8"/>
@@ -70,7 +68,6 @@ silicon_dzor.use((req, res, next) => {
         rel="stylesheet"/>
   <link href="react-big-calendar.css" rel="stylesheet" type="text/css"/>
   <link rel="preload" href="bundle.js" as="script"/>
-  ${styles}
 </head>
 <body>
   <style>

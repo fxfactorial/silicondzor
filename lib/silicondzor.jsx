@@ -63,24 +63,13 @@ export default class Application extends Component {
                 <li><Link style={link_style} to={"/tech-calendar"}>tech calendar</Link></li>
                 <li><Link style={link_style} to={"/jobs-board"}>jobs board</Link></li>
                 <li><Link style={link_style} to={"/bug-bounty"}>bug bounty</Link></li>
-                <li>
-                  <Link style={link_style} to={"/resquared"}>Resquared</Link>
-          <style jsx>{`
-a:hover {
-  color:yellow;
-}
-
-`}</style>
-                </li>
-
+                <li><Link style={link_style} to={"/resquared"}>about Resquared</Link></li>
               </ul>
 
 
               <li><Link style={link_style} to={"/login"}>login</Link></li>
-
             </ul>
           </nav>
-
 
           <hr/>
 
