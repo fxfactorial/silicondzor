@@ -14,14 +14,13 @@ import colors from './colors';
 
 const ul_s = {
   display:'flex',
-  justifyContent:'space-between',
   listStyleType: 'none',
   paddingLeft:'10px',
   paddingRight:'10px'
 };
 
 const nav_s = {
-  backgroundColor:`#${colors.site_colors.a}`,
+  backgroundColor:colors.site_colors.a,
   paddingTop:'20px',
   paddingBottom:'20px'
 };
@@ -36,7 +35,14 @@ const content_s = {
 
 const link_style = {
   color:'white',
+  marginRight:'15px',
   textDecoration:'none'
+};
+
+const title_style = {
+  color:colors.site_colors.d,
+  fontSize:'xx-large',
+  marginRight:'10px'
 };
 
 export default class Application extends Component {
@@ -49,12 +55,18 @@ export default class Application extends Component {
         <div>
           <nav style={nav_s}>
             <ul style={ul_s}>
-              <li><Link style={link_style} to={"/"}>news</Link></li>
-              <li><Link style={link_style} to={"/submit"}>submit</Link></li>
-              <li><Link style={link_style} to={"/tech-calendar"}>tech calendar</Link></li>
-              <li><Link style={link_style} to={"/jobs-board"}>jobs board</Link></li>
-              <li><Link style={link_style} to={"/bug-bounty"}>bug bounty</Link></li>
-              <li><Link style={link_style} to={"/resquared"}>about Resquared</Link></li>
+              <li style={title_style}>Silicondzor</li>
+
+              <ul style={{...ul_s, marginRight:'auto'}}>
+                <li><Link style={link_style} to={"/"}>news</Link></li>
+                <li><Link style={link_style} to={"/submit"}>submit</Link></li>
+                <li><Link style={link_style} to={"/tech-calendar"}>tech calendar</Link></li>
+                <li><Link style={link_style} to={"/jobs-board"}>jobs board</Link></li>
+                <li><Link style={link_style} to={"/bug-bounty"}>bug bounty</Link></li>
+                <li><Link style={link_style} to={"/resquared"}>about Resquared</Link></li>
+              </ul>
+
+
               <li><Link style={link_style} to={"/login"}>login</Link></li>
             </ul>
           </nav>

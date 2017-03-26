@@ -24,7 +24,7 @@ const news_stories = [
 
 
 const s = {
-  backgroundColor:`#${colors.site_colors.d}`,
+  backgroundColor:colors.site_colors.d,
   marginTop:'15px'
 };
 
