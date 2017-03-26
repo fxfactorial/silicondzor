@@ -28,9 +28,14 @@ const nav_s = {
 const content_s = {
   display:'flex',
   flexDirection:'column',
+  justifyContent:'space-between'
+};
+
+const application_container = {
+  marginTop:'10px',
   marginLeft:'20px',
   marginRight:'20px',
-  justifyContent:'space-between'
+  marginBottom:'10px'
 };
 
 const link_style = {
@@ -41,7 +46,7 @@ const link_style = {
 
 const title_style = {
   color:colors.site_colors.d,
-  fontSize:'xx-large',
+  fontSize:'30px',
   marginRight:'10px'
 };
 
@@ -52,7 +57,7 @@ export default class Application extends Component {
   render () {
     return (
       <Switch>
-        <div>
+        <div style={application_container}>
           <nav style={nav_s}>
             <ul style={ul_s}>
               <li style={title_style}>Silicondzor</li>

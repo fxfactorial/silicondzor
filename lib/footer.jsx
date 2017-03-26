@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
+import colors from './colors';
 
 const bottom_s = {
+  color:'white',
   position:'absolute',
+  // Great use of calc
+  width:`calc(100% - 40px)`,
   bottom:0,
   marginBottom:'10px',
-  backgroundColor:'orange'
+  backgroundColor:colors.site_colors.a
 };
 
 export default class Footer extends Component {
