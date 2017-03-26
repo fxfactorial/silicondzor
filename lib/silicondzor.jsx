@@ -50,6 +50,27 @@ const title_style = {
   marginRight:'10px'
 };
 
+const li_style = {
+  marginTop:'10px'
+};
+
+const routes = [
+  {to:'/', title:'news'},
+  {to:'/submit', title:'submit'},
+  {to:'/tech-calendar', title:'tech calendar'},
+  {to:'/jobs-board', title:'jobs board'},
+  {to:'/bug-bounty', title:'bug bounty'},
+  {to:'/requared', title:'Resquared'}
+];
+
+const list_items = routes.map(({to, title}) => (
+  <li style={li_style} key={to}>
+    <Link style={link_style} to={to}>
+      {title}
+    </Link>
+  </li>
+));
+
 export default class Application extends Component {
 
   state = {language:'Eng'}
@@ -61,17 +82,8 @@ export default class Application extends Component {
           <nav style={nav_s}>
             <ul style={ul_s}>
               <li style={title_style}>Silicondzor</li>
-
-              <ul style={{...ul_s, marginRight:'auto'}}>
-                <li><Link style={link_style} to={"/"}>news</Link></li>
-                <li><Link style={link_style} to={"/submit"}>submit</Link></li>
-                <li><Link style={link_style} to={"/tech-calendar"}>tech calendar</Link></li>
-                <li><Link style={link_style} to={"/jobs-board"}>jobs board</Link></li>
-                <li><Link style={link_style} to={"/bug-bounty"}>bug bounty</Link></li>
-                <li><Link style={link_style} to={"/resquared"}>about Resquared</Link></li>
-              </ul>
-
-              <li><Link style={link_style} to={"/login"}>login</Link></li>
+              <ul style={{...ul_s, marginRight:'auto'}}>{list_items}</ul>
+              <li style={li_style}><Link style={link_style} to={"/login"}>login</Link></li>
             </ul>
           </nav>
 

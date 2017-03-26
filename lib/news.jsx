@@ -34,7 +34,9 @@ const s = {
 // 68 points by adamnemecek 1 hour ago | flag | hide | 1 comment
 
 const arrow_style = {
-  cursor:'pointer'
+  cursor:'pointer',
+  marginLeft:'2px',
+  marginRight:'2px'
 };
 
 const byline_style = {
@@ -54,13 +56,14 @@ class NewsItem extends Component {
       <div style={s}>
         <div>
           <p style={byline_style}>
-            <span>{idx}).</span>
+            <span>{idx}.</span>
             <i onClick={this.up_vote}
                style={arrow_style}
                className={'material-icons'}>arrow_upward</i>
              {title} ({link})
           </p>
         </div>
+        <hr/>
         <div>
           <p>
             {vote_count} points by {author} 1 hour ago | flag | hide | {comment_count} comment
