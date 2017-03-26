@@ -27,7 +27,6 @@ CREATE TABLE event (
 
 CREATE TABLE post (
    creator INTEGER PRIMARY KEY NOT NULL,
-   FOREIGN KEY (creator) REFERENCES account(ID)
 
    creation_time INTEGER NOT NULL,
    title TEXT NOT NULL,
@@ -35,7 +34,10 @@ CREATE TABLE post (
    web_link TEXT,
    upvotes INTEGER NOT NULL DEFAULT 1,
    downvotes INTEGER NOT NULL DEFAULT 0,
-   comment_count INTEGER NOT NULL DEFAULT 0
+   comment_count INTEGER NOT NULL DEFAULT 0,
+
+   FOREIGN KEY (creator) REFERENCES account(ID)
+
 );
 
 CREATE TABLE comment (
