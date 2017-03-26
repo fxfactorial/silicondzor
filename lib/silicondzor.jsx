@@ -10,6 +10,7 @@ import SDJobs from './job-board';
 import SDLogin from './login';
 import BottomFooter from './footer';
 import SDSubmitNews from './submit-news';
+import colors from './colors';
 
 const ul_s = {
   display:'flex',
@@ -20,8 +21,9 @@ const ul_s = {
 };
 
 const nav_s = {
-  marginTop:'20px',
-  marginBottom:'20px'
+  backgroundColor:`#${colors.site_colors.a}`,
+  paddingTop:'20px',
+  paddingBottom:'20px'
 };
 
 const content_s = {
@@ -30,6 +32,11 @@ const content_s = {
   marginLeft:'20px',
   marginRight:'20px',
   justifyContent:'space-between'
+};
+
+const link_style = {
+  color:'white',
+  textDecoration:'none'
 };
 
 export default class Application extends Component {
@@ -42,13 +49,13 @@ export default class Application extends Component {
         <div>
           <nav style={nav_s}>
             <ul style={ul_s}>
-              <li><Link to={"/"}>news</Link></li>
-              <li><Link to={"/submit"}>submit</Link></li>
-              <li><Link to={"/tech-calendar"}>tech calendar</Link></li>
-              <li><Link to={"/jobs-board"}>jobs board</Link></li>
-              <li><Link to={"/bug-bounty"}>bug bounty</Link></li>
-              <li><Link to={"/resquared"}>about Resquared</Link></li>
-              <li><Link to={"/login"}>login</Link></li>
+              <li><Link style={link_style} to={"/"}>news</Link></li>
+              <li><Link style={link_style} to={"/submit"}>submit</Link></li>
+              <li><Link style={link_style} to={"/tech-calendar"}>tech calendar</Link></li>
+              <li><Link style={link_style} to={"/jobs-board"}>jobs board</Link></li>
+              <li><Link style={link_style} to={"/bug-bounty"}>bug bounty</Link></li>
+              <li><Link style={link_style} to={"/resquared"}>about Resquared</Link></li>
+              <li><Link style={link_style} to={"/login"}>login</Link></li>
             </ul>
           </nav>
 
