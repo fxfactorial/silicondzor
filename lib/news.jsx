@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // Later pick what we actually need to avoid code bloat.
-import DateFns from 'date-fns';
 
+import subDays from 'date-fns/sub_days';
 
 // Data model should include timestamp
 const news_stories = [
@@ -10,11 +10,13 @@ const news_stories = [
    link:'http://hyegar.com',
    title:'Tech is growing in Armenia',
    vote_count:10,
+   date:subDays(Date.now(), 1).getTime() - 123123,
    comment_count:3},
 
   {author:'RobertK',
    link: null,
    title:'ASK SD: How long do you work for?',
+   date:subDays(Date.now(), 2).getTime() - 10123,
    vote_count: 3,
    comment_count:12}
 
@@ -30,6 +32,7 @@ const s = {
 
 const NewsItem = ({author, title, comment_count, link, vote_count, idx}) => (
   <div style={s}>
+    <i className={'material-icons'}>arrow_upward</i>
     <div>
       <p>{idx} {title} ({link})</p>
     </div>
