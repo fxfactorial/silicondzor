@@ -30,20 +30,32 @@ const s = {
 // Writing an OS in Rust: Handling Exceptions (phil-opp.com)
 // 68 points by adamnemecek 1 hour ago | flag | hide | 1 comment
 
-const NewsItem = ({author, title, comment_count, link, vote_count, idx}) => (
-  <div style={s}>
-    <div>
-      <p>
-        <i className={'material-icons'}>arrow_upward</i>{idx} {title} ({link})
-      </p>
-    </div>
-    <div>
-      <p>
-        {vote_count} points by {author} 1 hour ago | flag | hide | {comment_count} comment
-      </p>
-    </div>
-  </div>
-);
+class NewsItem extends Component {
+
+  up_vote = e => {
+    console.log('upvote');
+  }
+
+  render () {
+    const {author, title, comment_count, link, vote_count, idx} = this.props;
+    return (
+      <div style={s}>
+        <div>
+          <p>
+            <i onClick={this.up_vote}
+               className={'material-icons'}>arrow_upward</i>
+            {idx} {title} ({link})
+          </p>
+        </div>
+        <div>
+          <p>
+            {vote_count} points by {author} 1 hour ago | flag | hide | {comment_count} comment
+          </p>
+        </div>
+      </div>
+    );
+  }
+};
 
 export default class SDNews extends Component {
   render () {
