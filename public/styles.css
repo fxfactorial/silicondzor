@@ -4,29 +4,7 @@ html { box-sizing: border-box; }
 *, *:before, *:after { box-sizing: inherit; }
 /*  Basic resets for modern browsers */
 
-@import url('https://fonts.googleapis.com/css?family=Raleway');
-
-* { font-family: 'Arian AMU', 'Raleway', sans-serif; }
-
-@media (max-width: 600px) {
-  header {
-    font-size:medium;
-  }
+a:hover {
+  transition: color 1.0s ease-out;
+  color:#B5A280 !important;
 }
-
-@media (min-width: 601px) {
-  header {
-    font-size:large;
-  }
-}
-
-header > a {text-decoration:none;}
-
-.modal-inputs > * { margin-bottom: 0.3rem; }
-
-ul {
-  list-style: none;
-  display:inline-flex;
-}
-
-li { padding-left:1em; }

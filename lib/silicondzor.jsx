@@ -66,7 +66,6 @@ export default class Application extends Component {
                 <li><Link style={link_style} to={"/resquared"}>about Resquared</Link></li>
               </ul>
 
-
               <li><Link style={link_style} to={"/login"}>login</Link></li>
             </ul>
           </nav>

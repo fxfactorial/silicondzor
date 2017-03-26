@@ -67,14 +67,11 @@ silicon_dzor.use((req, res, next) => {
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet"/>
   <link href="react-big-calendar.css" rel="stylesheet" type="text/css"/>
+  <link href="styles.css" rel="stylesheet" type="text/css"/>
+
   <link rel="preload" href="bundle.js" as="script"/>
 </head>
 <body>
-  <style>
-  * { margin:0; padding:0; }
-  html { box-sizing: border-box; }
-  *, *:before, *:after { box-sizing: inherit; }
-  </style>
   <div id='container'>${html}</div>
   <script src='bundle.js'></script>
 </body>
