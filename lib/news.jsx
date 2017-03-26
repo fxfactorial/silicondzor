@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+// Later pick what we actually need to avoid code bloat.
+import DateFns from 'date-fns';
 
+
+// Data model should include timestamp
 const news_stories = [
 
   {author:'e_d_g_a_r',
@@ -21,21 +25,31 @@ const s = {
   marginTop:'15px'
 };
 
-const NewsItem = ({author, title, comment_count, link}) => (
+// Writing an OS in Rust: Handling Exceptions (phil-opp.com)
+// 68 points by adamnemecek 1 hour ago | flag | hide | 1 comment
+
+const NewsItem = ({author, title, comment_count, link, vote_count, idx}) => (
   <div style={s}>
-    <p>{title}</p>
+    <div>
+      <p>{idx} {title} ({link})</p>
+    </div>
+    <div>
+      <p>
+        {vote_count} points by {author} 1 hour ago | flag | hide | {comment_count} comment
+      </p>
+    </div>
   </div>
 );
 
 export default class SDNews extends Component {
   render () {
     const items =
-          news_stories.map(props => <NewsItem key={props.title} {...props}/>);
+          news_stories.map((props, idx) =>
+                           <NewsItem idx={idx + 1} key={props.title} {...props}/>);
     return (
       <div>
         {items}
       </div>
     );
-
   }
 }
