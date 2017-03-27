@@ -19,7 +19,6 @@ const translateAll = require('./yandex-translate');
 const {email_account, email_verify_link,
        email_message, send_mail} = require('./email');
 
-const routes = require('../lib/routes').default;
 const REST = require('../lib/http-routes').default;
 
 const ui_routes =
