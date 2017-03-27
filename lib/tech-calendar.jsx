@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import BigCalendar from 'react-big-calendar';
+import moment_timezone from 'moment-timezone';
+
+moment_timezone.tz.setDefault('Asia/Yerevan');
+BigCalendar.momentLocalizer(moment_timezone);
 
 const default_scroll_time = new Date(1970, 1, 1, 4);
 
 const s = {
-  minHeight:'100px'
+  minHeight:'500px'
 };
 
 export default class SDTechCalendar extends Component {
