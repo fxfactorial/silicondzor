@@ -14,6 +14,6 @@ export default {
     {to:'/tech-calendar', title:'tech calendar'},
     {to:'/jobs-board', title:'jobs board'},
     {to:'/bug-bounty', title:'bug bounty'},
-    {to:'/requared', title:'Resquared'}
+    {to:'/resquared', title:'Resquared'}
   ]
 };

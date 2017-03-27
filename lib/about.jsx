@@ -1,11 +1,31 @@
 import React, { Component } from 'react';
 
-export default
-class Resquared extends Component {
+const s = {
+
+};
+
+const names = [
+  {name: 'Edgar Aroutiounian', img:'/edgar-arout.png'},
+  {name: 'Edgar Khanzandian', img:'/edgar-khan.png'},
+  {name: 'Robert Gevorgyan', img:'/robert.png'}
+];
+
+const profiles = names.map(({name, img}) => (
+  <p key={name}>
+    {name} <img src={img}/>
+  </p>
+));
+
+export default class Resquared extends Component {
   render () {
     return (
       <div>
-        <h2> About Resquared </h2>
+        <section>
+          Contact us for rates
+        </section>
+        <section style={{display:'flex'}}>
+          {profiles}
+        </section>
       </div>
     );
   }

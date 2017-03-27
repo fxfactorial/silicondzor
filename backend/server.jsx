@@ -73,12 +73,11 @@ silicon_dzor.use((req, res, next) => {
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <head>
-  <title>Silicondzor.com</title>
+  <title>Silicondzor</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet"/>
   <link href="react-big-calendar.css" rel="stylesheet" type="text/css"/>
   <link href="styles.css" rel="stylesheet" type="text/css"/>
-
   <link rel="preload" href="bundle.js" as="script"/>
 </head>
 <body>
