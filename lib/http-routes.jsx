@@ -4,6 +4,9 @@ export default {
   new_account: '/new-account',
   sign_in: '/sign-in',
   new_account_verify: '/verify-account/:identifier',
+  upvote: '/upvote',
+  comment: '/comment',
+  submit_post: '/submit-post',
   // And now the UI
   ui_routes: [
     {to:'/', title:'news'},
