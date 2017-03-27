@@ -22,6 +22,12 @@ const {email_account, email_verify_link,
 const routes = require('../lib/routes').default;
 const REST = require('../lib/http-routes').default;
 
+const ui_routes =
+      new Set(
+        require('../lib/http-routes').default
+          .ui_routes.map(({to}) => to)
+      );
+
 const db_promises = require('./sqlite-promises')('silicondzor.db');
 
 const json_pr = body_parser.json();
@@ -44,21 +50,25 @@ require('./middleware')(silicon_dzor);
 
 // Handle the UI requests
 silicon_dzor.use((req, res, next) => {
-  res.setHeader('Content-Type', 'text/html');
-  const context = {};
-  const events = [
-    {field:'123'},
-    {field: '1rrr'}
-  ];
-  const html = renderToString(
-    <StaticRouter
-      location={req.url}
-      context={context}>
-      <Application event_data={events}/>
-    </StaticRouter>
-  );
 
-  res.end(`
+  if (ui_routes.has(req.url) === false) next();
+  else {
+    res.setHeader('Content-Type', 'text/html');
+
+    const context = {};
+    const events = [
+      {field:'123'},
+      {field: '1rrr'}
+    ];
+    const html = renderToString(
+      <StaticRouter
+        location={req.url}
+        context={context}>
+        <Application event_data={events}/>
+      </StaticRouter>
+    );
+    console.log(context);
+    res.end(`
 <!doctype html>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -76,6 +86,8 @@ silicon_dzor.use((req, res, next) => {
   <script src='bundle.js'></script>
 </body>
 `);
+  }
+
 });
 
 silicon_dzor.post(REST.new_account, json_pr, form_pr, async (req, res) => {

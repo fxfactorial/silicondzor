@@ -11,6 +11,7 @@ import SDLogin from './login';
 import BottomFooter from './footer';
 import SDSubmitNews from './submit-news';
 import colors from './colors';
+import routes from './http-routes';
 
 const ul_s = {
   display:'flex',
@@ -54,16 +55,7 @@ const li_style = {
   marginTop:'10px'
 };
 
-const routes = [
-  {to:'/', title:'news'},
-  {to:'/submit', title:'submit'},
-  {to:'/tech-calendar', title:'tech calendar'},
-  {to:'/jobs-board', title:'jobs board'},
-  {to:'/bug-bounty', title:'bug bounty'},
-  {to:'/requared', title:'Resquared'}
-];
-
-const list_items = routes.map(({to, title}) => (
+const list_items = routes.ui_routes.map(({to, title}) => (
   <li style={li_style} key={to}>
     <Link style={link_style} to={to}>
       {title}

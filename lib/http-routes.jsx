@@ -5,11 +5,12 @@ export default {
   sign_in: '/sign-in',
   new_account_verify: '/verify-account/:identifier',
   // And now the UI
-  ui_routes: {
-    about:         {resource: '/about',         link:'about'},
-    tech_calendar: {resource: '/tech-calendar', link:'tech-calendar'},
-    login:         {resource: '/login',         link:'login'},
-    home:          {resource: '/',              link:'home'},
-    bug_exchange:  {resource: '/bug-exchange',  link:'bug-exchange'}
-  }
+  ui_routes: [
+    {to:'/', title:'news'},
+    {to:'/submit', title:'submit'},
+    {to:'/tech-calendar', title:'tech calendar'},
+    {to:'/jobs-board', title:'jobs board'},
+    {to:'/bug-bounty', title:'bug bounty'},
+    {to:'/requared', title:'Resquared'}
+  ]
 };
