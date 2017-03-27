@@ -108,6 +108,7 @@ silicon_dzor.post(REST.new_account, json_pr, form_pr, async (req, res) => {
       html: email_message(username, verify_link)
     };
     await send_mail(mail_opts);
+    res.setHeader('content-type', 'application/json');
     res.end(replies.ok());
   } catch (err) {
     res.end(replies.fail(err.msg));

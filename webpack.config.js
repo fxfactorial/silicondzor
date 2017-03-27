@@ -1,6 +1,6 @@
 module.exports = {
   devtool: 'inline-source-map',
-  entry: ['whatwg-fetch', './frontend/app.jsx'],
+  entry: ['babel-polyfill', 'whatwg-fetch', './frontend/app.jsx'],
   devServer:{
     inline:true,
     progress:true,
