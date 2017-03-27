@@ -15,11 +15,18 @@ class SDLogin extends Component {
     this.createUsernameChange = this.createUsernameChange.bind(this);
     this.createPasswordChange = this.createPasswordChange.bind(this);
     this.loginSubmit = this.loginSubmit.bind(this);
+    this.createAccountSubmit = this.createAccountSubmit.bind(this);
   }
   async loginSubmit(){
     const {logUsername, logPassword} = this.state;
     const send_to_server = request_opts(JSON.stringify({username: logUsername, password: logPassword}));
-    console.log('lol');
+    const answer = await fetch(`http://localhost:9090/sign-in`, send_to_server);
+    const answer_json = await answer.json();
+    console.log(answer_json);
+  }
+  async createAccountSubmit(){
+    const {logUsername, logPassword} = this.state;
+    const send_to_server = request_opts(JSON.stringify({username: logUsername, password: logPassword}));
     const answer = await fetch(`http://localhost:9090/new-account`, send_to_server);
     const answer_json = await answer.json();
     console.log(answer_json);
@@ -79,7 +86,7 @@ class SDLogin extends Component {
           password:
           <input onChange={this.createPasswordChange}/>
         </div>
-        <button style={buttonStyle}>
+        <button style={buttonStyle} onClick={this.createAccountSubmit}>
           create account
         </button>
         
