@@ -67,7 +67,7 @@ silicon_dzor.use((req, res, next) => {
         <Application event_data={events}/>
       </StaticRouter>
     );
-    console.log(context);
+
     res.end(`
 <!doctype html>
 <meta charset="utf-8"/>
@@ -185,7 +185,7 @@ silicon_dzor.post(REST.submit_post, json_pr, form_pr, async (req, res) => {
 ($creator, $id, $creation_time, $title, $content, $web_link)`, {
   $title: xssFilters.inHTMLData(b.title),
   $creation_time: (new Date()).getTime(),
-  $content: xssFilters.inHTMLData(b.content)
+  $content: xssFilters.inHTMLData(b.content),
   $web_link: b.web_link,
   $creator:query_result.id,
   $id: id
