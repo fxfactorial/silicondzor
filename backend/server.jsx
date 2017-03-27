@@ -156,7 +156,36 @@ silicon_dzor.get(REST.new_account_verify, (req, res) => {
       res.redirect('/');
     });
 });
-
+silicon_dzor.post(REST.submit_post, json_pr, form_pr, async (req, res) => {
+  try {
+    if (req.session.logged_in) {
+      const b = req.body;
+      const query_result =
+	    await db_promises
+	    .get(`select * from account where email = $username and is_verified = 1`,
+		 {$username: req.session.username});
+      const id =
+	    crypto
+	    .createHash('sha256')
+	    .update(b.title + b.creation_time + query_result.id)
+	    .digest('hex');
+      await db_promises.run(`insert into post (creator, id, creation_time, title, content, web_link) values
+($creator, $id, $creation_time, $title, $content, $web_link)`, {
+  $title: xssFilters.inHTMLData(b.title),
+  $creation_time: (new Date()).getTime(),
+  $content: xssFilters.inHTMLData(b.content)
+  $web_link: b.web_link,
+  $creator:query_result.id,
+  $id: id
+});
+      res.end(replies.ok());
+    } else {
+      res.end(replies.fail(replies.invalid_session));
+    }
+  } catch (err) {
+    res.end(replies.fail(err.msg));
+  }
+})
 silicon_dzor.post(REST.add_tech_event, json_pr, async (req, res) => {
   try {
     if (req.session.logged_in) {

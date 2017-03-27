@@ -27,7 +27,7 @@ CREATE TABLE event (
 
 CREATE TABLE post (
    creator INTEGER PRIMARY KEY NOT NULL,
-
+   id TEXT NOT NULL,
    creation_time INTEGER NOT NULL,
    title TEXT NOT NULL,
    content TEXT,
