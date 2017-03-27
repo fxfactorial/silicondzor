@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {request_opts} from './utility';
 export default
 class SDLogin extends Component {
   constructor(){
@@ -17,14 +18,7 @@ class SDLogin extends Component {
   }
   async loginSubmit(){
     const {logUsername, logPassword} = this.state;
-    const send_to_server = {
-      headers: new Headers({
-    	  Accept: 'application/json',
-    	  'Content-Type': 'application/json'
-    	}),
-    	method:'POST',
-    	body:JSON.stringify({username: logUsername, password: logPassword})
-    }
+    const send_to_server = request_opts(JSON.stringify({username: logUsername, password: logPassword}));
     console.log('lol');
     const answer = await fetch(`http://localhost:9090/new-account`, send_to_server);
     const answer_json = await answer.json();
