@@ -39,6 +39,17 @@ CREATE TABLE post (
    FOREIGN KEY (creator) REFERENCES account(ID)
 
 );
+CREATE TABLE job_post (
+   creator INTEGER PRIMARY KEY NOT NULL,
+   id TEXT NOT NULL,
+   creation_time INTEGER NOT NULL,
+   title TEXT NOT NULL,
+   content TEXT,
+   web_link TEXT,
+
+   FOREIGN KEY (creator) REFERENCES account(ID)
+
+);
 
 CREATE TABLE comment (
    creator INTEGER PRIMARY KEY NOT NULL,

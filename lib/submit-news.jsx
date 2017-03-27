@@ -11,12 +11,20 @@ export default class SDSubmitNews extends Component {
     this.titleChange = this.titleChange.bind(this);
     this.urlChange = this.urlChange.bind(this);
     this.contentChange = this.contentChange.bind(this);
-    this.submit = this.submit.bind(this);
+    this.submitJob = this.submitJob.bind(this);
+    this.submitPost = this.submitPost.bind(this);
   }
-  async submit(){
+  async submitPost(){
     const {title, url, content} = this.state;
     const send_to_server = request_opts(JSON.stringify({title, web_url: url, content}));
     const answer = await fetch(`http://localhost:9090/submit-post`, send_to_server);
+    const answer_json = await answer.json();
+    console.log(answer_json);
+  }
+  async submitJob(){
+    const {title, url, content} = this.state;
+    const send_to_server = request_opts(JSON.stringify({title, web_url: url, content}));
+    const answer = await fetch(`http://localhost:9090/submit-job`, send_to_server);
     const answer_json = await answer.json();
     console.log(answer_json);
   }
@@ -65,8 +73,11 @@ export default class SDSubmitNews extends Component {
           </div>
           <textarea onChange={this.contentChange} style={{width: 500, height: 200}} />
         </div>
-        <button style={buttonStyle} onClick={this.submit}>
-          submit
+        <button style={buttonStyle} onClick={this.submitPost}>
+          submit post
+        </button>
+        <button style={buttonStyle} onClick={this.submitJob}>
+          submit job
         </button>
       </div>
     );

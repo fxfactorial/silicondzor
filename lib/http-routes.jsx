@@ -7,6 +7,7 @@ export default {
   upvote: '/upvote',
   comment: '/comment',
   submit_post: '/submit-post',
+  submit_job: '/submit-job',
   // And now the UI
   ui_routes: [
     {to:'/', title:'news'},
