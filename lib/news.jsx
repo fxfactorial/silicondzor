@@ -90,7 +90,7 @@ class NewsItem extends Component {
             <i onClick={this.up_vote}
                style={arrow_style}
                className={'material-icons'}>arrow_upward</i>
-            {title} ({link})
+            {title} {link ? `(${link})` : null}
           </p>
         </div>
         <hr/>
