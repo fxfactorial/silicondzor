@@ -76,6 +76,7 @@ class NewsItem extends Component {
       </Link>);
     // Hiding should have a fun animation
     const hide = <span style={span_s} onClick={this.hide_this_post}>hide</span>;
+    // Need to add a favorites in case we are logged in.
     const byline = (
       <p>
         {vote_count} points by {to_author} 1 hour ago |
