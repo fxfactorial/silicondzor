@@ -6,7 +6,7 @@ import { renderToString } from 'react-dom/server';
 import Application from '../lib/silicondzor';
 
 const express = require('express');
-const leExpress = require('letsencrypt-express');
+const leExpress = require('greenlock-express');
 const uuid_v4 = require('uuid/v4');
 const body_parser = require('body-parser');
 const crypto = require('crypto');
