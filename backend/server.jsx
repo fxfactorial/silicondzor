@@ -23,8 +23,8 @@ const REST = require('../lib/http-routes').default;
 
 const ui_routes =
       new Set(
-        require('../lib/http-routes').default
-          .ui_routes.map(({to}) => to)
+        [...require('../lib/http-routes').default
+         .ui_routes.map(({to}) => to), '/user']
       );
 
 const db_promises = require('./sqlite-promises')('silicondzor.db');

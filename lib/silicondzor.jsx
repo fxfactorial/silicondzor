@@ -42,7 +42,6 @@ const application_container = {
 
 const link_style = {
   color:'white',
-  marginRight:'15px',
   textDecoration:'none'
 };
 
@@ -53,10 +52,11 @@ const title_style = {
 };
 
 const li_style = {
-  marginTop:'10px'
+  marginTop:'10px',
+  marginRight:'15px'
 };
 
-const list_items = routes.ui_routes.map(({to, title}) => (
+const nav_items = routes.ui_routes.map(({to, title}) => (
   <li style={li_style} key={to}>
     <Link style={link_style} to={to}>
       {title}
@@ -75,7 +75,7 @@ export default class Application extends Component {
           <nav style={nav_s}>
             <ul style={ul_s}>
               <li style={title_style}>Silicondzor</li>
-              <ul style={{...ul_s, marginRight:'auto'}}>{list_items}</ul>
+              <ul style={{...ul_s, marginRight:'auto'}}>{nav_items}</ul>
               <li style={li_style}><Link style={link_style} to={"/login"}>login</Link></li>
             </ul>
           </nav>
