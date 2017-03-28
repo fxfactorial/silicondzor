@@ -27,7 +27,7 @@ const news_stories = [
 
 
 const s = {
-  backgroundColor:colors.site_colors.d,
+  backgroundColor:colors.site_colors.cards,
   borderRadius:'5px',
   padding:'5px',
   marginTop:'15px'

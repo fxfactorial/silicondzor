@@ -64,6 +64,34 @@ const nav_items = routes.ui_routes.map(({to, title}) => (
   </li>
 ));
 
+const jobs_ex = [
+
+  {salary:'With experience',
+   employer:'A',
+   location:'Yerevan',
+   contact_info:'foo@bar.com',
+   job_descr:'Looking for a rockstar'},
+
+  {salary:'100.000AMD',
+   employer:'B',
+   location:'Yerevan',
+   contact_info:'foo@i.com',
+   job_descr:'iOS reverse engineering'},
+
+  {salary:'200,000AMD',
+   employer:'C',
+   location:'Gyumri',
+   contact_info:'eerer@f.com',
+   job_descr:'Great React native dev wanted'},
+
+  {salary:`Let's talk`,
+   employer:'D',
+   location:'Vanadzor',
+   contact_info:'oowew@bar.com',
+   job_descr:'Some job'}
+
+];
+
 export default class Application extends Component {
 
   state = {language:'Eng'}
@@ -76,7 +104,9 @@ export default class Application extends Component {
             <ul style={ul_s}>
               <li style={title_style}>Silicondzor</li>
               <ul style={{...ul_s, marginRight:'auto'}}>{nav_items}</ul>
-              <li style={li_style}><Link style={link_style} to={"/login"}>login</Link></li>
+              <li style={li_style}>
+                <Link style={link_style} to={"/login"}>login</Link>
+              </li>
             </ul>
           </nav>
 
@@ -86,7 +116,9 @@ export default class Application extends Component {
             <Route exact path={"/"}        component={SDNews}/>
             <Route path={"/submit"}        component={SDSubmitNews}/>
             <Route path={"/tech-calendar"} component={SDCalendar}/>
-            <Route path={"/jobs-board"}    component={SDJobs}/>
+            <Route path={"/jobs-board"}    render={() => {
+                return (<SDJobs all_jobs={jobs_ex}/>);
+            }}/>
             <Route path={"/bug-bounty"}    component={SDBugBounty}/>
             <Route path={"/resquared"}     component={Resquared}/>
             <Route path={"/login"}         component={SDLogin}/>

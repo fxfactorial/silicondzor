@@ -13,7 +13,7 @@ const names = [
    img:'/edgar-arout.jpg'},
 
   {name: 'Edgar Khanzadian',
-   descr:'Co-founder - Straight outta Stalingrad',
+   descr:'Founder - Straight outta Stalingrad',
    origin:'Raised in Russia',
    img:'/edgar-khan.jpg'},
 
