@@ -72,7 +72,7 @@ silicon_dzor.use((req, res, next) => {
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <head>
-  <title>Silicondzor</title>
+  <title>Tech community of Armenia</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet"/>
   <link href="react-big-calendar.css" rel="stylesheet" type="text/css"/>
