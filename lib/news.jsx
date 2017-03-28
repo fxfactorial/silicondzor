@@ -46,10 +46,14 @@ const byline_style = {
   fontSize:'x-large'
 };
 
+const span_s = {
+  cursor:'pointer'
+};
+
 class NewsItem extends Component {
 
   up_vote = e => {
-    console.log('upvote');
+    console.error('tell server to upvote only if logged in');
   }
 
   flag_post = e => {
@@ -57,7 +61,7 @@ class NewsItem extends Component {
   }
 
   hide_this_post = e => {
-    console.log('Do animation to move this post out');
+    console.error('Do animation to move this post out');
   }
 
   render () {
@@ -65,19 +69,19 @@ class NewsItem extends Component {
            time_of_sub, post_id,
            link, vote_count, idx} = this.props;
     const to_author = <Link to={`/user?id=${author}`}>{author}</Link>;
-    const flag = <span onClick={this.flag_post}> flag </span>;
-
+    const flag = <span style={span_s} onClick={this.flag_post}> flag </span>;
     const drilldown = (
       <Link to={`/item?id=${post_id}`}>
         {comment_count === 0 ? 'discuss' : `${comment_count} comments`}
       </Link>);
     // Hiding should have a fun animation
-    const hide = <span onClick={this.hide_this_post}>hide</span>;
-    const byline =
-          <p>
-          {vote_count} points by {to_author} 1 hour ago |
-          {flag} | {hide} | {drilldown}
-          </p>;
+    const hide = <span style={span_s} onClick={this.hide_this_post}>hide</span>;
+    const byline = (
+      <p>
+        {vote_count} points by {to_author} 1 hour ago |
+        {flag} | {hide} | {drilldown}
+      </p>
+    );
     return (
       <div style={s}>
         <div>
@@ -90,7 +94,7 @@ class NewsItem extends Component {
           </p>
         </div>
         <hr/>
-        <div>{byline}</div>
+        <div style={{marginLeft:'10px'}}>{byline}</div>
       </div>
     );
   }
