@@ -8,6 +8,9 @@ export default class SDSubmitNews extends Component {
       url: '',
       content: '',
       tab: 'post',
+      start: '',
+      end: '',
+      hoursChoice: []
     }
     this.titleChange = this.titleChange.bind(this);
     this.urlChange = this.urlChange.bind(this);
@@ -15,9 +18,27 @@ export default class SDSubmitNews extends Component {
     this.submitJob = this.submitJob.bind(this);
     this.submitPost = this.submitPost.bind(this);
     this.submitBugBounty = this.submitBugBounty.bind(this);
+    this.submitEvent = this.submitEvent.bind(this);
     this.changeTabPost = this.changeTabPost.bind(this);
     this.changeTabJob = this.changeTabJob.bind(this);
     this.changeTabBugBounty = this.changeTabBugBounty.bind(this);
+    this.changeTabEvent = this.changeTabEvent.bind(this);
+    this.onTimeChangeFrom = this.onTimeChangeFrom.bind(this);
+    this.onTimeChangeTo = this.onTimeChangeTo.bind(this);
+    let makeHoursChoice = [];
+    for(let i = 0; i <= 48; ++i){
+        if(i === 48){
+          this.state.hoursChoice = makeHoursChoice;
+        }else if(i-Math.round(i/2) < 10 && i % 2 == 0){
+          makeHoursChoice.push(<option key={i} value={`0${i-Math.round(i/2)}:00`}>0{i-Math.round(i/2)}:00</option>);
+        }else if(i-Math.round(i/2) < 10 && i % 2 == 1){
+          makeHoursChoice.push(<option key={i} value={`0${i-Math.round(i/2)}:30`}>0{i-Math.round(i/2)}:30</option>);
+        }else if(i-Math.round(i/2) >= 10 && i % 2 == 0){
+          makeHoursChoice.push(<option key={i} value={`${i-Math.round(i/2)}:00`}>{i-Math.round(i/2)}:00</option>);
+        }else if(i-Math.round(i/2) >= 10 && i % 2 == 1){
+          makeHoursChoice.push(<option key={i} value={`${i-Math.round(i/2)}:30`}>{i-Math.round(i/2)}:30</option>);
+        }
+    }
   }
   async submitPost(){
     const {title, url, content} = this.state;
@@ -41,6 +62,21 @@ export default class SDSubmitNews extends Component {
     const answer_json = await answer.json();
     console.log(answer_json);
   }
+  async submitEvent(){
+    const {title, url, content, start, end} = this.state;
+    const send_to_server = request_opts(JSON.stringify({
+      event_title: title, 
+      event_description: content, 
+      start, 
+      end, 
+      web_url: url, 
+      content
+    }));
+    const answer = await fetch(`http://localhost:9090/submit-job`, send_to_server); 
+    //need to add web_url to server and sql
+    const answer_json = await answer.json();
+    console.log(answer_json);
+  }
   titleChange(e){
     const title = e.currentTarget.value;
     this.setState({title});
@@ -53,9 +89,18 @@ export default class SDSubmitNews extends Component {
     const content = e.currentTarget.value;
     this.setState({content});
   }
+  onTimeChangeFrom(e){
+    const time = e.currentTarget.value;
+    this.setState({ start: time });
+  }
+  onTimeChangeTo(e){
+    const time = e.currentTarget.value;
+    this.setState({ end: time });
+  }
   changeTabPost(){this.setState({tab: 'post'})};
   changeTabJob(){this.setState({tab: 'job'})};
   changeTabBugBounty(){this.setState({tab: 'bug-bounty'})};
+  changeTabEvent(){this.setState({tab: 'event'})};
   render () {
     const titleStyle = {
       fontSize: 40,
@@ -68,7 +113,7 @@ export default class SDSubmitNews extends Component {
       marginTop: 10
     };
     const headerButton = {
-      width: '32%', 
+      width: '23%', 
       textAlign: 'center', 
       backgroundColor:'#2C3D54', 
       color: 'white', 
@@ -80,6 +125,7 @@ export default class SDSubmitNews extends Component {
           <div style={headerButton} onClick={this.changeTabPost}>Submit Post</div>
           <div style={headerButton} onClick={this.changeTabJob}>Submit Job</div>
           <div style={headerButton} onClick={this.changeTabBugBounty}>Submit Bug-Bounty</div>
+          <div style={headerButton} onClick={this.changeTabEvent}>Submit Event</div>
         </div>
         <div style={this.state.tab === 'post' ? {display: 'block'} : {display: 'none'}}>
           <div style={titleStyle}>
@@ -158,7 +204,47 @@ export default class SDSubmitNews extends Component {
             submit bug-bounty
           </button>
         </div>
-
+        
+        <div style={this.state.tab === 'event' ? {display: 'block'} : {display: 'none'}}>
+          <div style={titleStyle}>
+            Submit Event
+          </div>
+          <div style={{fontSize: 20}}>
+            title:
+            <input onChange={this.titleChange}/>
+          </div>
+          <div>
+            start:
+            <select onChange={this.onTimeChangeFrom} value={this.state.start}>
+              <option value="">Choose start time</option>
+              {this.state.hoursChoice}
+            </select>
+          </div>
+          <div>
+            end:
+            <select onChange={this.onTimeChangeTo} value={this.state.end}>
+              <option value="">Choose end time</option>
+              {this.state.hoursChoice}
+            </select>
+          </div>
+          <div style={{fontSize: 20}}>
+            url:
+            <input onChange={this.urlChange}/>
+          </div>
+          <div style={{fontSize: 20}}>
+            OR
+          </div>
+          <div>
+            <div style={{fontSize: 20}}>
+              text:
+            </div>
+            <textarea onChange={this.contentChange} style={{width: 500, height: 200}} />
+          </div>
+          <button style={buttonStyle} onClick={this.submitEvent}>
+            submit event
+          </button>
+        </div>
+        
       </div>
     );
   }
