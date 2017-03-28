@@ -5,15 +5,23 @@ const s = {
 };
 
 const names = [
-  {name: 'Edgar Aroutiounian', img:'/edgar-arout.png'},
-  {name: 'Edgar Khanzandian', img:'/edgar-khan.png'},
-  {name: 'Robert Gevorgyan', img:'/robert.png'}
+  {name: 'Edgar Aroutiounian', img:'/edgar-arout.jpg'},
+  {name: 'Edgar Khanzadian', img:'/edgar-khan.jpg'},
+  // {name: 'Robert Gevorgyan', img:'/robert.png'}
 ];
 
+const profiles_cont = {
+  display:'flex',
+  justifyContent:'space-between',
+  marginLeft:'3rem',
+  marginRight:'3rem'
+};
+
 const profiles = names.map(({name, img}) => (
-  <p key={name}>
-    {name} <img src={img}/>
-  </p>
+  <div key={name} style={{textAlign:'center'}}>
+    <img style={{borderRadius:'10px'}} src={img}/>
+    <p>{name}</p>
+  </div>
 ));
 
 export default class Resquared extends Component {
@@ -21,9 +29,9 @@ export default class Resquared extends Component {
     return (
       <div>
         <section>
-          Contact us for rates
+          Contact us to work on your next software project.
         </section>
-        <section style={{display:'flex'}}>
+        <section style={profiles_cont}>
           {profiles}
         </section>
       </div>
