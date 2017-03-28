@@ -12,6 +12,7 @@ import BottomFooter from './footer';
 import SDSubmitNews from './submit-news';
 import colors from './colors';
 import routes from './http-routes';
+import SDUserProfile from './user-profile';
 
 const ul_s = {
   display:'flex',

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import subDays from 'date-fns/sub_days';
+import { Link } from 'react-router-dom';
 
 import colors from './colors';
 
@@ -10,13 +11,13 @@ const news_stories = [
    link:'http://hyegar.com',
    title:'Tech is growing in Armenia',
    vote_count:10,
-   date:subDays(Date.now(), 1).getTime() - 123123,
+   time_of_sub:subDays(Date.now(), 1).getTime() - 123123,
    comment_count:3},
 
   {author:'RobertK',
    link: null,
    title:'ASK SD: How long do you work for?',
-   date:subDays(Date.now(), 2).getTime() - 10123,
+   time_of_sub:subDays(Date.now(), 2).getTime() - 10123,
    vote_count: 3,
    comment_count:12}
 
@@ -50,8 +51,10 @@ class NewsItem extends Component {
   }
 
   render () {
-    const {author, title, comment_count, link, vote_count, idx} = this.props;
-
+    const {author, title, comment_count,
+           time_of_sub,
+           link, vote_count, idx} = this.props;
+    const to_author = <Link to={`/user?id=${author}`}>{author}</Link>;
     return (
       <div style={s}>
         <div>
@@ -60,13 +63,13 @@ class NewsItem extends Component {
             <i onClick={this.up_vote}
                style={arrow_style}
                className={'material-icons'}>arrow_upward</i>
-             {title} ({link})
+            {title} ({link})
           </p>
         </div>
         <hr/>
         <div>
           <p>
-            {vote_count} points by {author} 1 hour ago | flag | hide | {comment_count} comment
+            {vote_count} points by {to_author} 1 hour ago | flag | hide | {comment_count} comment
           </p>
         </div>
       </div>
