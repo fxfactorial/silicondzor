@@ -22,7 +22,7 @@ const ul_s = {
 };
 
 const nav_s = {
-  backgroundColor:colors.site_colors.a,
+  backgroundColor:colors.site_colors.banner,
   paddingTop:'20px',
   paddingBottom:'20px'
 };
@@ -46,7 +46,7 @@ const link_style = {
 };
 
 const title_style = {
-  color:colors.site_colors.d,
+  color:colors.site_colors.title,
   fontSize:'30px',
   marginRight:'10px'
 };
