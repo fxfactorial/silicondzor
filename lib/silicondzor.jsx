@@ -16,6 +16,9 @@ import SDUserProfile from './user-profile';
 import SDDiscussion from './discussion';
 import subDays from 'date-fns/sub_days';
 
+import store from './sdMobx';
+import { observer } from 'mobx-react';
+
 const ul_s = {
   display:'flex',
   listStyleType: 'none',
@@ -110,15 +113,18 @@ const bugs = [
 ];
 
 export default class Application extends Component {
-
+  componentWillMount(){
+    store.jobs_posts = jobs_ex;
+    store.bug_bounties = bugs;
+  }
   state = {language:'Eng'}
 
   render_jobs = () => {
-    return (<SDJobs all_jobs={jobs_ex}/>);
+    return (<SDJobs all_jobs={store.jobs_posts}/>);
   }
 
   render_bug_bounty = () => {
-    return (<SDBugBounty bugs={bugs}/>);
+    return (<SDBugBounty bugs={store.bug_bounties}/>);
   }
 
   render () {
