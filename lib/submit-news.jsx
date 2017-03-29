@@ -12,19 +12,6 @@ export default class SDSubmitNews extends Component {
       end: '',
       hoursChoice: []
     }
-    this.titleChange = this.titleChange.bind(this);
-    this.urlChange = this.urlChange.bind(this);
-    this.contentChange = this.contentChange.bind(this);
-    this.submitJob = this.submitJob.bind(this);
-    this.submitPost = this.submitPost.bind(this);
-    this.submitBugBounty = this.submitBugBounty.bind(this);
-    this.submitEvent = this.submitEvent.bind(this);
-    this.changeTabPost = this.changeTabPost.bind(this);
-    this.changeTabJob = this.changeTabJob.bind(this);
-    this.changeTabBugBounty = this.changeTabBugBounty.bind(this);
-    this.changeTabEvent = this.changeTabEvent.bind(this);
-    this.onTimeChangeFrom = this.onTimeChangeFrom.bind(this);
-    this.onTimeChangeTo = this.onTimeChangeTo.bind(this);
     let makeHoursChoice = [];
     for(let i = 0; i <= 48; ++i){
         if(i === 48){
@@ -40,21 +27,21 @@ export default class SDSubmitNews extends Component {
         }
     }
   }
-  async submitPost(){
+  submitPost = async () => {
     const {title, url, content} = this.state;
     const send_to_server = request_opts(JSON.stringify({title, web_url: url, content}));
     const answer = await fetch(`http://localhost:9090/submit-post`, send_to_server);
     const answer_json = await answer.json();
     console.log(answer_json);
   }
-  async submitJob(){
+  submitJob = async () => {
     const {title, url, content} = this.state;
     const send_to_server = request_opts(JSON.stringify({title, web_url: url, content}));
     const answer = await fetch(`http://localhost:9090/submit-job`, send_to_server);
     const answer_json = await answer.json();
     console.log(answer_json);
   }
-  async submitBugBounty(){
+  submitBugBounty = async () => {
     const {title, url, content} = this.state;
     const send_to_server = request_opts(JSON.stringify({title, web_url: url, content}));
     const answer = await fetch(`http://localhost:9090/submit-job`, send_to_server); 
@@ -62,7 +49,7 @@ export default class SDSubmitNews extends Component {
     const answer_json = await answer.json();
     console.log(answer_json);
   }
-  async submitEvent(){
+  submitEvent = async () => {
     const {title, url, content, start, end} = this.state;
     const send_to_server = request_opts(JSON.stringify({
       event_title: title, 
@@ -77,30 +64,30 @@ export default class SDSubmitNews extends Component {
     const answer_json = await answer.json();
     console.log(answer_json);
   }
-  titleChange(e){
+  titleChange = (e) => {
     const title = e.currentTarget.value;
     this.setState({title});
   }
-  urlChange(e){
+  urlChange = (e) => {
     const url = e.currentTarget.value;
     this.setState({url});
   }
-  contentChange(e){
+  contentChange = (e) => {
     const content = e.currentTarget.value;
     this.setState({content});
   }
-  onTimeChangeFrom(e){
+  onTimeChangeFrom = (e) => {
     const time = e.currentTarget.value;
     this.setState({ start: time });
   }
-  onTimeChangeTo(e){
+  onTimeChangeTo = (e) => {
     const time = e.currentTarget.value;
     this.setState({ end: time });
   }
-  changeTabPost(){this.setState({tab: 'post'})};
-  changeTabJob(){this.setState({tab: 'job'})};
-  changeTabBugBounty(){this.setState({tab: 'bug-bounty'})};
-  changeTabEvent(){this.setState({tab: 'event'})};
+  changeTabPost = () => {this.setState({tab: 'post'})};
+  changeTabJob = () => {this.setState({tab: 'job'})};
+  changeTabBugBounty = () => {this.setState({tab: 'bug-bounty'})};
+  changeTabEvent = () => {this.setState({tab: 'event'})};
   render () {
     const titleStyle = {
       fontSize: 40,
