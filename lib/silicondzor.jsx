@@ -113,7 +113,6 @@ const bugs = [
 ];
 
 export default class Application extends Component {
-  //we have to make it rerender every time store is changed
   async componentWillMount(){
     const links = ['/get-news', '/get-jobs', '/get-bugs', 'get-events'];
     const news = await Promise.all(links.map(async (each) => {
@@ -125,6 +124,9 @@ export default class Application extends Component {
     store.jobs_posts = news[1];
     store.bug_bounties = news[2];
     store.events = news[3];
+    this.setState();
+    //we have to make it rerender every time store is changed,
+    //better without this.setState();
   }
   state = {language:'Eng'}
   
