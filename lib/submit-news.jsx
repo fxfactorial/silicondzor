@@ -100,19 +100,42 @@ export default class SDSubmitNews extends Component {
       marginTop: 10
     };
     const headerButton = {
-      width: '23%', 
+      width: '15%', 
       textAlign: 'center', 
       backgroundColor:'#2C3D54', 
       color: 'white', 
       cursor: 'pointer'
     }
+    const headerButtonActive = {
+      width: '15%', 
+      textAlign: 'center', 
+      backgroundColor:'#B5A280',
+      color: 'white', 
+      cursor: 'pointer'
+    }
     return (
       <div>
-        <div style={{display: 'flex', justifyContent: 'space-between', height: 50, alignItems: 'center'}}>
-          <div style={headerButton} onClick={this.changeTabPost}>Submit Post</div>
-          <div style={headerButton} onClick={this.changeTabJob}>Submit Job</div>
-          <div style={headerButton} onClick={this.changeTabBugBounty}>Submit Bug-Bounty</div>
-          <div style={headerButton} onClick={this.changeTabEvent}>Submit Event</div>
+        <div style={{display: 'flex', height: 50, alignItems: 'center', justifyContent: 'center'}}>
+          <div style={this.state.tab === 'post' ? {
+            ...headerButtonActive, 
+            borderTopLeftRadius: 7, 
+            borderBottomLeftRadius: 7
+          } : {
+            ...headerButton, 
+            borderTopLeftRadius: 7, 
+            borderBottomLeftRadius: 7
+          }} onClick={this.changeTabPost}>Submit Post</div>
+          <div style={this.state.tab === 'job' ? headerButtonActive : headerButton} onClick={this.changeTabJob}>Submit Job</div>
+          <div style={this.state.tab === 'bug-bounty' ? headerButtonActive : headerButton} onClick={this.changeTabBugBounty}>Submit Bug-Bounty</div>
+          <div style={this.state.tab === 'event' ? {
+            ...headerButtonActive, 
+            borderTopRightRadius: 7, 
+            borderBottomRightRadius: 7
+          } : {
+            ...headerButton, 
+            borderTopRightRadius: 7, 
+            borderBottomRightRadius: 7
+          }} onClick={this.changeTabEvent}>Submit Event</div>
         </div>
         <div style={this.state.tab === 'post' ? {display: 'block'} : {display: 'none'}}>
           <div style={titleStyle}>
