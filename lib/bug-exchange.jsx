@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
+import colors from './colors';
+import { observer } from 'mobx-react';
 
+const bug_card_s = {
+  marginTop:'10px',
+  backgroundColor:colors.site_colors.cards
+};
 const BugCard = (
-  {post_time, creator, descr}) => (
-    <div>
-      <p>{descr}</p>
-      <p>Posted at {post_time} by {creator}</p>
+  {creator, creation_time, title, content, web_link}) => (
+    <div style={bug_card_s}>
+      <p>{title}</p>
+      <p>{content}</p>
+      <p>{web_link}</p>
+      <p>creator : {creator}</p>
+      <p>{creation_time}</p>
     </div>
   );
-
+@observer
 export default
 class SDBugBounty extends Component {
   render () {

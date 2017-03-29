@@ -260,6 +260,39 @@ silicon_dzor.post(REST.add_tech_event, json_pr, async (req, res) => {
   }
 });
 
+silicon_dzor.get(REST.get_news, async (req, res) => {
+  const news =
+  await db_promises
+  .all(`select * from post`);
+  console.log('news');
+  console.log(news);
+  res.end(JSON.stringify(news));
+});
+silicon_dzor.get(REST.get_jobs, async (req, res) => {
+  const jobs =
+  await db_promises
+  .all(`select * from job_post`);
+  console.log('jobs');
+  console.log(jobs);
+  res.end(JSON.stringify(jobs));
+});
+silicon_dzor.get(REST.get_bugs, async (req, res) => {
+  const bugs =
+  await db_promises
+  .all(`select * from bug_post`);
+  console.log('bugs');
+  console.log(bugs);
+  res.end(JSON.stringify(bugs));
+});
+silicon_dzor.get(REST.get_events, async (req, res) => {
+  const events =
+  await db_promises
+  .all(`select * from event`);
+  console.log('events');
+  console.log(events);
+  res.end(JSON.stringify(events));
+});
+
 // No other handler picked it up yet, so this is our 404 handler
 silicon_dzor.use((req, res, next) => {
   res

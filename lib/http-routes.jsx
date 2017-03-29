@@ -8,6 +8,10 @@ export default {
   comment: '/comment',
   submit_post: '/submit-post',
   submit_job: '/submit-job',
+  get_events: '/get-events',
+  get_jobs: '/get-jobs',
+  get_bugs: '/get-bugs',
+  get_news: '/get-news',
   // And now the UI
   ui_routes: [
     {to:'/', title:'news'},

@@ -113,18 +113,31 @@ const bugs = [
 ];
 
 export default class Application extends Component {
-  componentWillMount(){
-    store.jobs_posts = jobs_ex;
-    store.bug_bounties = bugs;
+  //we have to make it rerender every time store is changed
+  async componentWillMount(){
+    const links = ['/get-news', '/get-jobs', '/get-bugs', 'get-events'];
+    const news = await Promise.all(links.map(async (each) => {
+      const fetched = await fetch(each);
+      const jsoned = await fetched.json();
+      return jsoned;
+    }));
+    store.news_posts = news[0];
+    store.jobs_posts = news[1];
+    store.bug_bounties = news[2];
+    store.events = news[3];
   }
   state = {language:'Eng'}
-
+  
   render_jobs = () => {
     return (<SDJobs all_jobs={store.jobs_posts}/>);
   }
 
   render_bug_bounty = () => {
     return (<SDBugBounty bugs={store.bug_bounties}/>);
+  }
+  
+  render_news = () => {
+    return (<SDNews news={store.news_posts}/>);
   }
 
   render () {
@@ -144,7 +157,7 @@ export default class Application extends Component {
           <hr/>
 
           <div style={content_s}>
-            <Route exact path={"/"}        component={SDNews}/>
+            <Route exact path={"/"}        render={this.render_news}/>
             <Route path={"/submit"}        component={SDSubmitNews}/>
             <Route path={"/tech-calendar"} component={SDCalendar}/>
             <Route path={"/jobs-board"}    render={this.render_jobs}/>
