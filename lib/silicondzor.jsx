@@ -13,6 +13,8 @@ import SDSubmitNews from './submit-news';
 import colors from './colors';
 import routes from './http-routes';
 import SDUserProfile from './user-profile';
+import SDDiscussion from './discussion';
+import subDays from 'date-fns/sub_days';
 
 const ul_s = {
   display:'flex',
@@ -92,9 +94,32 @@ const jobs_ex = [
 
 ];
 
+const bugs = [
+
+  {post_time:subDays(Date.now(), 1).getTime() - 123123,
+   creator:'Sipan',
+   descr:'Come find bugs in Government Infrastructure'},
+
+  {post_time:subDays(Date.now(), 2).getTime() - 123123,
+   creator:'Gor',
+   descr:'Fuzz test our ecommerce site'},
+
+  {post_time:subDays(Date.now(), 3).getTime() - 123123,
+   creator:'Hasmik',
+   descr:'Pentest our security system'}
+];
+
 export default class Application extends Component {
 
   state = {language:'Eng'}
+
+  render_jobs = () => {
+    return (<SDJobs all_jobs={jobs_ex}/>);
+  }
+
+  render_bug_bounty = () => {
+    return (<SDBugBounty bugs={bugs}/>);
+  }
 
   render () {
     return (
@@ -116,12 +141,11 @@ export default class Application extends Component {
             <Route exact path={"/"}        component={SDNews}/>
             <Route path={"/submit"}        component={SDSubmitNews}/>
             <Route path={"/tech-calendar"} component={SDCalendar}/>
-            <Route path={"/jobs-board"}    render={() => {
-                return (<SDJobs all_jobs={jobs_ex}/>);
-            }}/>
-            <Route path={"/bug-bounty"}    component={SDBugBounty}/>
+            <Route path={"/jobs-board"}    render={this.render_jobs}/>
+            <Route path={"/bug-bounty"}    render={this.render_bug_bounty}/>
             <Route path={"/resquared"}     component={Resquared}/>
             <Route path={"/login"}         component={SDLogin}/>
+            <Route path={'/item?id=:post_id'} component={SDDiscussion}/>
           </div>
           <BottomFooter/>
         </div>

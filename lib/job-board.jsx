@@ -17,7 +17,8 @@ const JobCard = (
 export default class SDJobs extends Component {
   render () {
     const { all_jobs } = this.props;
-    const postings = all_jobs.map(props => <JobCard {...props}/>);
+    const postings =
+          all_jobs.map(props => <JobCard key={props.job_descr} {...props}/>);
     return (
       <div>{postings}</div>
     );

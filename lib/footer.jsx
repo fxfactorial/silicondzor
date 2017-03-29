@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import colors from './colors';
 
+// Maybe don't need a fixed footer.
 const bottom_s = {
   color:'white',
   position:'absolute',
@@ -8,7 +9,7 @@ const bottom_s = {
   width:`calc(100% - 40px)`,
   bottom:0,
   marginBottom:'10px',
-  backgroundColor:colors.site_colors.a
+  backgroundColor:colors.site_colors.banner
 };
 
 export default class Footer extends Component {

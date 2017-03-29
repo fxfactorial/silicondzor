@@ -8,6 +8,7 @@ const Comment = ({parent, content, user}) => (
 
 export default class SDDiscussion extends Component {
   render() {
+    console.log(this.props);
     return (
       <div>
         This is the discussion

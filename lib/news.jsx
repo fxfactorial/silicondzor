@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import subDays from 'date-fns/sub_days';
 import { Link } from 'react-router-dom';
-
 import colors from './colors';
+import ReactPaginate from 'react-paginate';
 
 // Data model should include timestamp
 const news_stories = [
@@ -24,7 +24,6 @@ const news_stories = [
    comment_count:0}
 
 ];
-
 
 const s = {
   backgroundColor:colors.site_colors.cards,
@@ -69,13 +68,15 @@ class NewsItem extends Component {
            time_of_sub, post_id,
            link, vote_count, idx} = this.props;
     const to_author = <Link to={`/user?id=${author}`}>{author}</Link>;
-    const flag = <span style={span_s} onClick={this.flag_post}> flag </span>;
+    const flag =
+          <span style={span_s} onClick={this.flag_post}> flag </span>;
     const drilldown = (
       <Link to={`/item?id=${post_id}`}>
         {comment_count === 0 ? 'discuss' : `${comment_count} comments`}
       </Link>);
     // Hiding should have a fun animation
-    const hide = <span style={span_s} onClick={this.hide_this_post}>hide</span>;
+    const hide =
+          <span style={span_s} onClick={this.hide_this_post}>hide</span>;
     // Need to add a favorites in case we are logged in.
     const byline = (
       <p>
