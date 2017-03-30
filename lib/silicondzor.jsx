@@ -124,7 +124,7 @@ export default class Application extends Component {
     store.jobs_posts = news[1];
     store.bug_bounties = news[2];
     store.events = news[3];
-    this.setState();
+    this.forceUpdate();
     //we have to make it rerender every time store is changed,
     //better without this.setState();
   }
@@ -135,7 +135,7 @@ export default class Application extends Component {
     this.forceUpdate();
   }
   state = {language:'Eng'}
-  
+
   render_jobs = () => {
     return (<SDJobs all_jobs={store.jobs_posts}/>);
   }
@@ -143,7 +143,7 @@ export default class Application extends Component {
   render_bug_bounty = () => {
     return (<SDBugBounty bugs={store.bug_bounties}/>);
   }
-  
+
   render_news = () => {
     return (<SDNews news={store.news_posts} updateNews={this.updateNews}/>);
   }
