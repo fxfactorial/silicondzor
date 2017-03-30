@@ -172,7 +172,7 @@ export default class Application extends Component {
             <Route path={"/bug-bounty"}    render={this.render_bug_bounty}/>
             <Route path={"/resquared"}     component={Resquared}/>
             <Route path={"/login"}         component={SDLogin}/>
-            <Route path={'/item?id=:post_id'} component={SDDiscussion}/>
+            <Route path={'/item/:id'} component={SDDiscussion}/>
           </div>
           <BottomFooter/>
         </div>

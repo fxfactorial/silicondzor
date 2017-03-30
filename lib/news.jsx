@@ -85,7 +85,7 @@ class NewsItem extends Component {
     const flag =
           <span style={span_s} onClick={this.flag_post}> flag </span>;
     const drilldown = (
-      <Link to={`/item?id=${id}`}>
+      <Link to={`/item/${id}?smthreallycool=123&hey=123`}>
         {comment_count === 0 ? 'discuss' : `${comment_count} comments`}
       </Link>);
     const to_website = !web_link ? null : (<a href={web_link}>{web_link}</a>);
