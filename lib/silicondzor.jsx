@@ -35,14 +35,16 @@ const nav_s = {
 const content_s = {
   display:'flex',
   flexDirection:'column',
-  justifyContent:'space-between'
+  justifyContent:'space-between',
+  backgroundColor:colors.site_colors.e
 };
 
 const application_container = {
-  marginTop:'10px',
+  // marginTop:'10px',
+  backgroundColor:colors.site_colors.e,
   marginLeft:'20px',
-  marginRight:'20px',
-  marginBottom:'10px'
+  marginRight:'20px'
+  // marginBottom:'20px'
 };
 
 const link_style = {
@@ -151,29 +153,32 @@ export default class Application extends Component {
   render () {
     return (
       <Switch>
-        <section style={application_container}>
-          <nav style={nav_s}>
-            <ul style={ul_s}>
-              <li style={title_style}>Silicondzor</li>
-              <ul style={{...ul_s, marginRight:'auto'}}>{nav_items}</ul>
-              <li style={li_style}>
-                <Link style={link_style} to={"/login"}>login</Link>
-              </li>
-            </ul>
-          </nav>
 
-          <hr/>
+        <section>
 
-          <div style={content_s}>
-            <Route exact path={"/"}        render={this.render_news}/>
-            <Route path={"/submit"}        component={SDSubmitNews}/>
-            <Route path={"/tech-calendar"} component={SDCalendar}/>
-            <Route path={"/jobs-board"}    render={this.render_jobs}/>
-            <Route path={"/bug-bounty"}    render={this.render_bug_bounty}/>
-            <Route path={"/resquared"}     component={Resquared}/>
-            <Route path={"/login"}         component={SDLogin}/>
-            <Route path={'/item/:id'} component={SDDiscussion}/>
-          </div>
+          <section style={application_container}>
+            <nav style={nav_s}>
+              <ul style={ul_s}>
+                <li style={title_style}>Silicondzor</li>
+                <ul style={{...ul_s, marginRight:'auto'}}>{nav_items}</ul>
+                <li style={li_style}>
+                  <Link style={link_style} to={"/login"}>login</Link>
+                </li>
+              </ul>
+            </nav>
+
+            <div style={content_s}>
+              <Route exact path={"/"}        render={this.render_news}/>
+              <Route path={"/submit"}        component={SDSubmitNews}/>
+              <Route path={"/tech-calendar"} component={SDCalendar}/>
+              <Route path={"/jobs-board"}    render={this.render_jobs}/>
+              <Route path={"/bug-bounty"}    render={this.render_bug_bounty}/>
+              <Route path={"/resquared"}     component={Resquared}/>
+              <Route path={"/login"}         component={SDLogin}/>
+              <Route path={'/item/:id'} component={SDDiscussion}/>
+            </div>
+
+          </section>
           <BottomFooter/>
         </section>
       </Switch>

@@ -27,11 +27,13 @@ const news_stories = [
 
 ];
 
-const s = {
+const news_style = {
   backgroundColor:colors.site_colors.cards,
   borderRadius:'5px',
-  padding:'5px',
-  marginTop:'15px'
+  margin:'10px',
+  padding:'5px'
+  // padding:'5px',
+  // marginTop:'15px'
 };
 
 // Writing an OS in Rust: Handling Exceptions (phil-opp.com)
@@ -53,7 +55,7 @@ const span_s = {
 
 class NewsItem extends Component {
 
-  up_vote = async e => {
+  up_vote = async (e) => {
     const {id, updateNews} = this.props;
     const send_to_server = request_opts(JSON.stringify({id}));
     const sending = await fetch('/upvote', send_to_server);
@@ -79,7 +81,7 @@ class NewsItem extends Component {
   render () {
     const {creator, title, comment_count,
            creation_time,
-           web_link, upvotes, downvotes, 
+           web_link, upvotes, downvotes,
            content, idx, id} = this.props;
     const to_author = <Link to={`/user?id=${creator}`}>{creator}</Link>;
     const flag =
@@ -88,20 +90,25 @@ class NewsItem extends Component {
       <Link to={`/item/${id}?smthreallycool=123&hey=123`}>
         {comment_count === 0 ? 'discuss' : `${comment_count} comments`}
       </Link>);
-    const to_website = !web_link ? null : (<a href={web_link}>{web_link}</a>);
+    const to_website =
+          !web_link ? null
+          : (
+            <a style={{color:'black'}}
+               href={web_link}>({web_link})</a>
+          );
     // Hiding should have a fun animation
     const hide =
           <span style={span_s} onClick={this.hide_this_post}>hide</span>;
     // Need to add a favorites in case we are logged in.
     const byline = (
       <p>
-        upvotes:{upvotes} | downvotes:{downvotes} | 
+        upvotes:{upvotes} | downvotes:{downvotes} |
         points by {to_author} | time: {creation_time} |
         {flag} | {hide} | {drilldown}
       </p>
     );
     return (
-      <div style={s}>
+      <div style={news_style}>
         <div>
           <p style={byline_style}>
             <span>{idx}.</span>
@@ -124,7 +131,10 @@ export default class SDNews extends Component {
     const items =
           this.props.news
           .map((props, idx) =>
-               <NewsItem idx={idx + 1} updateNews={this.props.updateNews} key={props.id} {...props}/>);
+               <NewsItem idx={idx + 1}
+               updateNews={this.props.updateNews}
+               key={props.id}
+               {...props}/>);
     return (
       <div>
         {items}

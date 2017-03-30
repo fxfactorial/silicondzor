@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import colors from './colors';
 
 const bottom_s = {
-  paddingTop:'20px',
-  width:`100%`,
   paddingBottom:'10px'
 };
 
 const bar_s = {
+  marginLeft:'20px',
+  marginRight:'20px',
   backgroundColor:colors.site_colors.banner,
-  height:'5px'
+  height:'10px'
 };
 
 const footer_row = {
