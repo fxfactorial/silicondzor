@@ -151,7 +151,7 @@ export default class Application extends Component {
   render () {
     return (
       <Switch>
-        <div style={application_container}>
+        <section style={application_container}>
           <nav style={nav_s}>
             <ul style={ul_s}>
               <li style={title_style}>Silicondzor</li>
@@ -175,7 +175,7 @@ export default class Application extends Component {
             <Route path={'/item/:id'} component={SDDiscussion}/>
           </div>
           <BottomFooter/>
-        </div>
+        </section>
       </Switch>
     );
   }
