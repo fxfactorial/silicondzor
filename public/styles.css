@@ -8,5 +8,5 @@ a { text-decoration:none; }
 
 a:hover {
   transition: color 1.0s ease-out;
-  color:#B5A280 !important;
+  color:#98c5ed !important;
 }

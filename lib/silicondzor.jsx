@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import BigCalendar from 'react-big-calendar';
 import { Switch } from 'react-router';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, NavLink } from 'react-router-dom';
 import Resquared from './about';
 import SDBugBounty from './bug-exchange';
 import SDNews from './news';
@@ -63,9 +63,12 @@ const li_style = {
 
 const nav_items = routes.ui_routes.map(({to, title}) => (
   <li style={li_style} key={to}>
-    <Link style={link_style} to={to}>
+    <NavLink style={link_style}
+             exact
+             activeStyle={{color:colors.site_colors.active_link}}
+             to={to}>
       {title}
-    </Link>
+    </NavLink>
   </li>
 ));
 
@@ -163,7 +166,7 @@ export default class Application extends Component {
                 <li style={title_style}>Silicondzor</li>
                 <ul style={{...ul_s, marginRight:'auto'}}>{nav_items}</ul>
                 <li style={li_style}>
-                  <Link style={link_style} to={"/login"}>login</Link>
+                  <NavLink style={link_style} to={"/login"}>login</NavLink>
                 </li>
               </ul>
             </nav>
