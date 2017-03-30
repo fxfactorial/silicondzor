@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import colors from './colors';
 
-// Maybe don't need a fixed footer.
 const bottom_s = {
+  marginTop:'20px',
   color:'white',
-  position:'absolute',
-  // Great use of calc
-  width:`calc(100% - 40px)`,
+  width:`100%`,
   bottom:0,
   marginBottom:'10px',
   backgroundColor:colors.site_colors.banner
