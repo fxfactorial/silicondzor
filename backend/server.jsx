@@ -260,6 +260,38 @@ silicon_dzor.post(REST.add_tech_event, json_pr, async (req, res) => {
   }
 });
 
+silicon_dzor.post(REST.comment, json_pr, async (req, res) => {
+  try {
+    if (req.session.logged_in) {
+      const b = req.body;
+      const query_result =
+	    await db_promises
+	    .get(`select * from account where email = $username and is_verified = 1`,
+		 {$username: req.session.username});
+      const id =
+	    crypto
+	    .createHash('sha256')
+	    .update(b.post_id + query_result.id)
+	    .digest('hex');
+      await db_promises.run(`
+insert into comment (creator, under_post_id, id, creation_time, content, parent_comment) values
+($creator, $under_post_id, $id, $creation_time, $content)`, {
+  $creator:query_result.id,
+  $under_post_id: b.post_id,
+  $id: id,
+  $creation_time: (new Date()).getTime(),
+  $content: xssFilters.inHTMLData(b.content),
+  $parent_comment: b.parent_comment ? b.parent_comment : null,
+});
+      res.end(replies.ok());
+    } else {
+      res.end(replies.fail(replies.invalid_session));
+    }
+  } catch (err) {
+    res.end(replies.fail(err.msg));
+  }
+});
+
 silicon_dzor.get(REST.get_news, async (req, res) => {
   const news =
   await db_promises
@@ -294,31 +326,11 @@ silicon_dzor.get(REST.get_events, async (req, res) => {
 });
 
 silicon_dzor.post(REST.get_comments, json_pr, form_pr, async (req, res) => {
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
   const comments =
   await db_promises
   .all(`select * from comment where under_post_id = $post_id`, {$post_id: req.body.post_id});
   console.log('comments');
   console.log(comments);
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
-  console.log('AAAAADJHASFDHASKDFHGAKSDGHFKJAHSGDFA');
   res.end(JSON.stringify(comments));
 });
 
