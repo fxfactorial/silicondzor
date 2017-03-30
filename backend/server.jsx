@@ -293,6 +293,28 @@ silicon_dzor.get(REST.get_events, async (req, res) => {
   res.end(JSON.stringify(events));
 });
 
+silicon_dzor.post(REST.upvote, json_pr, async (req, res) => {
+  try {
+    if (req.session.logged_in) {
+      const b = req.body;
+      const query_result =
+	    await db_promises
+	    .get(`select upvotes from post where id = $id`,
+		 {$id: b.id});
+     
+      await db_promises.run(`UPDATE post
+SET upvotes = $upvotes
+WHERE id = $id;
+()`, {$id: b.id, $upvotes: ++query_result.upvotes});
+      res.end(replies.ok());
+    } else {
+      res.end(replies.fail(replies.invalid_session));
+    }
+  } catch (err) {
+    res.end(replies.fail(err.msg));
+  }
+});
+
 // No other handler picked it up yet, so this is our 404 handler
 silicon_dzor.use((req, res, next) => {
   res

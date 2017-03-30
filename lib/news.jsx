@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import colors from './colors';
 import ReactPaginate from 'react-paginate';
 
+import {request_opts} from './utility';
+
 // Data model should include timestamp
 const news_stories = [
 
@@ -52,8 +54,18 @@ const span_s = {
 class NewsItem extends Component {
 
   up_vote = async e => {
-    console.log(e.target.id);
-    console.error('tell server to upvote only if logged in');
+    const {id, updateNews} = this.props;
+    const send_to_server = request_opts(JSON.stringify({id}));
+    const sending = await fetch('/upvote', send_to_server);
+    const answer = await sending.json();
+    switch (answer.result) {
+      case 'success':
+        updateNews();
+        break;
+      default:
+        console.error('you have to be logged in or there is smth bad on the server');
+        break;
+    }
   }
 
   flag_post = e => {
@@ -112,7 +124,7 @@ export default class SDNews extends Component {
     const items =
           this.props.news
           .map((props, idx) =>
-               <NewsItem idx={idx + 1} key={props.id} {...props}/>);
+               <NewsItem idx={idx + 1} updateNews={this.props.updateNews} key={props.id} {...props}/>);
     return (
       <div>
         {items}

@@ -128,6 +128,12 @@ export default class Application extends Component {
     //we have to make it rerender every time store is changed,
     //better without this.setState();
   }
+  updateNews = async () => {
+    const fetched = await fetch('/get-news');
+    const jsoned = await fetched.json();
+    store.news_posts = jsoned;
+    this.forceUpdate();
+  }
   state = {language:'Eng'}
   
   render_jobs = () => {
@@ -139,7 +145,7 @@ export default class Application extends Component {
   }
   
   render_news = () => {
-    return (<SDNews news={store.news_posts}/>);
+    return (<SDNews news={store.news_posts} updateNews={this.updateNews}/>);
   }
 
   render () {
