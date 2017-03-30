@@ -32,12 +32,7 @@ const news_style = {
   borderRadius:'5px',
   margin:'10px',
   padding:'5px'
-  // padding:'5px',
-  // marginTop:'15px'
 };
-
-// Writing an OS in Rust: Handling Exceptions (phil-opp.com)
-// 68 points by adamnemecek 1 hour ago | flag | hide | 1 comment
 
 const arrow_style = {
   cursor:'pointer',

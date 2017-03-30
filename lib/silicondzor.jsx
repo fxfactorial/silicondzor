@@ -120,6 +120,8 @@ export default class Application extends Component {
       const jsoned = await fetched.json();
       return jsoned;
     }));
+    // Need to be join result
+    // console.log(news[0]);
     store.news_posts = news[0];
     store.jobs_posts = news[1];
     store.bug_bounties = news[2];
@@ -131,6 +133,7 @@ export default class Application extends Component {
   updateNews = async () => {
     const fetched = await fetch('/get-news');
     const jsoned = await fetched.json();
+
     store.news_posts = jsoned;
     this.forceUpdate();
   }

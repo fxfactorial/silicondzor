@@ -295,42 +295,37 @@ insert into comment (creator, under_post_id, id, creation_time, content, parent_
 silicon_dzor.get(REST.get_news, async (req, res) => {
   const news =
   await db_promises
+  // This needs to do a join
   .all(`select * from post`);
   console.log('news');
   console.log(news);
   res.end(JSON.stringify(news));
 });
+
 silicon_dzor.get(REST.get_jobs, async (req, res) => {
-  const jobs =
-  await db_promises
-  .all(`select * from job_post`);
-  console.log('jobs');
-  console.log(jobs);
+  const jobs = await db_promises.all(`select * from job_post`);
+  console.log({jobs});
   res.end(JSON.stringify(jobs));
 });
+
 silicon_dzor.get(REST.get_bugs, async (req, res) => {
-  const bugs =
-  await db_promises
-  .all(`select * from bug_post`);
-  console.log('bugs');
-  console.log(bugs);
+  const bugs = await db_promises.all(`select * from bug_post`);
+  console.log({bugs});
   res.end(JSON.stringify(bugs));
 });
+
 silicon_dzor.get(REST.get_events, async (req, res) => {
-  const events =
-  await db_promises
-  .all(`select * from event`);
-  console.log('events');
-  console.log(events);
+  const events = await db_promises .all(`select * from event`);
+  console.log({events});
   res.end(JSON.stringify(events));
 });
 
 silicon_dzor.post(REST.get_comments, json_pr, form_pr, async (req, res) => {
   const comments =
-  await db_promises
-  .all(`select * from comment where under_post_id = $post_id`, {$post_id: req.body.post_id});
-  console.log('comments');
-  console.log(comments);
+        await db_promises
+        .all(`select * from comment where under_post_id = $post_id`,
+             {$post_id: req.body.post_id});
+  console.log({comments});
   res.end(JSON.stringify(comments));
 });
 
@@ -339,10 +334,9 @@ silicon_dzor.post(REST.upvote, json_pr, async (req, res) => {
     if (req.session.logged_in) {
       const b = req.body;
       const query_result =
-	    await db_promises
-	    .get(`select upvotes from post where id = $id`,
-		 {$id: b.id});
-     
+	          await db_promises.get(`select upvotes from post where id = $id`,
+		                              {$id: b.id});
+
       await db_promises.run(`UPDATE post
 SET upvotes = $upvotes
 WHERE id = $id;
