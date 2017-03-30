@@ -5,6 +5,7 @@ class SdMobx {
 	@observable jobs_posts = [];
 	@observable events = [];
 	@observable bug_bounties = [];
+	@observable current_comments = [];
 }
 
 let store = new SdMobx;

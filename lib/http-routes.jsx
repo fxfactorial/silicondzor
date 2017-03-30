@@ -12,6 +12,7 @@ export default {
   get_jobs: '/get-jobs',
   get_bugs: '/get-bugs',
   get_news: '/get-news',
+  get_comments: '/get-comments',
   // And now the UI
   ui_routes: [
     {to:'/', title:'news'},

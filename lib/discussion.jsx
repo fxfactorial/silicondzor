@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-
+import {request_opts} from './utility';
+import store from './sdMobx';
 class Comment extends Component {
   render(){
+    console.log(this.props);
+    const {creator, creation_time, content, upvotes, downvotes} = this.props;
     return(
       <div>
         <div style={{color:'#828282'}}>
-          name, time
+          creator: {creator} | time:{creation_time} | upvotes: {upvotes} | downvotes: {downvotes}
         </div>
         <div style={{ margin: 10, fontSize: 20}}>
-          a lot of some text text text
+          {content}
         </div>
       </div>
     );
@@ -16,6 +19,16 @@ class Comment extends Component {
 }
 
 export default class SDDiscussion extends Component {
+  getComments = async () => {
+    const send_to_server = request_opts(JSON.stringify({post_id : this.props.match.params.id}));
+    const fetched = await fetch('/get-comments', send_to_server);
+    const jsoned = await fetched.json();
+    store.current_comments = jsoned;
+    this.forceUpdate();
+  }
+  componentWillMount(){
+    this.getComments();
+  }
   render() {
     //get post_id from url
     const post_id = this.props.match.params.id
@@ -31,9 +44,9 @@ export default class SDDiscussion extends Component {
     });
     console.log(arrayOfURLVars);
     //
-    const renderComments = ['','',''].map((value) => (
+    const renderComments = store.current_comments.map((value) => (
       <div>
-        <Comment />
+        <Comment {...value}/>
       </div>
     ))
     return (
