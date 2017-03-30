@@ -29,7 +29,7 @@ export default class Footer extends Component {
   render () {
     return (
       <footer style={bottom_s}>
-        <hr style={bar_s}/>
+        <div style={bar_s}/>
         <section style={footer_row}>
 
           <section style={grouping_s}>
