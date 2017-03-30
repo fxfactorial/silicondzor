@@ -36,15 +36,13 @@ const content_s = {
   display:'flex',
   flexDirection:'column',
   justifyContent:'space-between',
-  backgroundColor:colors.site_colors.e
+  backgroundColor:colors.site_colors.bg
 };
 
 const application_container = {
-  // marginTop:'10px',
-  backgroundColor:colors.site_colors.e,
+  backgroundColor:colors.site_colors.bg,
   marginLeft:'20px',
   marginRight:'20px'
-  // marginBottom:'20px'
 };
 
 const link_style = {

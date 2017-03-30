@@ -5,6 +5,6 @@ export default {
     b:'#131826',
     title:'#B5A280',
     cards:'#D7B47E',
-    e:'#79423F'
+    bg:'#79423F'
   }
 };
