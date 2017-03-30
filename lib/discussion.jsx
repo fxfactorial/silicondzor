@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 
-const Comment = ({parent, content, user}) => (
-  <div>
-    This is some comment
-  </div>
-);
+class Comment extends Component {
+  render(){
+    return(
+      <div>
+        <div style={{color:'#828282'}}>
+          name, time
+        </div>
+        <div style={{ margin: 10, fontSize: 20}}>
+          a lot of some text text text
+        </div>
+      </div>
+    );
+  }
+}
 
 export default class SDDiscussion extends Component {
   render() {
@@ -22,9 +31,22 @@ export default class SDDiscussion extends Component {
     });
     console.log(arrayOfURLVars);
     //
-    return (
+    const renderComments = ['','',''].map((value) => (
       <div>
-        <div>This is the discussion</div>
+        <Comment />
+      </div>
+    ))
+    return (
+      <div style={{backgroundColor: '#f6f6ef'}}>
+        <div style={{fontSize: 25, margin : 20}}>should be a title (and web link)</div>
+        <div style={{color:'#828282', margin : 20}}>183 points by walterbell 7 hours ago | hide | past | web | 70 comments | favorite</div>
+        <textarea style={{width: 500, height: 200, margin: 20, fontSize: 18}}></textarea>
+        <div>
+          <button style={{fontSize: 20, margin: 20, padding: 5, borderRadius: 5}}>add comment</button>
+        </div>
+        <div style={{margin: 20}}>
+          {renderComments}
+        </div>
       </div>
     );
   }
