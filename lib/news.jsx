@@ -51,7 +51,8 @@ const span_s = {
 
 class NewsItem extends Component {
 
-  up_vote = e => {
+  up_vote = async e => {
+    console.log(e.target.id);
     console.error('tell server to upvote only if logged in');
   }
 
@@ -64,23 +65,26 @@ class NewsItem extends Component {
   }
 
   render () {
-    const {author, title, comment_count,
-           time_of_sub, post_id,
-           link, vote_count, idx} = this.props;
-    const to_author = <Link to={`/user?id=${author}`}>{author}</Link>;
+    const {creator, title, comment_count,
+           creation_time,
+           web_link, upvotes, downvotes, 
+           content, idx, id} = this.props;
+    const to_author = <Link to={`/user?id=${creator}`}>{creator}</Link>;
     const flag =
           <span style={span_s} onClick={this.flag_post}> flag </span>;
     const drilldown = (
-      <Link to={`/item?id=${post_id}`}>
+      <Link to={`/item?id=${id}`}>
         {comment_count === 0 ? 'discuss' : `${comment_count} comments`}
       </Link>);
+    const to_website = !web_link ? null : (<a href={web_link}>{web_link}</a>);
     // Hiding should have a fun animation
     const hide =
           <span style={span_s} onClick={this.hide_this_post}>hide</span>;
     // Need to add a favorites in case we are logged in.
     const byline = (
       <p>
-        {vote_count} points by {to_author} 1 hour ago |
+        upvotes:{upvotes} | downvotes:{downvotes} | 
+        points by {to_author} | time: {creation_time} |
         {flag} | {hide} | {drilldown}
       </p>
     );
@@ -90,9 +94,10 @@ class NewsItem extends Component {
           <p style={byline_style}>
             <span>{idx}.</span>
             <i onClick={this.up_vote}
+               id={id}
                style={arrow_style}
                className={'material-icons'}>arrow_upward</i>
-            {title} {link ? `(${link})` : null}
+            {title} {to_website}
           </p>
         </div>
         <hr/>
@@ -105,9 +110,9 @@ class NewsItem extends Component {
 export default class SDNews extends Component {
   render () {
     const items =
-          news_stories
+          this.props.news
           .map((props, idx) =>
-               <NewsItem idx={idx + 1} key={props.title} {...props}/>);
+               <NewsItem idx={idx + 1} key={props.id} {...props}/>);
     return (
       <div>
         {items}
