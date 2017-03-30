@@ -43,6 +43,19 @@ INSERT INTO post
 			'aaaa lloooooot oooooffff teeeext',
 			'https://www.facebook.com/groups/410797219090898/', 1999, 3, 195);
 
+INSERT INTO comment
+    (creator, under_post_id, id, creation_time, content, upvotes, downvotes)
+    VALUES (2, 'sadCoolId', 'qweqweqweqweqID', '1490805999999', 
+			'aaaa lloooooot oooooffff teeeext', 199, 3);
+INSERT INTO comment
+    (creator, under_post_id, id, creation_time, content, upvotes, downvotes)
+    VALUES (2, 'sadCoolId', 'qweqweqweqweqID', '1490805999999', 
+			'aaaa dsadt', 129, 3);
+INSERT INTO comment
+    (creator, under_post_id, id, creation_time, content, upvotes, downvotes)
+    VALUES (2, 'sadCoolId', 'qweqweqweqweqID', '1490805999999', 
+			'aaaa lloooooffff teeeext', 9, 3);
+      
 INSERT INTO job_post
     (creator, id, creation_time, title, content, web_link)
     VALUES (2, 'sadCoafasdfasdfasdfsdasolId', '1490805999363', 'hacking is super fun', 

@@ -64,15 +64,19 @@ CREATE TABLE bug_post (
 );
 
 CREATE TABLE comment (
-   creator INTEGER PRIMARY KEY NOT NULL,
+   creator INTEGER NOT NULL,
 
    --Make sure this goes through XSS Filter first before entering the
    --DB
-   CONTENT TEXT NOT NULL,
-   parent INTEGER,
+   under_post_id TEXT NOT NULL,
+   id TEXT NOT NULL,
+   creation_time INTEGER NOT NULL,
+   content TEXT NOT NULL,
+   parent_comment TEXT,
    upvotes INTEGER NOT NULL DEFAULT 0,
    downvotes INTEGER NOT NULL DEFAULT 0,
-
-   FOREIGN KEY (parent)  REFERENCES comment(id),
-   FOREIGN KEY (creator) REFERENCES account(ID)
+   
+   FOREIGN KEY (under_post_id) REFERENCES post(id),
+   FOREIGN KEY (parent_comment)  REFERENCES comment(id),
+   FOREIGN KEY (creator) REFERENCES account(id)
 );
