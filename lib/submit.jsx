@@ -112,6 +112,9 @@ const JobSubmit = ({s, emply_change, title_change,
 
 const pen_test_spiel =
       'Come pentest our system, find a bug and make Armenia more secure.';
+const tech_event_spiel =
+      'You must be logged in to be able to submit new tech events.';
+
 const BugBountySubmit = ({s, bug_poster, bounty_amount,
                           content_change, disabled, submit}) => (
   <section style={s}>
@@ -132,12 +135,14 @@ const BugBountySubmit = ({s, bug_poster, bounty_amount,
       <button style={{marginTop:'10px'}}
               title={'You must be logged in to be able to submit new posts.'}
               disabled={disabled}
-              onClick={submit}>Post bug bounty</button>
+              onClick={submit}>Post bug bounty
+      </button>
     </section>
   </section>
 );
 
-const TechEventSubmit = ({s, time_start, time_end, creator}) => (
+const TechEventSubmit = ({s, time_start, time_end,
+                          creator, content, disabled, submit}) => (
   <section style={s}>
     <p style={title_style}>New Tech Event</p>
     <hr style={{marginBottom:'5px'}}/>
@@ -166,6 +171,20 @@ const TechEventSubmit = ({s, time_start, time_end, creator}) => (
         <input placeholder={'Event host'}
                style={{width:'100%'}}
                onChange={creator}/>
+        <section style={{width:'100%', marginTop:'5px'}}>
+          <label style={{marginTop:'10px'}}>Event Description:</label>
+          <textarea {...text_area_props}
+                    style={{display:'block', marginTop:'5px', width:'100%'}}
+                    placeholder={'ISTC is hosting...'}
+                    onChange={content}/>
+        </section>
+        <button style={{marginTop:'10px'}}
+                title={tech_event_spiel}
+                style={{width:'100%', marginTop:'10px'}}
+                disabled={disabled}
+                onClick={submit}>
+          Post tech event
+        </button>
       </section>
 
     </section>
