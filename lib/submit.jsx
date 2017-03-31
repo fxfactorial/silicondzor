@@ -255,7 +255,7 @@ class SDSubmitNews extends Component {
     };
 
     const submit_content = {
-      minHeight:'400px',
+      minHeight:'600px',
       marginLeft:'20%',
       marginRight:'20%',
       marginBottom:'1rem',
