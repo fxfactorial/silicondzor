@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {request_opts} from './utility';
+import colors from './colors';
 
 export default
 class SDSubmitNews extends Component {
@@ -113,13 +114,7 @@ class SDSubmitNews extends Component {
     this.setState({ end: time });
   }
 
-  changeTabPost = () => {this.setState({tab: 'post'})};
-
-  changeTabJob = () => {this.setState({tab: 'job'})};
-
-  changeTabBugBounty = () => {this.setState({tab: 'bug-bounty'})};
-
-  changeTabEvent = () => {this.setState({tab: 'event'})};
+  tab_change = tab => this.setState({tab});
 
   render () {
 
@@ -131,44 +126,57 @@ class SDSubmitNews extends Component {
 
     const headerButton = {
       width: '15%', textAlign: 'center', backgroundColor:'#2C3D54',
-      color: 'white', cursor: 'pointer'
+      color: 'white', cursor: 'pointer', minHeight:'40px', paddingTop:'10px'
     };
 
     const headerButtonActive = {
-      width: '15%', textAlign: 'center', backgroundColor:'#B5A280',
-      color: 'white', cursor: 'pointer'
+      borderStyle:'outset', fontWeight:'bold',
+      width: '15%', textAlign: 'center', backgroundColor:'#2C3D54',
+      color: 'white', cursor: 'pointer', minHeight:'40px', paddingTop:'10px',
+      color:colors.site_colors.active_link
     };
-    const s = {display: 'flex', height: 50, alignItems: 'center', justifyContent: 'center'};
+
+    const s = {
+      display: 'flex', marginTop:'0.75rem',
+      alignItems: 'center', justifyContent: 'center'
+    };
+
     return (
       <div>
-        <div style={s}>
-          <div style={this.state.tab === 'post' ? {
-                 ...headerButtonActive,
+
+        <section style={s}>
+          <p style={this.state.tab === 'post' ? {
+               ...headerButtonActive,
+               borderTopLeftRadius: 7,
+               borderBottomLeftRadius: 7
+               } : {
+                 ...headerButton,
                  borderTopLeftRadius: 7,
                  borderBottomLeftRadius: 7
-                 } : {
-                   ...headerButton,
-                   borderTopLeftRadius: 7,
-                   borderBottomLeftRadius: 7
-               }} onClick={this.changeTabPost}>Submit Post</div>
-          <div style={this.state.tab === 'job' ? headerButtonActive : headerButton}
-               onClick={this.changeTabJob}>
-            Submit Job
-          </div>
-          <div style={this.state.tab === 'bug-bounty' ? headerButtonActive : headerButton}
-               onClick={this.changeTabBugBounty}>
-            Submit Bug-Bounty
-          </div>
-          <div style={this.state.tab === 'event' ? {
-                 ...headerButtonActive,
+             }} onClick={this.tab_change.bind(null, 'post')}>
+            Post
+          </p>
+          <p style={this.state.tab === 'job' ? headerButtonActive : headerButton}
+             onClick={this.tab_change.bind(null, 'job')}>
+            Job
+          </p>
+          <p style={this.state.tab === 'bug-bounty' ? headerButtonActive : headerButton}
+             onClick={this.tab_change.bind(null, 'bug-bounty')}>
+            Bug-Bounty
+          </p>
+          <p style={this.state.tab === 'event' ? {
+               ...headerButtonActive,
+               borderTopRightRadius: 7,
+               borderBottomRightRadius: 7
+               } : {
+                 ...headerButton,
                  borderTopRightRadius: 7,
                  borderBottomRightRadius: 7
-                 } : {
-                   ...headerButton,
-                   borderTopRightRadius: 7,
-                   borderBottomRightRadius: 7
-               }} onClick={this.changeTabEvent}>Submit Event</div>
-        </div>
+             }} onClick={this.tab_change.bind(null, 'event')}>
+            Event
+          </p>
+        </section>
+
         <div style={this.state.tab === 'post' ? {display: 'block'} : {display: 'none'}}>
           <div style={titleStyle}>
             Submit Post
