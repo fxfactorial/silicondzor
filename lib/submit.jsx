@@ -15,10 +15,8 @@ const title_style = {
 };
 
 const text_area_props = {
-  autoComplete: true,
-  autoFocus: true,
-  minLength: 10,
-  rows: 20
+  autoComplete: true, autoFocus: true,
+  minLength: 10, rows: 20
 };
 const titleStyle = {fontSize: 40, marginBottom: 10};
 
@@ -137,14 +135,31 @@ const BugBountySubmit = ({s, bug_poster, bounty_amount,
   </section>
 );
 
-const TechEventSubmit = ({s, time_change}) => (
+const TechEventSubmit = ({s, time_start, time_end, creator}) => (
   <section style={s}>
-    <p>New tech Event</p>
-    <section>
-      <label>Start time:</label>
-      <select onChange={time_change}>
-        <option value={""}>Choose start time</option>
-      </select>
+    <p style={title_style}>New Tech Event</p>
+    <section style={{...e}}>
+
+      <section style={{display:'flex', maxWidth:'200px'}}>
+        <label style={{marginLeft:'auto', marginRight:'10px'}}>Start time:</label>
+        <select onChange={time_start}>
+          <option>---</option>
+        </select>
+      </section>
+
+      <section style={{display:'flex', maxWidth:'200px', marginTop:'5px'}}>
+        <label style={{marginLeft:'auto', marginRight:'10px'}}>End time:</label>
+        <select onChange={time_end}>
+          <option>---</option>
+        </select>
+      </section>
+
+      <section style={{display:'flex', maxWidth:'200px'}}>
+        <label>Creator or group</label>
+        <input placeholder={'Event host'}
+               onChange={creator}/>
+      </section>
+
     </section>
   </section>
 );
@@ -158,7 +173,7 @@ class SDSubmitNews extends Component {
       title: '',
       url: '',
       content: '',
-      tab: 'bug-bounty',
+      tab: 'event',
       start: '',
       end: '',
       hoursChoice: []
