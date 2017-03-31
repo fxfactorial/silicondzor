@@ -15,9 +15,10 @@ const title_style = {
 };
 
 const text_area_props = {
-  autoComplete: true, autoFocus: true,
-  minLength: 10, rows: 20
+  autoComplete: true, autoFocus: true, spellCheck:true,
+  minLength: 10, rows: 20, autoCapitalize:'sentences'
 };
+
 const titleStyle = {fontSize: 40, marginBottom: 10};
 
 const buttonStyle = {
