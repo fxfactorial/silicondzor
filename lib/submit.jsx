@@ -50,18 +50,27 @@ const PostSubmit = ({input_change, disabled, url_change, text_change, submit, s}
   </section>
 );
 
-const JobSubmit = ({s, emply_change, title_change, submit, text_change}) => (
-  <section style={s}>
-    <p>Submit a new Job posting</p>
-    <section>
+const JobSubmit = ({s, emply_change, title_change, text_change, disabled, submit}) => (
+  <section style={{...e, ...s}}>
+    <p style={title_style}>New Job Posting</p>
+    <section style={e}>
       <label>Employer:</label>
-      <input onChange={emply_change}/>
-      <label>Job Description:</label>
-      <input onChange={title_change}/>
-      <p>Job Description</p>
-      <textarea onChange={text_change}/>
+      <input placeholder={'Hayastan Tech LLC'}
+             onChange={emply_change}/>
+      <label style={{marginTop:'5px'}}>Salary, can be a range</label>
+      <input
+        placeholder={'350.000AMD a month'}
+        onChange={title_change}/>
+      <p style={or_style}>Job description</p>
+      <p>Content:</p>
+      <textarea {...text_area_props}
+                placeholder={'Looking for great ReactJS programmers in Yerevan'}
+                onChange={text_change}/>
+      <button style={{marginTop:'10px'}}
+              title={'Must be logged in to be able to submit new posts'}
+              disabled={disabled}
+              onClick={submit}>Post job</button>
     </section>
-    <button onClick={submit}>Submit job posting</button>
   </section>
 );
 
@@ -98,7 +107,7 @@ class SDSubmitNews extends Component {
       title: '',
       url: '',
       content: '',
-      tab: 'post',
+      tab: 'job',
       start: '',
       end: '',
       hoursChoice: []
@@ -290,9 +299,11 @@ class SDSubmitNews extends Component {
           <JobSubmit
             s={this.state.tab === 'job'
             ? {display: 'block'} : {display: 'none'}}
-            employer_change={this.employer_change}
-            job_title_change={this.job_title_change}
-            submit_job={this.job_submit}
+            emply_change={this.employer_change}
+            title_change={this.job_title_change}
+            text_change={this.contentChange}
+            disabled={false}
+            submit={this.job_submit}
             />
 
           <BugBountySubmit
