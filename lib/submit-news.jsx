@@ -11,35 +11,49 @@ const PostSubmit = ({input_change, url_change, text_change, submit, s}) => (
       <label>URL:</label>
       <input onChange={url_change}/>
       <p style={{fontWeight:'bold'}}> OR </p>
-      Text:
+      <p>Text:</p>
       <textarea onChange={text_change} style={{width: 500, height: 200}}/>
     </section>
     <button onClick={submit}>Submit post</button>
   </section>
 );
 
-        // <JobSubmit
-        //   s={this.state.tab === 'job' ? {display: 'block'} : {display: 'none'}}
-        //   />
-
-const JobSubmit = ({s}) => (
-  <section>
+const JobSubmit = ({s, emply_change, title_change, submit, text_change}) => (
+  <section style={s}>
     <p>Submit a new Job posting</p>
     <section>
+      <label>Employer:</label>
+      <input onChange={emply_change}/>
+      <label>Job Description:</label>
+      <input onChange={title_change}/>
+      <p>Job Description</p>
+      <textarea onChange={text_change} style={{width: 500, height: 200}}/>
+    </section>
+    <button onClick={submit}>Submit job posting</button>
+  </section>
+);
 
+const BugBountySubmit = ({s, bug_poster}) => (
+  <section style={s}>
+    <p>Create a new bug bounty </p>
+    <section>
+      <label>Poster:</label>
+      <input onChange={bug_poster}/>
+      <label>bounty:</label>
+      <input type={'number'}/>
     </section>
   </section>
 );
 
-const BugBountySubmit = ({submitter}) => (
-  <section>
-
-  </section>
-);
-
-const TechEventSubmit = ({submitter}) => (
-  <section>
-
+const TechEventSubmit = ({s, time_change}) => (
+  <section style={s}>
+    <p>New tech Event</p>
+    <section>
+      <label>Start time:</label>
+      <select onChange={time_change}>
+        <option value={""}>Choose start time</option>
+      </select>
+    </section>
   </section>
 );
 
@@ -173,13 +187,26 @@ class SDSubmitNews extends Component {
     const headerButtonActive = {
       borderStyle:'outset', fontWeight:'bold',
       width: '15%', textAlign: 'center', backgroundColor:'#2C3D54',
-      color: 'white', cursor: 'pointer', minHeight:'40px', paddingTop:'10px',
+      color: 'white', cursor: 'pointer', minHeight:'40px', paddingTop:'7px',
       color:colors.site_colors.active_link
     };
 
     const s = {
       display: 'flex', marginTop:'0.75rem',
       alignItems: 'center', justifyContent: 'center'
+    };
+
+    const submit_content = {
+      minHeight:'400px',
+      marginLeft:'3rem',
+      marginRight:'3rem',
+      marginBottom:'1rem',
+      display:'flex',
+      justifyContent:'center',
+      marginTop:'1rem',
+      textIndent:'2rem',
+      boxShadow: 'inset 0 0 10px #000000',
+      padding:'1.5em 1.5em 1.5em 1.5em'
     };
 
     return (
@@ -218,106 +245,30 @@ class SDSubmitNews extends Component {
           </p>
         </section>
 
-        <PostSubmit
-          s={this.state.tab === 'post' ? {display: 'block'} : {display: 'none'}}
-          url_change={this.urlChange}
-          text_change={this.contentChange}
-          submit={this.submitPost}
-          input_change={this.titleChange}/>
+        <section style={submit_content}>
+          <PostSubmit
+            s={this.state.tab === 'post' ? {display: 'block'} : {display: 'none'}}
+            url_change={this.urlChange}
+            text_change={this.contentChange}
+            submit={this.submitPost}
+            input_change={this.titleChange}/>
 
+          <JobSubmit
+            s={this.state.tab === 'job' ? {display: 'block'} : {display: 'none'}}
+            employer_change={this.employer_change}
+            job_title_change={this.job_title_change}
+            submit_job={this.job_submit}
+            />
 
-        <div style={this.state.tab === 'job' ? {display: 'block'} : {display: 'none'}}>
-          <div style={titleStyle}>
-            Submit Job
-          </div>
-          <div style={{fontSize: 20}}>
-            title:
-            <input onChange={this.titleChange}/>
-          </div>
-          <div style={{fontSize: 20}}>
-            url:
-            <input onChange={this.urlChange}/>
-          </div>
-          <div style={{fontSize: 20}}>
-            OR
-          </div>
-          <div>
-            <div style={{fontSize: 20}}>
-              text:
-            </div>
-            <textarea onChange={this.contentChange} style={{width: 500, height: 200}} />
-          </div>
-          <button style={buttonStyle} onClick={this.submitJob}>
-            submit job
-          </button>
-        </div>
+          <BugBountySubmit
+            s={this.state.tab === 'bug-bounty' ? {display: 'block'} : {display: 'none'}}
+            />
 
-        <div style={this.state.tab === 'bug-bounty' ? {display: 'block'} : {display: 'none'}}>
-          <div style={titleStyle}>
-            Submit Bug-Bounty
-          </div>
-          <div style={{fontSize: 20}}>
-            title:
-            <input onChange={this.titleChange}/>
-          </div>
-          <div style={{fontSize: 20}}>
-            url:
-            <input onChange={this.urlChange}/>
-          </div>
-          <div style={{fontSize: 20}}>
-            OR
-          </div>
-          <div>
-            <div style={{fontSize: 20}}>
-              text:
-            </div>
-            <textarea onChange={this.contentChange} style={{width: 500, height: 200}} />
-          </div>
-          <button style={buttonStyle} onClick={this.submitBugBounty}>
-            submit bug-bounty
-          </button>
-        </div>
+          <TechEventSubmit
+            s={this.state.tab === 'event' ? {display: 'block'} : {display: 'none'}}
+            />
 
-        <div style={this.state.tab === 'event' ? {display: 'block'} : {display: 'none'}}>
-          <div style={titleStyle}>
-            Submit Event
-          </div>
-          <div style={{fontSize: 20}}>
-            title:
-            <input onChange={this.titleChange}/>
-          </div>
-          <div>
-            start:
-            <select onChange={this.onTimeChangeFrom} value={this.state.start}>
-              <option value="">Choose start time</option>
-              {this.state.hoursChoice}
-            </select>
-          </div>
-          <div>
-            end:
-            <select onChange={this.onTimeChangeTo} value={this.state.end}>
-              <option value="">Choose end time</option>
-              {this.state.hoursChoice}
-            </select>
-          </div>
-          <div style={{fontSize: 20}}>
-            url:
-            <input onChange={this.urlChange}/>
-          </div>
-          <div style={{fontSize: 20}}>
-            OR
-          </div>
-          <div>
-            <div style={{fontSize: 20}}>
-              text:
-            </div>
-            <textarea onChange={this.contentChange} style={{width: 500, height: 200}} />
-          </div>
-          <button style={buttonStyle} onClick={this.submitEvent}>
-            submit event
-          </button>
-        </div>
-
+        </section>
       </div>
     );
   }
