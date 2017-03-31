@@ -35,10 +35,13 @@ const PostSubmit = ({input_change, disabled, url_change, text_change, submit, s}
         placeholder={'URL to what you want to link to'}
         onChange={url_change}/>
       <p style={or_style}>OR</p>
-      <p>Content</p>
+      <p>Content:</p>
       <textarea {...text_area_props}
                 placeholder={'New tech discussion in Armenia'}
                 onChange={text_change}/>
+      <p style={{textAlign:'center', fontSize:'0.8em', marginTop:'10px'}}>
+        Leave URL field blank if submitting a discussion
+      </p>
       <button style={{marginTop:'10px'}}
               title={'Must be logged in to be able to submit new posts'}
               disabled={disabled}
