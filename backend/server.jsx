@@ -4,6 +4,7 @@ import React from 'react';
 import { StaticRouter } from 'react-router';
 import { renderToString } from 'react-dom/server';
 import Application from '../lib/silicondzor';
+import colors from '../lib/colors';
 
 const express = require('express');
 const leExpress = require('greenlock-express');
@@ -76,8 +77,21 @@ silicon_dzor.use((req, res, next) => {
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet"/>
   <link href="react-big-calendar.css" rel="stylesheet" type="text/css"/>
-  <link href="styles.css" rel="stylesheet" type="text/css"/>
   <link rel="preload" href="bundle.js" as="script"/>
+  <style>
+/*  Basic resets for modern browsers */
+* { margin:0; padding:0; }
+html { box-sizing: border-box; }
+*, *:before, *:after { box-sizing: inherit; }
+/*  Basic resets for modern browsers */
+
+a { text-decoration:none; }
+
+a:hover {
+  transition: color 1.0s ease-out;
+  color:${colors.site_colors.active_link} !important;
+}
+</style>
 </head>
 <body>
   <div id='container'>${html}</div>
