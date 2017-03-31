@@ -85,6 +85,11 @@ const PostSubmit = ({input_change, disabled,
   </section>
 );
 
+const react_spiel =
+      'We are looking for great ReactJS programmers in Yerevan.';
+const job_post_spiel =
+      'You must be logged in to be able to submit new job postings.';
+
 const JobSubmit = ({s, emply_change, title_change,
                     text_change, disabled, submit}) => (
   <section style={{...e, ...s}}>
@@ -100,10 +105,10 @@ const JobSubmit = ({s, emply_change, title_change,
         onChange={title_change}/>
       <p style={or_style}>Job description</p>
       <textarea {...text_area_props}
-                placeholder={'We are looking for great ReactJS programmers in Yerevan.'}
+                placeholder={react_spiel}
                 onChange={text_change}/>
       <button style={{marginTop:'10px'}}
-              title={'You must be logged in to be able to submit new job postings.'}
+              title={job_post_spiel}
               disabled={disabled}
               onClick={submit}>Post job</button>
     </section>
