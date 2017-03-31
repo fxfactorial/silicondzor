@@ -2,6 +2,47 @@ import React, { Component } from 'react';
 import {request_opts} from './utility';
 import colors from './colors';
 
+const PostSubmit = ({input_change, url_change, text_change, submit, s}) => (
+  <section style={s}>
+    <p> New Post </p>
+    <section>
+      <label>Title:</label>
+      <input onChange={input_change}/>
+      <label>URL:</label>
+      <input onChange={url_change}/>
+      <p style={{fontWeight:'bold'}}> OR </p>
+      Text:
+      <textarea onChange={text_change} style={{width: 500, height: 200}}/>
+    </section>
+    <button onClick={submit}>Submit post</button>
+  </section>
+);
+
+        // <JobSubmit
+        //   s={this.state.tab === 'job' ? {display: 'block'} : {display: 'none'}}
+        //   />
+
+const JobSubmit = ({s}) => (
+  <section>
+    <p>Submit a new Job posting</p>
+    <section>
+
+    </section>
+  </section>
+);
+
+const BugBountySubmit = ({submitter}) => (
+  <section>
+
+  </section>
+);
+
+const TechEventSubmit = ({submitter}) => (
+  <section>
+
+  </section>
+);
+
 export default
 class SDSubmitNews extends Component {
 
@@ -177,31 +218,13 @@ class SDSubmitNews extends Component {
           </p>
         </section>
 
-        <div style={this.state.tab === 'post' ? {display: 'block'} : {display: 'none'}}>
-          <div style={titleStyle}>
-            Submit Post
-          </div>
-          <div style={{fontSize: 20}}>
-            title:
-            <input onChange={this.titleChange}/>
-          </div>
-          <div style={{fontSize: 20}}>
-            url:
-            <input onChange={this.urlChange}/>
-          </div>
-          <div style={{fontSize: 20}}>
-            OR
-          </div>
-          <div>
-            <div style={{fontSize: 20}}>
-              text:
-            </div>
-            <textarea onChange={this.contentChange} style={{width: 500, height: 200}} />
-          </div>
-          <button style={buttonStyle} onClick={this.submitPost}>
-            submit post
-          </button>
-        </div>
+        <PostSubmit
+          s={this.state.tab === 'post' ? {display: 'block'} : {display: 'none'}}
+          url_change={this.urlChange}
+          text_change={this.contentChange}
+          submit={this.submitPost}
+          input_change={this.titleChange}/>
+
 
         <div style={this.state.tab === 'job' ? {display: 'block'} : {display: 'none'}}>
           <div style={titleStyle}>
