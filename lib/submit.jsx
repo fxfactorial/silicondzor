@@ -23,7 +23,8 @@ const text_area_props = {
 
 const or_style = {fontWeight:'bold', marginTop:'10px', textAlign:'center'};
 
-const PostSubmit = ({input_change, disabled, url_change, text_change, submit, s}) => (
+const PostSubmit = ({input_change, disabled,
+                     url_change, text_change, submit, s}) => (
   <section style={{...e, ...s}}>
     <p style={title_style}>New Post</p>
     <section style={e}>
@@ -50,14 +51,15 @@ const PostSubmit = ({input_change, disabled, url_change, text_change, submit, s}
   </section>
 );
 
-const JobSubmit = ({s, emply_change, title_change, text_change, disabled, submit}) => (
+const JobSubmit = ({s, emply_change, title_change,
+                    text_change, disabled, submit}) => (
   <section style={{...e, ...s}}>
     <p style={title_style}>New Job Posting</p>
     <section style={e}>
       <label>Employer:</label>
       <input placeholder={'Hayastan Tech LLC'}
              onChange={emply_change}/>
-      <label style={{marginTop:'5px'}}>Salary, can be a range</label>
+      <label style={{marginTop:'5px'}}>Salary, can be a range:</label>
       <input
         placeholder={'350.000AMD a month'}
         onChange={title_change}/>
@@ -74,14 +76,29 @@ const JobSubmit = ({s, emply_change, title_change, text_change, disabled, submit
   </section>
 );
 
-const BugBountySubmit = ({s, bug_poster}) => (
+const pen_test_spiel =
+      'Come pentest our system, find a bug and make Armenia more secure';
+const BugBountySubmit = ({s, bug_poster, bounty_amount,
+                          content_change, disabled, submit}) => (
   <section style={s}>
-    <p>Create a new bug bounty </p>
-    <section>
-      <label>Poster:</label>
-      <input onChange={bug_poster}/>
-      <label>bounty:</label>
-      <input type={'number'}/>
+    <p style={title_style}>New bug bounty</p>
+    <section style={e}>
+      <label>Offered by:</label>
+      <input placeholder={'Central Bank of Armenia'}
+             onChange={bug_poster}/>
+      <label style={{marginTop:'5px'}}>Bounty:</label>
+      <input
+        placeholder={'350.000AMD'}
+        onChange={bounty_amount}/>
+      <p style={or_style}>Job description</p>
+      <p>Content:</p>
+      <textarea {...text_area_props}
+                placeholder={pen_test_spiel}
+                onChange={content_change}/>
+      <button style={{marginTop:'10px'}}
+              title={'Must be logged in to be able to submit new posts'}
+              disabled={disabled}
+              onClick={submit}>Post job</button>
     </section>
   </section>
 );
@@ -107,7 +124,7 @@ class SDSubmitNews extends Component {
       title: '',
       url: '',
       content: '',
-      tab: 'job',
+      tab: 'bug-bounty',
       start: '',
       end: '',
       hoursChoice: []
