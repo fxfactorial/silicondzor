@@ -23,7 +23,7 @@ const text_area_props = {
 
 const or_style = {fontWeight:'bold', marginTop:'10px', textAlign:'center'};
 
-const PostSubmit = ({input_change, url_change, text_change, submit, s}) => (
+const PostSubmit = ({input_change, disabled, url_change, text_change, submit, s}) => (
   <section style={{...e, ...s}}>
     <p style={title_style}>New Post</p>
     <section style={e}>
@@ -40,6 +40,8 @@ const PostSubmit = ({input_change, url_change, text_change, submit, s}) => (
                 placeholder={'New tech discussion in Armenia'}
                 onChange={text_change}/>
       <button style={{marginTop:'10px'}}
+              title={'Must be logged in to be able to submit new posts'}
+              disabled={disabled}
               onClick={submit}>Submit post</button>
     </section>
   </section>
@@ -278,6 +280,7 @@ class SDSubmitNews extends Component {
             ? {display: 'block'} : {display: 'none'}}
             url_change={this.urlChange}
             text_change={this.contentChange}
+            disabled={false}
             submit={this.submitPost}
             input_change={this.titleChange}/>
 
