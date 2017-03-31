@@ -115,7 +115,7 @@ const bugs = [
    descr:'Pentest our security system'}
 ];
 
-const guidelines = {
+const message_s = {
   fontSize:'1.75em',
   marginTop:'10px',
   textAlign:'center',
@@ -123,8 +123,14 @@ const guidelines = {
 };
 
 const Guidelines = () => (
-  <section style={guidelines}>
+  <section style={message_s}>
     Some words
+  </section>
+);
+
+const Faq = () => (
+  <section style={message_s}>
+    Some Faq
   </section>
 );
 
@@ -194,6 +200,7 @@ export default class Application extends Component {
               <Route path={"/login"}         component={SDLogin}/>
               <Route path={'/item/:id'}      component={SDDiscussion}/>
               <Route path={'/guidelines'}    component={Guidelines}/>
+              <Route path={'/faq'}           component={Faq}/>
             </div>
 
           </section>
