@@ -9,7 +9,7 @@ import SDCalendar from './tech-calendar';
 import SDJobs from './job-board';
 import SDLogin from './login';
 import BottomFooter from './footer';
-import SDSubmitNews from './submit-news';
+import SDSubmit from './submit';
 import colors from './colors';
 import routes from './http-routes';
 import SDUserProfile from './user-profile';
@@ -173,7 +173,7 @@ export default class Application extends Component {
 
             <div style={content_s}>
               <Route exact path={"/"}        render={this.render_news}/>
-              <Route path={"/submit"}        component={SDSubmitNews}/>
+              <Route path={"/submit"}        component={SDSubmit}/>
               <Route path={"/tech-calendar"} component={SDCalendar}/>
               <Route path={"/jobs-board"}    render={this.render_jobs}/>
               <Route path={"/bug-bounty"}    render={this.render_bug_bounty}/>

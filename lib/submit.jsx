@@ -2,19 +2,46 @@ import React, { Component } from 'react';
 import {request_opts} from './utility';
 import colors from './colors';
 
+const e = {
+  display:'flex',
+  flexDirection:'column',
+  // Need to adjust this on media query
+  minWidth:'350px',
+  maxWidth:'500px'
+};
+
+const title_style = {
+  textAlign:'center', fontSize:'2em', marginBottom:'10px'
+};
+
+const text_area_props = {
+  autoComplete: true,
+  autoFocus: true,
+  minLength: 10,
+  rows: 20
+};
+
+const or_style = {fontWeight:'bold', marginTop:'10px', textAlign:'center'};
+
 const PostSubmit = ({input_change, url_change, text_change, submit, s}) => (
-  <section style={s}>
-    <p> New Post </p>
-    <section>
+  <section style={{...e, ...s}}>
+    <p style={title_style}>New Post</p>
+    <section style={e}>
       <label>Title:</label>
-      <input onChange={input_change}/>
-      <label>URL:</label>
-      <input onChange={url_change}/>
-      <p style={{fontWeight:'bold'}}> OR </p>
-      <p>Text:</p>
-      <textarea onChange={text_change} style={{width: 500, height: 200}}/>
+      <input placeholder={'Title for your discussion piece'}
+             onChange={input_change}/>
+      <label style={{marginTop:'5px'}}>URL:</label>
+      <input
+        placeholder={'URL to what you want to link to'}
+        onChange={url_change}/>
+      <p style={or_style}>OR</p>
+      <p>Content</p>
+      <textarea {...text_area_props}
+                placeholder={'New tech discussion in Armenia'}
+                onChange={text_change}/>
+      <button style={{marginTop:'10px'}}
+              onClick={submit}>Submit post</button>
     </section>
-    <button onClick={submit}>Submit post</button>
   </section>
 );
 
@@ -27,7 +54,7 @@ const JobSubmit = ({s, emply_change, title_change, submit, text_change}) => (
       <label>Job Description:</label>
       <input onChange={title_change}/>
       <p>Job Description</p>
-      <textarea onChange={text_change} style={{width: 500, height: 200}}/>
+      <textarea onChange={text_change}/>
     </section>
     <button onClick={submit}>Submit job posting</button>
   </section>
@@ -198,14 +225,13 @@ class SDSubmitNews extends Component {
 
     const submit_content = {
       minHeight:'400px',
-      marginLeft:'3rem',
-      marginRight:'3rem',
+      marginLeft:'20%',
+      marginRight:'20%',
       marginBottom:'1rem',
       display:'flex',
       justifyContent:'center',
       marginTop:'1rem',
-      textIndent:'2rem',
-      boxShadow: 'inset 0 0 10px #000000',
+      boxShadow: 'inset 0 0 3px #000000',
       padding:'1.5em 1.5em 1.5em 1.5em'
     };
 
@@ -228,7 +254,8 @@ class SDSubmitNews extends Component {
              onClick={this.tab_change.bind(null, 'job')}>
             Job
           </p>
-          <p style={this.state.tab === 'bug-bounty' ? headerButtonActive : headerButton}
+          <p style={this.state.tab === 'bug-bounty'
+             ? headerButtonActive : headerButton}
              onClick={this.tab_change.bind(null, 'bug-bounty')}>
             Bug-Bounty
           </p>
@@ -247,25 +274,29 @@ class SDSubmitNews extends Component {
 
         <section style={submit_content}>
           <PostSubmit
-            s={this.state.tab === 'post' ? {display: 'block'} : {display: 'none'}}
+            s={this.state.tab === 'post'
+            ? {display: 'block'} : {display: 'none'}}
             url_change={this.urlChange}
             text_change={this.contentChange}
             submit={this.submitPost}
             input_change={this.titleChange}/>
 
           <JobSubmit
-            s={this.state.tab === 'job' ? {display: 'block'} : {display: 'none'}}
+            s={this.state.tab === 'job'
+            ? {display: 'block'} : {display: 'none'}}
             employer_change={this.employer_change}
             job_title_change={this.job_title_change}
             submit_job={this.job_submit}
             />
 
           <BugBountySubmit
-            s={this.state.tab === 'bug-bounty' ? {display: 'block'} : {display: 'none'}}
+            s={this.state.tab === 'bug-bounty'
+            ? {display: 'block'} : {display: 'none'}}
             />
 
           <TechEventSubmit
-            s={this.state.tab === 'event' ? {display: 'block'} : {display: 'none'}}
+            s={this.state.tab === 'event'
+            ? {display: 'block'} : {display: 'none'}}
             />
 
         </section>

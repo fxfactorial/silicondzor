@@ -5,7 +5,7 @@ export default {
     text:'#131826',
     title:'#B5A280',
     cards:'#D7B47E',
-    bg:'#79423F',
+    bg:'#f6f6ef',
     active_link:'#98c5ed'
   }
 };
