@@ -115,6 +115,19 @@ const bugs = [
    descr:'Pentest our security system'}
 ];
 
+const guidelines = {
+  fontSize:'1.75em',
+  marginTop:'10px',
+  textAlign:'center',
+  marginBottom:'10px'
+};
+
+const Guidelines = () => (
+  <section style={guidelines}>
+    Some words
+  </section>
+);
+
 export default class Application extends Component {
   async componentWillMount(){
     const links = ['/get-news', '/get-jobs', '/get-bugs', 'get-events'];
@@ -179,7 +192,8 @@ export default class Application extends Component {
               <Route path={"/bug-bounty"}    render={this.render_bug_bounty}/>
               <Route path={"/resquared"}     component={Resquared}/>
               <Route path={"/login"}         component={SDLogin}/>
-              <Route path={'/item/:id'} component={SDDiscussion}/>
+              <Route path={'/item/:id'}      component={SDDiscussion}/>
+              <Route path={'/guidelines'}    component={Guidelines}/>
             </div>
 
           </section>
