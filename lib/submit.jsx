@@ -20,6 +20,40 @@ const text_area_props = {
   minLength: 10,
   rows: 20
 };
+const titleStyle = {fontSize: 40, marginBottom: 10};
+
+const buttonStyle = {
+  fontSize: 15, padding: 4, borderRadius: 3, marginTop: 10
+};
+
+const headerButton = {
+  width: '15%', textAlign: 'center', backgroundColor:'#2C3D54',
+  color: 'white', cursor: 'pointer', minHeight:'40px', paddingTop:'10px'
+};
+
+const headerButtonActive = {
+  borderStyle:'outset', fontWeight:'bold',
+  width: '15%', textAlign: 'center', backgroundColor:'#2C3D54',
+  color: 'white', cursor: 'pointer', minHeight:'40px', paddingTop:'7px',
+  color:colors.site_colors.active_link
+};
+
+const s = {
+  display: 'flex', marginTop:'0.75rem',
+  alignItems: 'center', justifyContent: 'center'
+};
+
+const submit_content = {
+  minHeight:'600px',
+  marginLeft:'20%',
+  marginRight:'20%',
+  marginBottom:'1rem',
+  display:'flex',
+  justifyContent:'center',
+  marginTop:'1rem',
+  boxShadow: 'inset 0 0 3px #000000',
+  padding:'1.5em 1.5em 1.5em 1.5em'
+};
 
 const or_style = {fontWeight:'bold', marginTop:'10px', textAlign:'center'};
 
@@ -230,41 +264,6 @@ class SDSubmitNews extends Component {
   tab_change = tab => this.setState({tab});
 
   render () {
-
-    const titleStyle = {fontSize: 40, marginBottom: 10};
-
-    const buttonStyle = {
-      fontSize: 15, padding: 4, borderRadius: 3, marginTop: 10
-    };
-
-    const headerButton = {
-      width: '15%', textAlign: 'center', backgroundColor:'#2C3D54',
-      color: 'white', cursor: 'pointer', minHeight:'40px', paddingTop:'10px'
-    };
-
-    const headerButtonActive = {
-      borderStyle:'outset', fontWeight:'bold',
-      width: '15%', textAlign: 'center', backgroundColor:'#2C3D54',
-      color: 'white', cursor: 'pointer', minHeight:'40px', paddingTop:'7px',
-      color:colors.site_colors.active_link
-    };
-
-    const s = {
-      display: 'flex', marginTop:'0.75rem',
-      alignItems: 'center', justifyContent: 'center'
-    };
-
-    const submit_content = {
-      minHeight:'600px',
-      marginLeft:'20%',
-      marginRight:'20%',
-      marginBottom:'1rem',
-      display:'flex',
-      justifyContent:'center',
-      marginTop:'1rem',
-      boxShadow: 'inset 0 0 3px #000000',
-      padding:'1.5em 1.5em 1.5em 1.5em'
-    };
 
     return (
       <div>
