@@ -60,6 +60,7 @@ const PostSubmit = ({input_change, disabled,
                      url_change, text_change, submit, s}) => (
   <section style={{...e, ...s}}>
     <p style={title_style}>New Post</p>
+    <hr style={{marginBottom:'5px'}}/>
     <section style={e}>
       <label>Title:</label>
       <input placeholder={'Title for your discussion piece'}
@@ -77,7 +78,7 @@ const PostSubmit = ({input_change, disabled,
         Leave URL field blank if submitting a discussion
       </p>
       <button style={{marginTop:'10px'}}
-              title={'Must be logged in to be able to submit new posts'}
+              title={'You must be logged in to be able to submit new posts'}
               disabled={disabled}
               onClick={submit}>Submit post</button>
     </section>
@@ -88,6 +89,7 @@ const JobSubmit = ({s, emply_change, title_change,
                     text_change, disabled, submit}) => (
   <section style={{...e, ...s}}>
     <p style={title_style}>New Job Posting</p>
+    <hr style={{marginBottom:'5px'}}/>
     <section style={e}>
       <label>Employer:</label>
       <input placeholder={'Hayastan Tech LLC'}
@@ -97,12 +99,11 @@ const JobSubmit = ({s, emply_change, title_change,
         placeholder={'350.000AMD a month'}
         onChange={title_change}/>
       <p style={or_style}>Job description</p>
-      <p>Content:</p>
       <textarea {...text_area_props}
-                placeholder={'Looking for great ReactJS programmers in Yerevan'}
+                placeholder={'We are looking for great ReactJS programmers in Yerevan.'}
                 onChange={text_change}/>
       <button style={{marginTop:'10px'}}
-              title={'Must be logged in to be able to submit new posts'}
+              title={'You must be logged in to be able to submit new job postings.'}
               disabled={disabled}
               onClick={submit}>Post job</button>
     </section>
@@ -110,11 +111,12 @@ const JobSubmit = ({s, emply_change, title_change,
 );
 
 const pen_test_spiel =
-      'Come pentest our system, find a bug and make Armenia more secure';
+      'Come pentest our system, find a bug and make Armenia more secure.';
 const BugBountySubmit = ({s, bug_poster, bounty_amount,
                           content_change, disabled, submit}) => (
   <section style={s}>
-    <p style={title_style}>New bug bounty</p>
+    <p style={title_style}>New Bug Bounty</p>
+    <hr style={{marginBottom:'5px'}}/>
     <section style={e}>
       <label>Offered by:</label>
       <input placeholder={'Central Bank of Armenia'}
@@ -123,15 +125,14 @@ const BugBountySubmit = ({s, bug_poster, bounty_amount,
       <input
         placeholder={'350.000AMD'}
         onChange={bounty_amount}/>
-      <p style={or_style}>Job description</p>
-      <p>Content:</p>
+      <p style={{marginTop:'5px'}}>Content:</p>
       <textarea {...text_area_props}
                 placeholder={pen_test_spiel}
                 onChange={content_change}/>
       <button style={{marginTop:'10px'}}
-              title={'Must be logged in to be able to submit new posts'}
+              title={'You must be logged in to be able to submit new posts.'}
               disabled={disabled}
-              onClick={submit}>Post job</button>
+              onClick={submit}>Post bug bounty</button>
     </section>
   </section>
 );
@@ -139,25 +140,31 @@ const BugBountySubmit = ({s, bug_poster, bounty_amount,
 const TechEventSubmit = ({s, time_start, time_end, creator}) => (
   <section style={s}>
     <p style={title_style}>New Tech Event</p>
+    <hr style={{marginBottom:'5px'}}/>
     <section style={{...e}}>
 
-      <section style={{display:'flex', maxWidth:'200px'}}>
-        <label style={{marginLeft:'auto', marginRight:'10px'}}>Start time:</label>
-        <select onChange={time_start}>
-          <option>---</option>
-        </select>
+      <section style={{display:'inline-flex', justifyContent:'space-around'}}>
+
+        <section>
+          <label>Start time:</label>
+          <select onChange={time_start}>
+            <option>---</option>
+          </select>
+        </section>
+
+        <section>
+          <label>End time:</label>
+          <select onChange={time_end}>
+            <option>---</option>
+          </select>
+        </section>
+
       </section>
 
-      <section style={{display:'flex', maxWidth:'200px', marginTop:'5px'}}>
-        <label style={{marginLeft:'auto', marginRight:'10px'}}>End time:</label>
-        <select onChange={time_end}>
-          <option>---</option>
-        </select>
-      </section>
-
-      <section style={{display:'flex', maxWidth:'200px'}}>
-        <label>Creator or group</label>
+      <section style={{marginTop:'10px'}}>
+        <label>Creator or group name:</label>
         <input placeholder={'Event host'}
+               style={{width:'100%'}}
                onChange={creator}/>
       </section>
 
@@ -303,7 +310,7 @@ class SDSubmitNews extends Component {
           <p style={this.state.tab === 'bug-bounty'
              ? headerButtonActive : headerButton}
              onClick={this.tab_change.bind(null, 'bug-bounty')}>
-            Bug-Bounty
+            Bug Bounty
           </p>
           <p style={this.state.tab === 'event' ? {
                ...headerButtonActive,
