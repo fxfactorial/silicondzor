@@ -92,6 +92,7 @@ a:hover {
   transition: color 1.0s ease-out;
   color:${colors.site_colors.active_link} !important;
 }
+.faqs > li { margin-bottom:20px;}
 </style>
 </head>
 <body>

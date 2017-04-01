@@ -116,10 +116,12 @@ const bugs = [
 ];
 
 const message_s = {
-  fontSize:'1.75em',
+  fontSize:'1.50em',
   marginTop:'10px',
   textAlign:'center',
-  marginBottom:'10px'
+  marginBottom:'10px',
+  paddingLeft:'15%',
+  paddingRight:'15%'
 };
 
 const Guidelines = () => (
@@ -128,9 +130,44 @@ const Guidelines = () => (
   </section>
 );
 
+const ital = s => <span style={{fontStyle:'italic'}}>{s}</span>;
+
 const Faq = () => (
   <section style={message_s}>
-    Some Faq
+    <p style={{fontWeight:'bold'}}>FAQ</p>
+    <hr/>
+    <section style={{marginTop:'10px', textAlign:'justify'}}>
+      <ul style={{listStyleType:'none'}} className={'faqs'}>
+        <li>
+          <p>Q: {ital('Who made this?')}</p>
+          <p>A: This was made by {' '}
+            <a href={'https://hyegar.com'}>Edgar Aroutiounian</a>
+            {' '}and Edgar Khanzadian along with contributions
+            by other programmers.
+          </p>
+        </li>
+        <li>
+          <p>Q: {ital('Why is it called ')}
+            <code>silicondzor</code>{ital('?')}</p>
+          <p>A: Because the domain was given for free</p>
+        </li>
+        <li>
+          <p>Q: {ital('What languages are acceptable to use?')}</p>
+          <p>A: You are free to use any language but the site preference
+            is that you use either written
+            Armenian in the Armenian alphabet or English
+          </p>
+        </li>
+        <li>
+          <p>Q: {ital('The UI/UX sucks, when will you change it?')}</p>
+          <p>A: The source code is open and available, you can submit
+            a GitHub pull request and if the changes are good then
+            it will be accepted.
+          </p>
+        </li>
+
+      </ul>
+    </section>
   </section>
 );
 
