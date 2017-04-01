@@ -124,13 +124,32 @@ const message_s = {
   paddingRight:'15%'
 };
 
+const ital = s => <span style={{fontStyle:'italic'}}>{s}</span>;
+
 const Guidelines = () => (
   <section style={message_s}>
-    Some words
+    <p style={{fontWeight:'bold'}}>Guidelines</p>
+    <hr/>
+    <section style={{marginTop:'10px', textAlign:'justify'}}>
+      <ul style={{listStyleType:'none'}} className={'faqs'}>
+        <li>
+          <p>
+            Silicondzor is a central place for everything tech in Armenia
+            and the Caucasus region writ large. As such any discussion
+            should be respectful and without personal insults. Moderators
+            reserve the right to delete posts without prior notice.
+          </p>
+        </li>
+        <li>
+          <p>
+            The jobs board should only include
+            jobs related to {ital('tech')}.
+          </p>
+        </li>
+      </ul>
+    </section>
   </section>
 );
-
-const ital = s => <span style={{fontStyle:'italic'}}>{s}</span>;
 
 const Faq = () => (
   <section style={message_s}>
