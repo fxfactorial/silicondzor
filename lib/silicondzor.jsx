@@ -184,7 +184,12 @@ const Faq = () => (
             it will be accepted.
           </p>
         </li>
-
+        <li>
+          <p>Q: {ital('Why does this remind of something?')}</p>
+          <p>A: Because it should! It was purposefully modeled after
+            YCombinator's HackerNews.
+          </p>
+        </li>
       </ul>
     </section>
   </section>
