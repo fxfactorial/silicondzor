@@ -17,7 +17,8 @@ const JobCard = (
       <p>{creation_time}</p>
     </div>
   );
-@observer
+
+
 export default class SDJobs extends Component {
   render () {
     const { all_jobs } = this.props;
