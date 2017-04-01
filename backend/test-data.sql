@@ -35,7 +35,37 @@ INSERT INTO post
     (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
     VALUES (1, 'sasdddCoolId', '1490805999363', 'hacking Other people',
 			'aaaa llooosdfasdfasdfasdooot oooasdfooffff tsdafeeeext',
+			'http://info.sec/home', 15, 0, 5);
+
+INSERT INTO post
+    (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
+    VALUES (1, 'sasdddCoolId', '1490805999363', 'Will Vue survive the nuclear winter?',
+			'aaaa llooosdfasdfasdfasdooot oooasdfooffff tsdafeeeext',
+			'http://rob.adamyan', 15, 0, 5);
+
+INSERT INTO post
+    (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
+    VALUES (1, 'sasdddCoolId', '1490805999363', 'Who cares about gulp anymore?',
+			'aaaa llooosdfasdfasdfasdooot oooasdfooffff tsdafeeeext',
 			'http://otherpage.com', 15, 0, 5);
+
+INSERT INTO post
+    (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
+    VALUES (1, 'sasdddCoolId', '1490805999363', 'Generic post',
+			'aaaa llooosdfasdfasdfasdooot oooasdfooffff tsdafeeeext',
+			'http://otherpage.com', 15, 0, 5);
+
+INSERT INTO post
+    (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
+    VALUES (1, 'sasdddCoolId', '1490805999363', 'ASK SD: How can I get better at Python?',
+			'aaaa llooosdfasdfasdfasdooot oooasdfooffff tsdafeeeext',
+			'http://otherpage.com/snakes', 15, 0, 5);
+
+INSERT INTO post
+    (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
+    VALUES (1, 'sasdddCoolId', '1490805999363', 'Webpack in Armenian',
+			'aaaa llooosdfasdfasdfasdooot oooasdfooffff tsdafeeeext',
+			'http://hyegar.com/hopeful-future', 15, 0, 5);
 
 INSERT INTO post
     (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
