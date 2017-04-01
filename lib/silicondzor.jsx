@@ -34,6 +34,7 @@ const nav_s = {
 
 const content_s = {
   display:'flex',
+  height:'700px',
   flexDirection:'column',
   justifyContent:'space-between',
   backgroundColor:colors.site_colors.bg
