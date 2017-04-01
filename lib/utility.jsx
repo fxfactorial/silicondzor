@@ -1,3 +1,6 @@
+import React from 'react';
+
+export const ital = s => <span style={{fontStyle:'italic'}}>{s}</span>;
 
 export const request_opts = body => {
   return {

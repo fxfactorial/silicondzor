@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import BigCalendar from 'react-big-calendar';
 import { Switch } from 'react-router';
 import { Route, Link, NavLink } from 'react-router-dom';
+import subDays from 'date-fns/sub_days';
+
 import Resquared from './about';
 import SDBugBounty from './bug-exchange';
 import SDNews from './news';
@@ -14,10 +16,8 @@ import colors from './colors';
 import routes from './http-routes';
 import SDUserProfile from './user-profile';
 import SDDiscussion from './discussion';
-import subDays from 'date-fns/sub_days';
-
 import store from './sdMobx';
-import { observer } from 'mobx-react';
+import { ital } from './utility';
 
 const ul_s = {
   display:'flex',
@@ -73,28 +73,60 @@ const nav_items = routes.ui_routes.map(({to, title}) => (
   </li>
 ));
 
+const news_stories = [
+
+  {author:'e_d_g_a_r',
+   link:'http://hyegar.com',
+   title:'Tech is growing in Armenia',
+   vote_count:10,
+   post_id:1231,
+   time_of_sub:subDays(Date.now(), 1).getTime() - 123123,
+   comment_count:3},
+
+  {author:'RobertK',
+   link: null,
+   post_id:454545,
+   title:'ASK SD: How long do you work for?',
+   time_of_sub:subDays(Date.now(), 2).getTime() - 10123,
+   vote_count: 3,
+   comment_count:0}
+
+];
+
 const jobs_ex = [
 
   {salary:'With experience',
    employer:'A',
+   upvotes:3,
+   downvotes: 2,
    location:'Yerevan',
+   job_title:'Some job title',
    contact_info:'foo@bar.com',
    job_descr:'Looking for a rockstar'},
 
   {salary:'100.000AMD',
    employer:'B',
+   upvotes:3,
+   job_title:'Another title',
+   downvotes: 2,
    location:'Yerevan',
    contact_info:'foo@i.com',
    job_descr:'iOS reverse engineering'},
 
   {salary:'200,000AMD',
    employer:'C',
+   upvotes:3,
+   job_title:'test test',
+   downvotes: 2,
    location:'Gyumri',
    contact_info:'eerer@f.com',
    job_descr:'Great React native dev wanted'},
 
   {salary:`Let's talk`,
    employer:'D',
+   upvotes:3,
+   job_title:'Some job title',
+   downvotes: 2,
    location:'Vanadzor',
    contact_info:'oowew@bar.com',
    job_descr:'Some job'}
@@ -126,8 +158,6 @@ const message_s = {
   height:'700px',
   overflow:'scroll'
 };
-
-const ital = s => <span style={{fontStyle:'italic'}}>{s}</span>;
 
 const Guidelines = () => (
   <section style={message_s}>
@@ -221,7 +251,6 @@ export default class Application extends Component {
     store.events = news[3];
     this.forceUpdate();
     //we have to make it rerender every time store is changed,
-    //better without this.setState();
   }
   updateNews = async () => {
     const fetched = await fetch('/get-news');
@@ -233,15 +262,15 @@ export default class Application extends Component {
   state = {language:'Eng'}
 
   render_jobs = () => {
-    return (<SDJobs all_jobs={store.jobs_posts}/>);
+    return (<SDJobs all_jobs={jobs_ex}/>);
   }
 
   render_bug_bounty = () => {
-    return (<SDBugBounty bugs={store.bug_bounties}/>);
+    return (<SDBugBounty bugs={bugs}/>);
   }
 
   render_news = () => {
-    return (<SDNews news={store.news_posts} updateNews={this.updateNews}/>);
+    return (<SDNews news={news_stories} updateNews={this.updateNews}/>);
   }
 
   render () {

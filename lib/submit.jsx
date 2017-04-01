@@ -54,7 +54,10 @@ const submit_content = {
   padding:'1.5em 1.5em 1.5em 1.5em'
 };
 
-const or_style = {fontWeight:'bold', marginTop:'10px', textAlign:'center'};
+const or_style = {
+  fontWeight:'bold', marginTop:'10px',
+  textAlign:'center', marginBottom:'5px'
+};
 
 const PostSubmit = ({input_change, disabled,
                      url_change, text_change, submit, s}) => (
@@ -91,6 +94,7 @@ const job_post_spiel =
       'You must be logged in to be able to submit new job postings.';
 
 const JobSubmit = ({s, emply_change, title_change,
+                    location_change, contact_change,
                     text_change, disabled, submit}) => (
   <section style={{...e, ...s}}>
     <p style={title_style}>New Job Posting</p>
@@ -103,6 +107,17 @@ const JobSubmit = ({s, emply_change, title_change,
       <input
         placeholder={'350.000AMD a month'}
         onChange={title_change}/>
+
+      <label style={{marginTop:'5px'}}>Location:</label>
+      <input
+        placeholder={'Yerevan, Armenia'}
+        onChange={location_change}/>
+
+      <label style={{marginTop:'5px'}}>Contact Info:</label>
+      <input
+        placeholder={'jobs@somehyetechllc.am'}
+        onChange={contact_change}/>
+
       <p style={or_style}>Job description</p>
       <textarea {...text_area_props}
                 placeholder={react_spiel}
@@ -205,7 +220,7 @@ class SDSubmitNews extends Component {
       title: '',
       url: '',
       content: '',
-      tab: 'event',
+      tab: 'job',
       start: '',
       end: '',
       hoursChoice: []
@@ -365,6 +380,8 @@ class SDSubmitNews extends Component {
             emply_change={this.employer_change}
             title_change={this.job_title_change}
             text_change={this.contentChange}
+            location_change={this.location_change}
+            contact_change={this.contact_change}
             disabled={false}
             submit={this.job_submit}
             />

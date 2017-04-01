@@ -93,6 +93,7 @@ a:hover {
   color:${colors.site_colors.active_link} !important;
 }
 .faqs > li { margin-bottom:20px;}
+i { vertical-align:bottom; cursor:pointer}
 </style>
 </head>
 <body>
