@@ -8,14 +8,9 @@ import colors from '../lib/colors';
 
 const express = require('express');
 const leExpress = require('greenlock-express');
-const uuid_v4 = require('uuid/v4');
-const body_parser = require('body-parser');
-const crypto = require('crypto');
-const xssFilters = require('xss-filters');
 
 const env = require('./env');
 const replies = require('../lib/replies').default;
-const bcrypt_promises = require('./bcrypt-promise');
 const translateAll = require('./yandex-translate');
 const {email_account, email_verify_link,
        email_message, send_mail} = require('./email');
@@ -31,8 +26,6 @@ const ui_routes =
 
 const db_promises = require('./sqlite-promises')('silicondzor.db');
 
-const json_pr = body_parser.json();
-const form_pr = body_parser.urlencoded({extended: true});
 const silicon_dzor = express();
 let register_email_users = {};
 
@@ -48,6 +41,7 @@ require('./fb-events')
 		require('./tweet-events'));
 // Add helmet, serve static in public, favicon, morgan, sessions
 require('./middleware')(silicon_dzor);
+require('./post-routes')(silicon_dzor, db_promises);
 
 // Handle the UI requests
 silicon_dzor.use((req, res, next) => {
@@ -105,65 +99,7 @@ i { vertical-align:bottom; cursor:pointer}
 
 });
 
-silicon_dzor.post(REST.new_account, json_pr, form_pr, async (req, res) => {
-  const {username, password} = req.body;
 
-  const email_query =
-	await db_promises
-	.get(`select email from account where email = $email`,
-  	     {$email:username});
-
-  if (email_query) {
-    res.end(replies.fail(replies.invalid_username_already_picked));
-    return;
-  }
-
-  const identifier = uuid_v4();
-  register_email_users[identifier] = {username, identifier};
-  const verify_link = email_verify_link(identifier);
-
-  const hash = await bcrypt_promises.hash(password, 10);
-  try {
-    await db_promises
-      .run(`insert into account (email, hashed_password) values ($e, $h)`,
-	   { $e: username, $h: hash});
-    const mail_opts = {
-      from: 'Silicondzor.com <iteratehackerspace@gmail.com> ',
-      to: username,
-      subject: 'Verify account -- Silicondzor.com',
-      text: email_message(username, verify_link, false),
-      html: email_message(username, verify_link)
-    };
-    await send_mail(mail_opts);
-    res.setHeader('content-type', 'application/json');
-    res.end(replies.ok());
-  } catch (err) {
-    res.end(replies.fail(err.msg));
-  }
-});
-
-silicon_dzor.post(REST.sign_in, json_pr, form_pr, async (req, res) => {
-  const {username, password} = req.body;
-  req.session.logged_in = false;
-  try {
-    const row =
-	  await db_promises
-	  .get(`
-select hashed_password from account where email = $e and is_verified = 1`,
-	       {$e:username});
-    try {
-      await bcrypt_promises.compare(password, row.hashed_password);
-      req.session.logged_in = true;
-      req.session.username = username;
-      res.end(replies.ok());
-    }
-    catch (err) {
-      res.end(replies.fail(replies.invalid_credentials));
-    }
-  } catch (err) {
-    res.end(replies.fail(replies.invalid_email));
-  }
-});
 
 silicon_dzor.get(REST.new_account_verify, (req, res) => {
   const { identifier } = req.params;
@@ -182,131 +118,6 @@ silicon_dzor.get(REST.new_account_verify, (req, res) => {
       // Need to tell user that email couldn't be verified
       res.redirect('/');
     });
-});
-silicon_dzor.post(REST.submit_post, json_pr, form_pr, async (req, res) => {
-  try {
-    if (req.session.logged_in) {
-      const b = req.body;
-      const query_result =
-	    await db_promises
-	    .get(`select * from account where email = $username and is_verified = 1`,
-		 {$username: req.session.username});
-      const id =
-	    crypto
-	    .createHash('sha256')
-	    .update(b.title + b.creation_time + query_result.id)
-	    .digest('hex');
-      await db_promises.run(`insert into post (creator, id, creation_time, title, content, web_link) values
-($creator, $id, $creation_time, $title, $content, $web_link)`, {
-  $title: xssFilters.inHTMLData(b.title),
-  $creation_time: (new Date()).getTime(),
-  $content: xssFilters.inHTMLData(b.content),
-  $web_link: b.web_link,
-  $creator:query_result.id,
-  $id: id
-});
-      res.end(replies.ok());
-    } else {
-      res.end(replies.fail(replies.invalid_session));
-    }
-  } catch (err) {
-    res.end(replies.fail(err.msg));
-  }
-})
-silicon_dzor.post(REST.submit_job, json_pr, form_pr, async (req, res) => {
-  try {
-    if (req.session.logged_in) {
-      const b = req.body;
-      const query_result =
-	    await db_promises
-	    .get(`select * from account where email = $username and is_verified = 1`,
-		 {$username: req.session.username});
-      const id =
-	    crypto
-	    .createHash('sha256')
-	    .update(b.title + b.creation_time + query_result.id)
-	    .digest('hex');
-      await db_promises.run(`insert into post (creator, id, creation_time, title, content, web_link) values
-($creator, $id, $creation_time, $title, $content, $web_link)`, {
-  $title: xssFilters.inHTMLData(b.title),
-  $creation_time: (new Date()).getTime(),
-  $content: xssFilters.inHTMLData(b.content),
-  $web_link: b.web_link,
-  $creator:query_result.id,
-  $id: id
-});
-      res.end(replies.ok());
-    } else {
-      res.end(replies.fail(replies.invalid_session));
-    }
-  } catch (err) {
-    res.end(replies.fail(err.msg));
-  }
-})
-silicon_dzor.post(REST.add_tech_event, json_pr, async (req, res) => {
-  try {
-    if (req.session.logged_in) {
-      const b = req.body;
-      let title = await translateAll(b.event_title);
-      const query_result =
-	    await db_promises
-	    .get(`select * from account where email = $username and is_verified = 1`,
-		 {$username: req.session.username});
-      const id =
-	    crypto
-	    .createHash('sha256')
-	    .update(b.event_title + b.start + query_result.id)
-	    .digest('hex');
-      await db_promises.run(`insert into event values
-($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
-  $title: xssFilters.inHTMLData(title),
-  $all_day: new Date(b.start) === new Date(b.end),
-  $start:(new Date(b.start)).getTime(),
-  $end:(new Date(b.end)).getTime(),
-  $description: xssFilters.inHTMLData(b.event_description),
-  $creator:query_result.id,
-  $url: `https://silicondzor.com/${id}`, // TODO: use the url for linking
-  $id: id
-});
-      res.end(replies.ok());
-    } else {
-      res.end(replies.fail(replies.invalid_session));
-    }
-  } catch (err) {
-    res.end(replies.fail(err.msg));
-  }
-});
-
-silicon_dzor.post(REST.comment, json_pr, async (req, res) => {
-  try {
-    if (req.session.logged_in) {
-      const b = req.body;
-      const query_result =
-	    await db_promises
-	    .get(`select * from account where email = $username and is_verified = 1`,
-		 {$username: req.session.username});
-      const id =
-	    crypto
-	    .createHash('sha256')
-	    .update(b.post_id + query_result.id)
-	    .digest('hex');
-      await db_promises.run(`
-insert into comment (creator, under_post_id, id, creation_time, content, parent_comment) values
-($creator, $under_post_id, $id, $creation_time, $content)`, {
-  $creator:query_result.id,
-  $under_post_id: b.post_id,
-  $id: id,
-  $creation_time: (new Date()).getTime(),
-  $content: xssFilters.inHTMLData(b.content),
-  $parent_comment: b.parent_comment ? b.parent_comment : null,
-});
-      res.end(replies.ok());
-    } else {
-      res.end(replies.fail(replies.invalid_session));
-    }
-  } catch (err) {
-    res.end(replies.fail(err.msg));
-  }
 });
 
 silicon_dzor.get(REST.get_news, async (req, res) => {
@@ -337,35 +148,15 @@ silicon_dzor.get(REST.get_events, async (req, res) => {
   res.end(JSON.stringify(events));
 });
 
-silicon_dzor.post(REST.get_comments, json_pr, form_pr, async (req, res) => {
-  const comments =
-        await db_promises
-        .all(`select * from comment where under_post_id = $post_id`,
-             {$post_id: req.body.post_id});
-  console.log({comments});
-  res.end(JSON.stringify(comments));
-});
+// silicon_dzor.post(REST.get_comments, json_pr, form_pr, async (req, res) => {
+//   const comments =
+//         await db_promises
+//         .all(`select * from comment where under_post_id = $post_id`,
+//              {$post_id: req.body.post_id});
+//   console.log({comments});
+//   res.end(JSON.stringify(comments));
+// });
 
-silicon_dzor.post(REST.upvote, json_pr, async (req, res) => {
-  try {
-    if (req.session.logged_in) {
-      const b = req.body;
-      const query_result =
-	          await db_promises.get(`select upvotes from post where id = $id`,
-		                              {$id: b.id});
-
-      await db_promises.run(`UPDATE post
-SET upvotes = $upvotes
-WHERE id = $id;
-()`, {$id: b.id, $upvotes: ++query_result.upvotes});
-      res.end(replies.ok());
-    } else {
-      res.end(replies.fail(replies.invalid_session));
-    }
-  } catch (err) {
-    res.end(replies.fail(err.msg));
-  }
-});
 
 // No other handler picked it up yet, so this is our 404 handler
 silicon_dzor.use((req, res, next) => {
