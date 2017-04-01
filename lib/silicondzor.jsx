@@ -121,7 +121,9 @@ const message_s = {
   textAlign:'center',
   marginBottom:'10px',
   paddingLeft:'15%',
-  paddingRight:'15%'
+  paddingRight:'15%',
+  height:'700px',
+  overflow:'scroll'
 };
 
 const ital = s => <span style={{fontStyle:'italic'}}>{s}</span>;
@@ -143,7 +145,14 @@ const Guidelines = () => (
         <li>
           <p>
             The jobs board should only include
-            jobs related to {ital('tech')}.
+            jobs related to {ital('tech')} and likewise the
+            tech calendar should only have {ital('tech')} events.
+          </p>
+        </li>
+        <li>
+          <p>
+            Spamming is also not allowed, i.e. no posting of
+            paid class offerings.
           </p>
         </li>
       </ul>
