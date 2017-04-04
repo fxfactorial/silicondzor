@@ -37,8 +37,8 @@ CREATE TABLE post (
    comment_count INTEGER NOT NULL DEFAULT 0,
 
    FOREIGN KEY (creator) REFERENCES account(ID)
-
 );
+
 CREATE TABLE job_post (
    creator INTEGER NOT NULL,
    id TEXT NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE comment (
    parent_comment TEXT,
    upvotes INTEGER NOT NULL DEFAULT 0,
    downvotes INTEGER NOT NULL DEFAULT 0,
-   
+
    FOREIGN KEY (under_post_id) REFERENCES post(id),
    FOREIGN KEY (parent_comment)  REFERENCES comment(id),
    FOREIGN KEY (creator) REFERENCES account(id)

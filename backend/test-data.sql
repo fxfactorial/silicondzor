@@ -39,6 +39,24 @@ INSERT INTO post
 
 INSERT INTO post
     (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
+    VALUES (1, 'sasdddCoolId', '1490805999363', 'Some other title',
+			'aaaa llooosdfasdfasdfasdooot oooasdfooffff tsdafeeeext',
+			'http://info.sec/home', 15, 0, 5);
+
+INSERT INTO post
+    (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
+    VALUES (1, 'sasdddCoolId', '1490805999363', 'More imports and pagination',
+			'aaaa llooosdfasdfasdfasdooot oooasdfooffff tsdafeeeext',
+			'http://info.sec/home', 15, 0, 5);
+
+INSERT INTO post
+    (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
+    VALUES (1, 'sasdddCoolId', '1490805999363', 'Some very complicated topic',
+			'aaaa llooosdfasdfasdfasdooot oooasdfooffff tsdafeeeext',
+			'http://info.sec/home', 15, 0, 5);
+
+INSERT INTO post
+    (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
     VALUES (1, 'sasdddCoolId', '1490805999363', 'Will Vue survive the nuclear winter?',
 			'aaaa llooosdfasdfasdfasdooot oooasdfooffff tsdafeeeext',
 			'http://rob.adamyan', 15, 0, 5);

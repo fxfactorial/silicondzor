@@ -8,6 +8,7 @@ import colors from '../lib/colors';
 
 const express = require('express');
 const leExpress = require('greenlock-express');
+const url = require('url');
 
 const env = require('./env');
 const replies = require('../lib/replies').default;
@@ -21,7 +22,7 @@ const ui_routes =
       new Set(
         [...require('../lib/http-routes').default
          .ui_routes.map(({to}) => to),
-         '/user', '/item', '/faq', '/guidelines']
+         '/user', '/item', '/faq', '/guidelines', '/news']
       );
 
 const db_promises = require('./sqlite-promises')('silicondzor.db');
@@ -42,27 +43,35 @@ require('./fb-events')
 // Add helmet, serve static in public, favicon, morgan, sessions
 require('./middleware')(silicon_dzor);
 require('./post-routes')(silicon_dzor, db_promises);
+require('./get-routes')(silicon_dzor, db_promises);
 
 // Handle the UI requests
-silicon_dzor.use((req, res, next) => {
+silicon_dzor.use(async (req, res, next) => {
 
-  if (ui_routes.has(req.url) === false) next();
+  const g = url.parse(req.url).pathname;
+  console.log({URL:req.url, PARAMS: req.query, g});
+
+  if (ui_routes.has(g) === false) next();
   else {
     res.setHeader('Content-Type', 'text/html');
-
     const context = {};
-    const events = [
-      {field:'123'},
-      {field: '1rrr'}
-    ];
     const html = renderToString(
       <StaticRouter
         location={req.url}
         context={context}>
-        <Application event_data={events}/>
+        <Application/>
       </StaticRouter>
     );
-
+    console.log(context);
+    // Need to only take enough for the first page, say 10?
+    const data = await db_promises.all(`
+select
+P.id, creation_time, title, content, web_link,
+upvotes, downvotes, comment_count, username
+from post as P, account as A where P.creator = A.id
+limit 10
+`);
+    console.log(data[0]);
     res.end(`
 <!doctype html>
 <meta charset="utf-8"/>
@@ -88,7 +97,12 @@ a:hover {
 }
 .faqs > li { margin-bottom:20px;}
 i { vertical-align:bottom; cursor:pointer}
+
 </style>
+<script>
+  // Bootstrap the process up
+  window.__INIT_NEWS__ = ${JSON.stringify(data)}
+</script>
 </head>
 <body>
   <div id='container'>${html}</div>
@@ -99,54 +113,25 @@ i { vertical-align:bottom; cursor:pointer}
 
 });
 
+// silicon_dzor.get(REST.new_account_verify, (req, res) => {
+//   const { identifier } = req.params;
+//   const { username } = register_email_users[identifier];
+//   db_promises
+//     .run(`update account set is_verified = 1 where email = $username`,
+// 	 { $username:username })
+//     .then(() => {
+//       delete register_email_users[username];
+//       req.session.logged_in = true;
+//       req.session.username = username;
+//       res.redirect('/');
+//     })
+//     .catch(err => {
+//       console.error(err);
+//       // Need to tell user that email couldn't be verified
+//       res.redirect('/');
+//     });
+// });
 
-
-silicon_dzor.get(REST.new_account_verify, (req, res) => {
-  const { identifier } = req.params;
-  const { username } = register_email_users[identifier];
-  db_promises
-    .run(`update account set is_verified = 1 where email = $username`,
-	 { $username:username })
-    .then(() => {
-      delete register_email_users[username];
-      req.session.logged_in = true;
-      req.session.username = username;
-      res.redirect('/');
-    })
-    .catch(err => {
-      console.error(err);
-      // Need to tell user that email couldn't be verified
-      res.redirect('/');
-    });
-});
-
-silicon_dzor.get(REST.get_news, async (req, res) => {
-  const news =
-  await db_promises
-  // This needs to do a join
-  .all(`select * from post`);
-  console.log('news');
-  console.log(news);
-  res.end(JSON.stringify(news));
-});
-
-silicon_dzor.get(REST.get_jobs, async (req, res) => {
-  const jobs = await db_promises.all(`select * from job_post`);
-  console.log({jobs});
-  res.end(JSON.stringify(jobs));
-});
-
-silicon_dzor.get(REST.get_bugs, async (req, res) => {
-  const bugs = await db_promises.all(`select * from bug_post`);
-  console.log({bugs});
-  res.end(JSON.stringify(bugs));
-});
-
-silicon_dzor.get(REST.get_events, async (req, res) => {
-  const events = await db_promises .all(`select * from event`);
-  console.log({events});
-  res.end(JSON.stringify(events));
-});
 
 // silicon_dzor.post(REST.get_comments, json_pr, form_pr, async (req, res) => {
 //   const comments =

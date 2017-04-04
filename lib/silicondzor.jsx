@@ -3,6 +3,8 @@ import BigCalendar from 'react-big-calendar';
 import { Switch } from 'react-router';
 import { Route, Link, NavLink } from 'react-router-dom';
 import subDays from 'date-fns/sub_days';
+import { observer } from "mobx-react";
+import { observable } from "mobx";
 
 import Resquared from './about';
 import SDBugBounty from './bug-exchange';
@@ -33,6 +35,7 @@ const nav_s = {
 };
 
 const content_s = {
+  overflow:'scroll',
   display:'flex',
   height:'700px',
   flexDirection:'column',
@@ -235,31 +238,16 @@ const Faq = () => (
   </section>
 );
 
-export default class Application extends Component {
-  async componentWillMount(){
-    const links = ['/get-news', '/get-jobs', '/get-bugs', 'get-events'];
-    const news = await Promise.all(links.map(async (each) => {
-      const fetched = await fetch(each);
-      const jsoned = await fetched.json();
-      return jsoned;
-    }));
-    // Need to be join result
-    // console.log(news[0]);
-    store.news_posts = news[0];
-    store.jobs_posts = news[1];
-    store.bug_bounties = news[2];
-    store.events = news[3];
-    this.forceUpdate();
-    //we have to make it rerender every time store is changed,
-  }
-  updateNews = async () => {
-    const fetched = await fetch('/get-news');
-    const jsoned = await fetched.json();
+export default
+@observer
+class Application extends Component {
 
-    store.news_posts = jsoned;
+  @observable news_items = [];
+
+  async componentDidMount() {
+    this.news_items = window.__INIT_NEWS__;
     this.forceUpdate();
   }
-  state = {language:'Eng'}
 
   render_jobs = () => {
     return (<SDJobs all_jobs={jobs_ex}/>);
@@ -269,8 +257,12 @@ export default class Application extends Component {
     return (<SDBugBounty bugs={bugs}/>);
   }
 
-  render_news = () => {
-    return (<SDNews news={news_stories} updateNews={this.updateNews}/>);
+  render_home_page_news = (p) => {
+    return (<SDNews page={0} news={this.news_items} {...p} />);
+  }
+
+  render_paged_news = (p) => {
+    return (<SDNews page={1} news={this.news_items} {...p}/>);
   }
 
   render () {
@@ -291,7 +283,8 @@ export default class Application extends Component {
             </nav>
 
             <div style={content_s}>
-              <Route exact path={"/"}        render={this.render_news}/>
+              <Route exact path={"/"}        render={this.render_home_page_news}/>
+              <Route path={'/news'}     render={this.render_paged_news}/>
               <Route path={"/submit"}        component={SDSubmit}/>
               <Route path={"/tech-calendar"} component={SDCalendar}/>
               <Route path={"/jobs-board"}    render={this.render_jobs}/>

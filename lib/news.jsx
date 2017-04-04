@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { observable } from "mobx";
 import subDays from 'date-fns/sub_days';
 import { Link } from 'react-router-dom';
 import colors from './colors';
-import ReactPaginate from 'react-paginate';
+import { observer } from "mobx-react";
 
-import {request_opts} from './utility';
+import { request_opts } from './utility';
 
 const news_style = {
   backgroundColor:colors.site_colors.cards,
@@ -93,19 +94,49 @@ class NewsItem extends Component {
   }
 };
 
-export default class SDNews extends Component {
+export default
+@observer
+class SDNews extends Component {
+
+  @observable page_count = 1;
+
+  handle_page_click = () => {
+    console.log(this.page_count);
+    // Now need to call parent code and restart things?
+    this.page_count++;
+  }
+
+  componentDidMount() {
+    window.onpopstate = ev => {
+      if (document.location.pathname === '/news') {
+        const params = new URLSearchParams(document.location.search);
+        this.page_count = +params.get('p');
+      }
+    };
+  }
+
+
   render () {
-    const items =
-          this.props.news
-          .map((props, idx) =>
-               <NewsItem idx={idx + 1}
-               updateNews={this.props.updateNews}
-               key={props.id}
-               {...props}/>);
+    const items = this.props.news.map(
+      (props, idx) =>(
+        <NewsItem idx={idx + 1}
+                  key={`${props.content}/${props.title}`}
+                  {...props}/>)
+    );
+    const link_to = {
+      pathname: '/news',
+      search: `?p=${this.page_count}`
+    };
+    console.log(this.page_count);
     return (
-      <div>
+      <section>
         {items}
-      </div>
+        <Link onClick={this.handle_page_click}
+              style={{marginLeft:'10px'}}
+              to={link_to}>
+          More
+        </Link>
+      </section>
     );
   }
 }
