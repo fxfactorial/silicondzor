@@ -3,6 +3,7 @@
 import React from 'react';
 import { StaticRouter } from 'react-router';
 import { renderToString } from 'react-dom/server';
+import differenceInHours from 'date-fns/difference_in_hours';
 import Application from '../lib/silicondzor';
 import colors from '../lib/colors';
 
@@ -44,6 +45,25 @@ require('./fb-events')
 require('./middleware')(silicon_dzor);
 require('./post-routes')(silicon_dzor, db_promises);
 require('./get-routes')(silicon_dzor, db_promises);
+
+// medium.com/hacking-and-gonzo/how-hacker-news-ranking-algorithm-works-1d9b0cf2c08d
+const calculate_score = (votes, item_hour_age, gravity=1.8) => {
+  return (votes - 1) / Math.pow(item_hour_age + 2, gravity);
+};
+
+const calculate_for_all = async (db) => {
+  // If this becomes too big then can make another smaller table with
+  // the minimum information
+  const payload = await db.all('select * from post');
+  const ranked = payload.map(elem => {
+    const birth = new Date(elem.creation_time);
+    const rank = calculate_score(elem.upvotes - elem.downvotes,
+                                 differenceInHours(Date.now(), birth));
+    return {...elem, rank};
+  });
+  return ranked;
+};
+
 
 // Handle the UI requests
 silicon_dzor.use(async (req, res, next) => {
