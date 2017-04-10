@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { observable } from "mobx";
+import { observable, autorun, action, runInAction, computed } from "mobx";
 import subDays from 'date-fns/sub_days';
+import { fromPromise, when } from 'mobx-utils';
 import { Link } from 'react-router-dom';
-import colors from './colors';
 import { observer } from "mobx-react";
 
-import { request_opts } from './utility';
+import colors from './colors';
+import { request_opts, document_current_page } from './utility';
+import routes from './http-routes';
 
 const news_style = {
   backgroundColor:colors.site_colors.cards,
@@ -30,12 +32,13 @@ class NewsItem extends Component {
     const sending = await fetch('/upvote', send_to_server);
     const answer = await sending.json();
     switch (answer.result) {
-      case 'success':
-        updateNews();
-        break;
-      default:
-        console.error('you have to be logged in or there is smth bad on the server');
-        break;
+    case 'success':
+      updateNews();
+      break;
+    default:
+      console
+        .error('you have to be logged in or there is smth bad on the server');
+      break;
     }
   }
 
@@ -54,20 +57,20 @@ class NewsItem extends Component {
            content, idx, id} = this.props;
     const to_author = <Link to={`/user?id=${creator}`}>{creator}</Link>;
     const flag =
-          <span style={span_s} onClick={this.flag_post}> flag </span>;
+      <span style={span_s} onClick={this.flag_post}> flag </span>;
     const drilldown = (
       <Link to={`/item/${id}?smthreallycool=123&hey=123`}>
         {comment_count === 0 ? 'discuss' : `${comment_count} comments`}
       </Link>);
     const to_website =
-          !web_link ? null
-          : (
-            <a style={{color:'black'}}
-               href={web_link}>({web_link})</a>
-          );
+      !web_link ? null
+      : (
+        <a style={{color:'black'}}
+           href={web_link}>({web_link})</a>
+      );
     // Hiding should have a fun animation
     const hide =
-          <span style={span_s} onClick={this.hide_this_post}>hide</span>;
+      <span style={span_s} onClick={this.hide_this_post}>hide</span>;
     // Need to add a favorites in case we are logged in.
     const byline = (
       <p>
@@ -98,44 +101,45 @@ export default
 @observer
 class SDNews extends Component {
 
-  @observable page_count = 1;
+  // Need to use the map so that mobx tracks the NEW pairs added, with
+  // plain object it only tracks the ones done initially
+  @observable news_items = observable.map({'0':[]});
+  @observable _current_page_ = '0';
 
-  handle_page_click = () => {
-    console.log(this.page_count);
-    // Now need to call parent code and restart things?
-    this.page_count++;
+  @computed get current_page() {
+    const items = this.news_items.get(this._current_page_);
+    return items === undefined ? [] : items;
   }
 
-  componentDidMount() {
-    window.onpopstate = ev => {
-      if (document.location.pathname === '/news') {
-        const params = new URLSearchParams(document.location.search);
-        this.page_count = +params.get('p');
+  @action componentDidMount() {
+    const page = document_current_page();
+    if (page === null || page === 0) {
+      this.news_items.set('0', window.__INIT_NEWS__);
+    } else {
+      this._current_page_ = '' + page;
+      if (this.news_items.get(this._current_page_) === undefined) {
+        fetch(`${routes.get_news}?p=${this._current_page_}`)
+          .then(d => d.json())
+          .then(real_data => {
+            this.news_items.set(this._current_page_, real_data);
+          });
       }
-    };
+    }
   }
-
 
   render () {
-    const items = this.props.news.map(
-      (props, idx) =>(
+    const link_to = {pathname: '/news', search: `?p=${+this._current_page_ + 1}`};
+    const items = this.current_page.map(
+      (props, idx) => (
         <NewsItem idx={idx + 1}
                   key={`${props.content}/${props.title}`}
                   {...props}/>)
     );
-    const link_to = {
-      pathname: '/news',
-      search: `?p=${this.page_count}`
-    };
-    console.log(this.page_count);
+
     return (
       <section>
         {items}
-        <Link onClick={this.handle_page_click}
-              style={{marginLeft:'10px'}}
-              to={link_to}>
-          More
-        </Link>
+        <Link style={{marginLeft:'10px'}} to={link_to}> More </Link>
       </section>
     );
   }

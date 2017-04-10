@@ -1,11 +1,18 @@
 'use strict';
 
 const REST = require('../lib/http-routes').default;
+const { calculate_for_all, sort_ranks } = require('./scoring');
 
 module.exports = (silicon_dzor, db) => {
 
   silicon_dzor.get(REST.get_news, async (req, res) => {
-    const news = [];
+    console.log('Get more news asked', +req.query.p);
+    // stupidly inefficient, need to write a better query
+    const ranked_posts = await calculate_for_all(db);
+    const sorted = ranked_posts.sort(sort_ranks);
+    const starting_point = +req.query.p * 10;
+    const news = sorted.slice(starting_point, starting_point + 10);
+    console.log(news);
     res.end(JSON.stringify(news));
   });
 

@@ -37,7 +37,7 @@ const nav_s = {
 const content_s = {
   overflow:'scroll',
   display:'flex',
-  height:'700px',
+  height:'720px',
   flexDirection:'column',
   justifyContent:'space-between',
   backgroundColor:colors.site_colors.bg
@@ -239,15 +239,7 @@ const Faq = () => (
 );
 
 export default
-@observer
 class Application extends Component {
-
-  @observable news_items = [];
-
-  async componentDidMount() {
-    this.news_items = window.__INIT_NEWS__;
-    this.forceUpdate();
-  }
 
   render_jobs = () => {
     return (<SDJobs all_jobs={jobs_ex}/>);
@@ -257,13 +249,10 @@ class Application extends Component {
     return (<SDBugBounty bugs={bugs}/>);
   }
 
-  render_home_page_news = (p) => {
-    return (<SDNews page={0} news={this.news_items} {...p} />);
-  }
-
-  render_paged_news = (p) => {
-    return (<SDNews page={1} news={this.news_items} {...p}/>);
-  }
+  // render_news = (e) => {
+  //   console.log(e);
+  //   return <SDNews/>;
+  // }
 
   render () {
     return (
@@ -283,8 +272,8 @@ class Application extends Component {
             </nav>
 
             <div style={content_s}>
-              <Route exact path={"/"}        render={this.render_home_page_news}/>
-              <Route path={'/news'}     render={this.render_paged_news}/>
+              <Route exact path={"/"}        component={SDNews}/>
+              <Route path={'/news'}          component={SDNews}/>
               <Route path={"/submit"}        component={SDSubmit}/>
               <Route path={"/tech-calendar"} component={SDCalendar}/>
               <Route path={"/jobs-board"}    render={this.render_jobs}/>

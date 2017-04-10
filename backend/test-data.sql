@@ -39,13 +39,13 @@ INSERT INTO post
 
 INSERT INTO post
     (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
-    VALUES (1, 'sasdddCoolId', '1490805999363', 'Some other title',
+    VALUES (1, 'sasdddCoolId', '1490805991363', 'Some other title',
 			'aaaa llooosdfasdfasdfasdooot oooasdfooffff tsdafeeeext',
 			'http://info.sec/home', 15, 0, 5);
 
 INSERT INTO post
     (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
-    VALUES (1, 'sasdddCoolId', '1490805999363', 'More imports and pagination',
+    VALUES (1, 'sasdddCoolId', '1490805599363', 'More imports and pagination',
 			'aaaa llooosdfasdfasdfasdooot oooasdfooffff tsdafeeeext',
 			'http://info.sec/home', 15, 0, 5);
 
@@ -57,19 +57,19 @@ INSERT INTO post
 
 INSERT INTO post
     (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
-    VALUES (1, 'sasdddCoolId', '1490805999363', 'Will Vue survive the nuclear winter?',
+    VALUES (1, 'sasdddCoolId', '1490805997363', 'Will Vue survive the nuclear winter?',
 			'aaaa llooosdfasdfasdfasdooot oooasdfooffff tsdafeeeext',
 			'http://rob.adamyan', 15, 0, 5);
 
 INSERT INTO post
     (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
-    VALUES (1, 'sasdddCoolId', '1490805999363', 'Who cares about gulp anymore?',
+    VALUES (1, 'sasdddCoolId', '1490905999363', 'Who cares about gulp anymore?',
 			'aaaa llooosdfasdfasdfasdooot oooasdfooffff tsdafeeeext',
 			'http://otherpage.com', 15, 0, 5);
 
 INSERT INTO post
     (creator, id, creation_time, title, content, web_link, upvotes, downvotes, comment_count)
-    VALUES (1, 'sasdddCoolId', '1490805999363', 'Generic post',
+    VALUES (1, 'sasdddCoolId', '1440805999363', 'Generic post',
 			'aaaa llooosdfasdfasdfasdooot oooasdfooffff tsdafeeeext',
 			'http://otherpage.com', 15, 0, 5);
 

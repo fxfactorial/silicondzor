@@ -11,3 +11,8 @@ export const request_opts = body => {
     body
   };
 };
+
+export const document_current_page = () => {
+  try { return +(new URLSearchParams(document.location.search)).get('p'); }
+  catch (e) { return 0; }
+};

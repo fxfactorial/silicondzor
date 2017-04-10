@@ -3,9 +3,9 @@
 import React from 'react';
 import { StaticRouter } from 'react-router';
 import { renderToString } from 'react-dom/server';
-import differenceInHours from 'date-fns/difference_in_hours';
 import Application from '../lib/silicondzor';
 import colors from '../lib/colors';
+import { calculate_for_all, sort_ranks } from './scoring';
 
 const express = require('express');
 const leExpress = require('greenlock-express');
@@ -14,9 +14,8 @@ const url = require('url');
 const env = require('./env');
 const replies = require('../lib/replies').default;
 const translateAll = require('./yandex-translate');
-const {email_account, email_verify_link,
-       email_message, send_mail} = require('./email');
-
+const { email_account, email_verify_link,
+        email_message, send_mail } = require('./email');
 const REST = require('../lib/http-routes').default;
 
 const ui_routes =
@@ -46,25 +45,6 @@ require('./middleware')(silicon_dzor);
 require('./post-routes')(silicon_dzor, db_promises);
 require('./get-routes')(silicon_dzor, db_promises);
 
-// medium.com/hacking-and-gonzo/how-hacker-news-ranking-algorithm-works-1d9b0cf2c08d
-const calculate_score = (votes, item_hour_age, gravity=1.8) => {
-  return (votes - 1) / Math.pow(item_hour_age + 2, gravity);
-};
-
-const calculate_for_all = async (db) => {
-  // If this becomes too big then can make another smaller table with
-  // the minimum information
-  const payload = await db.all('select * from post');
-  const ranked = payload.map(elem => {
-    const birth = new Date(elem.creation_time);
-    const rank = calculate_score(elem.upvotes - elem.downvotes,
-                                 differenceInHours(Date.now(), birth));
-    return {...elem, rank};
-  });
-  return ranked;
-};
-
-
 // Handle the UI requests
 silicon_dzor.use(async (req, res, next) => {
 
@@ -74,7 +54,20 @@ silicon_dzor.use(async (req, res, next) => {
   if (ui_routes.has(g) === false) next();
   else {
     res.setHeader('Content-Type', 'text/html');
+    // Might get fucked by DoS
+    const ranked_posts = await calculate_for_all(db_promises);
+    const sorted = ranked_posts.sort(sort_ranks);
+
     const context = {};
+    let data = [];
+
+    if (g === '/news' && req.query.p !== undefined) {
+      console.log(req.query.p);
+      data = sorted.slice(+req.query.p * 10, (+req.query.p * 10) + 10);
+    } else if (g === '/'){
+      data = sorted.slice(0, 10);
+    }
+
     const html = renderToString(
       <StaticRouter
         location={req.url}
@@ -82,16 +75,13 @@ silicon_dzor.use(async (req, res, next) => {
         <Application/>
       </StaticRouter>
     );
-    console.log(context);
-    // Need to only take enough for the first page, say 10?
-    const data = await db_promises.all(`
-select
-P.id, creation_time, title, content, web_link,
-upvotes, downvotes, comment_count, username
-from post as P, account as A where P.creator = A.id
-limit 10
-`);
-    console.log(data[0]);
+
+    // Is Math.{floor, ceil} useful here?
+    if (+req.query.p > (sorted.length / 10)) {
+      console.warn(`Page requested, ${+req.query.p}, outside data range`);
+      res.redirect('/');
+    } else {
+    // console.log(data);
     res.end(`
 <!doctype html>
 <meta charset="utf-8"/>
@@ -121,7 +111,7 @@ i { vertical-align:bottom; cursor:pointer}
 </style>
 <script>
   // Bootstrap the process up
-  window.__INIT_NEWS__ = ${JSON.stringify(data)}
+  window.__INIT_NEWS__ = ${JSON.stringify(data)};
 </script>
 </head>
 <body>
@@ -130,7 +120,7 @@ i { vertical-align:bottom; cursor:pointer}
 </body>
 `);
   }
-
+  }
 });
 
 // silicon_dzor.get(REST.new_account_verify, (req, res) => {
