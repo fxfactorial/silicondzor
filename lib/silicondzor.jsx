@@ -4,7 +4,7 @@ import { Switch } from 'react-router';
 import { Route, Link, NavLink } from 'react-router-dom';
 import subDays from 'date-fns/sub_days';
 import { observer } from "mobx-react";
-import { observable } from "mobx";
+import { observable, useStrict } from "mobx";
 
 import Resquared from './about';
 import SDBugBounty from './bug-exchange';
@@ -18,8 +18,14 @@ import colors from './colors';
 import routes from './http-routes';
 import SDUserProfile from './user-profile';
 import SDDiscussion from './discussion';
-import store from './sdMobx';
 import { ital } from './utility';
+
+/**
+   Enables MobX strict mode globally.
+   In strict mode, it is not allowed to
+   change any state outside of an action
+*/
+useStrict(true);
 
 const ul_s = {
   display:'flex',
@@ -75,26 +81,6 @@ const nav_items = routes.ui_routes.map(({to, title}) => (
     </NavLink>
   </li>
 ));
-
-const news_stories = [
-
-  {author:'e_d_g_a_r',
-   link:'http://hyegar.com',
-   title:'Tech is growing in Armenia',
-   vote_count:10,
-   post_id:1231,
-   time_of_sub:subDays(Date.now(), 1).getTime() - 123123,
-   comment_count:3},
-
-  {author:'RobertK',
-   link: null,
-   post_id:454545,
-   title:'ASK SD: How long do you work for?',
-   time_of_sub:subDays(Date.now(), 2).getTime() - 10123,
-   vote_count: 3,
-   comment_count:0}
-
-];
 
 const jobs_ex = [
 
@@ -249,46 +235,39 @@ class Application extends Component {
     return (<SDBugBounty bugs={bugs}/>);
   }
 
-  // render_news = (e) => {
-  //   console.log(e);
-  //   return <SDNews/>;
-  // }
-
   render () {
     return (
-      <Switch>
+        <Switch>
+          <section>
+            <section style={application_container}>
+              <nav style={nav_s}>
+                <ul style={ul_s}>
+                  <li style={title_style}>🇦🇲 Silicondzor</li>
+                  <ul style={{...ul_s, marginRight:'auto'}}>{nav_items}</ul>
+                  <li style={li_style}>
+                    <NavLink style={link_style} to={"/login"}>login</NavLink>
+                  </li>
+                </ul>
+              </nav>
 
-        <section>
+              <div style={content_s}>
+                <Route exact path={"/"}        component={SDNews}/>
+                <Route path={'/news'}          component={SDNews}/>
+                <Route path={"/submit"}        component={SDSubmit}/>
+                <Route path={"/tech-calendar"} component={SDCalendar}/>
+                <Route path={"/jobs-board"}    render={this.render_jobs}/>
+                <Route path={"/bug-bounty"}    render={this.render_bug_bounty}/>
+                <Route path={"/resquared"}     component={Resquared}/>
+                <Route path={"/login"}         component={SDLogin}/>
+                <Route path={'/item/:id'}      component={SDDiscussion}/>
+                <Route path={'/guidelines'}    component={Guidelines}/>
+                <Route path={'/faq'}           component={Faq}/>
+              </div>
 
-          <section style={application_container}>
-            <nav style={nav_s}>
-              <ul style={ul_s}>
-                <li style={title_style}>🇦🇲 Silicondzor</li>
-                <ul style={{...ul_s, marginRight:'auto'}}>{nav_items}</ul>
-                <li style={li_style}>
-                  <NavLink style={link_style} to={"/login"}>login</NavLink>
-                </li>
-              </ul>
-            </nav>
-
-            <div style={content_s}>
-              <Route exact path={"/"}        component={SDNews}/>
-              <Route path={'/news'}          component={SDNews}/>
-              <Route path={"/submit"}        component={SDSubmit}/>
-              <Route path={"/tech-calendar"} component={SDCalendar}/>
-              <Route path={"/jobs-board"}    render={this.render_jobs}/>
-              <Route path={"/bug-bounty"}    render={this.render_bug_bounty}/>
-              <Route path={"/resquared"}     component={Resquared}/>
-              <Route path={"/login"}         component={SDLogin}/>
-              <Route path={'/item/:id'}      component={SDDiscussion}/>
-              <Route path={'/guidelines'}    component={Guidelines}/>
-              <Route path={'/faq'}           component={Faq}/>
-            </div>
-
+            </section>
+            <BottomFooter/>
           </section>
-          <BottomFooter/>
-        </section>
-      </Switch>
+        </Switch>
     );
   }
 };

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+
 import {request_opts} from './utility';
 import colors from './colors';
+import routes from './http-routes';
 
 const e = {
   display:'flex',
@@ -220,7 +222,7 @@ class SDSubmitNews extends Component {
       title: '',
       url: '',
       content: '',
-      tab: 'job',
+      tab: 'post',
       start: '',
       end: '',
       hoursChoice: []
@@ -260,7 +262,7 @@ class SDSubmitNews extends Component {
   submitPost = async () => {
     const {title, url, content} = this.state;
     const send_to_server = request_opts(JSON.stringify({title, web_url: url, content}));
-    const answer = await fetch(`/submit-post`, send_to_server);
+    const answer = await fetch(routes.post.submit_post, send_to_server);
     const answer_json = await answer.json();
     console.log(answer_json);
   }

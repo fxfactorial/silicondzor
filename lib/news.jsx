@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { observable, autorun, action, runInAction, computed } from "mobx";
+import { observable, action, computed } from 'mobx';
 import subDays from 'date-fns/sub_days';
-import { fromPromise, when } from 'mobx-utils';
+import { fromPromise } from 'mobx-utils';
 import { Link } from 'react-router-dom';
 import { observer } from "mobx-react";
 

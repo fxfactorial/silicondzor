@@ -3,6 +3,8 @@
 const body_parser = require('body-parser');
 const xssFilters = require('xss-filters');
 const crypto = require('crypto');
+
+const translateAll = require('./yandex-translate');
 const REST = require('../lib/http-routes').default;
 const replies = require('../lib/replies').default;
 const { email_verify_link, email_message, send_mail } = require('./email');
@@ -14,7 +16,7 @@ const uuid_v4 = require('uuid/v4');
 
 module.exports = (silicon_dzor, db, register_email_users) => {
 
-  silicon_dzor.post(REST.new_account, json_pr, form_pr, async (req, res) => {
+  silicon_dzor.post(REST.post.new_account, json_pr, form_pr, async (req, res) => {
     const {username, password} = req.body;
 
     const email_query =
@@ -71,7 +73,7 @@ select hashed_password from account where email = $e and is_verified = 1`,
     }
   });
 
-  silicon_dzor.post(REST.submit_post, json_pr, form_pr, async (req, res) => {
+  silicon_dzor.post(REST.post.submit_post, json_pr, form_pr, async (req, res) => {
     try {
       if (req.session.logged_in) {
         const b = req.body;
@@ -101,13 +103,14 @@ insert into post (creator, id, creation_time, title, content, web_link) values
     } catch (err) {
       res.end(replies.fail(err.msg));
     }
-  })
+  });
+
   silicon_dzor.post(REST.submit_job, json_pr, form_pr, async (req, res) => {
     try {
       if (req.session.logged_in) {
         const b = req.body;
         const query_result =
-	        await db_promises
+	        await db
 	        .get(`select * from account where email = $username and is_verified = 1`,
 		           {$username: req.session.username});
         const id =
@@ -115,7 +118,8 @@ insert into post (creator, id, creation_time, title, content, web_link) values
 	        .createHash('sha256')
 	        .update(b.title + b.creation_time + query_result.id)
 	        .digest('hex');
-        await db_promises.run(`insert into post (creator, id, creation_time, title, content, web_link) values
+        await db.run(`
+insert into post (creator, id, creation_time, title, content, web_link) values
 ($creator, $id, $creation_time, $title, $content, $web_link)`, {
   $title: xssFilters.inHTMLData(b.title),
   $creation_time: (new Date()).getTime(),
@@ -131,14 +135,15 @@ insert into post (creator, id, creation_time, title, content, web_link) values
     } catch (err) {
       res.end(replies.fail(err.msg));
     }
-  })
+  });
+
   silicon_dzor.post(REST.add_tech_event, json_pr, async (req, res) => {
     try {
       if (req.session.logged_in) {
         const b = req.body;
         let title = await translateAll(b.event_title);
         const query_result =
-	        await db_promises
+	        await db
 	        .get(`select * from account where email = $username and is_verified = 1`,
 		           {$username: req.session.username});
         const id =
@@ -146,7 +151,8 @@ insert into post (creator, id, creation_time, title, content, web_link) values
 	        .createHash('sha256')
 	        .update(b.event_title + b.start + query_result.id)
 	        .digest('hex');
-        await db_promises.run(`insert into event values
+        await db.run(`
+insert into event values
 ($title, $all_day, $start, $end, $description, $creator, $url, $id)`, {
   $title: xssFilters.inHTMLData(title),
   $all_day: new Date(b.start) === new Date(b.end),

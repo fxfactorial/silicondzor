@@ -1,96 +1,95 @@
 import React, { Component } from 'react';
-import {request_opts} from './utility';
+import { observer } from "mobx-react";
+import { observable, action, computed, toJS } from 'mobx';
+import { request_opts } from './utility';
+
+const input_style = {
+  display:'flex',
+  flexDirection:'column',
+  alignItems:'center'
+};
+
+const form_style = {
+  display:'flex',
+  flexDirection:'column',
+  minWidth:'200px',
+  textAlign:'center'
+};
+
 export default
+@observer
 class SDLogin extends Component {
-  constructor(){
-    super();
-    this.state = {
-      logUsername: '',
-      logPassword: '',
-      createUsername: '',
-      createPassword: '',
-    }
-    this.logUsernameChange = this.logUsernameChange.bind(this);
-    this.logPasswordChange = this.logPasswordChange.bind(this);
-    this.createUsernameChange = this.createUsernameChange.bind(this);
-    this.createPasswordChange = this.createPasswordChange.bind(this);
-    this.loginSubmit = this.loginSubmit.bind(this);
-    this.createAccountSubmit = this.createAccountSubmit.bind(this);
-  }
-  async loginSubmit(){
-    const {logUsername, logPassword} = this.state;
-    const send_to_server = request_opts(JSON.stringify({username: logUsername, password: logPassword}));
-    const answer = await fetch(`http://localhost:9090/sign-in`, send_to_server);
-    const answer_json = await answer.json();
-    console.log(answer_json);
-  }
-  async createAccountSubmit(){
-    const {logUsername, logPassword} = this.state;
-    const send_to_server = request_opts(JSON.stringify({username: logUsername, password: logPassword}));
-    const answer = await fetch(`http://localhost:9090/new-account`, send_to_server);
-    const answer_json = await answer.json();
-    console.log(answer_json);
-  }
-  logUsernameChange(e){
-    const logUsername = e.currentTarget.value;
-    this.setState({...this.state, logUsername});
-  }
-  logPasswordChange(e){
-    const logPassword = e.currentTarget.value;
-    this.setState({logPassword});
-  }
-  createUsernameChange(e){
-    const createUsername = e.currentTarget.value;
-    this.setState({createUsername});
-  }
-  createPasswordChange(e){
-    const createPassword = e.currentTarget.value;
-    this.setState({createPassword});
-  }
+
+  @observable login_creds = {username:'', password:''}
+  @observable create_account = {username:'', password:''}
+
+  @action login_password_handler =
+    e => this.login_creds.password = e.target.value;
+
+  @action login_username_handler =
+    e => this.login_creds.username = e.target.value;
+
+  @action create_account_password_handler =
+    e => this.login_creds.password = e.target.value;
+
+  @action create_account_username_handler =
+    e => this.login_creds.username = e.target.value;
+
+  @action do_login = async () => {
+    console.log('fetched', toJS(this.login_creds));
+  };
+
+  @action do_create_account = async () => {
+    console.log('Create an account');
+  };
+
+
   render () {
-    const titleStyle = {
-      fontSize: 40,
-      marginBottom: 20,
-    };
-    const buttonStyle = {
-      fontSize: 10,
-      padding: 4,
-      borderRadius: 3,
-      marginTop: 10
-    };
     return (
-      <div>
-        <div style={titleStyle}>
-          Login
-        </div>
-        <div>
-          username:
-          <input onChange={this.logUsernameChange}/>
-        </div>
-        <div>
-          password:
-          <input onChange={this.logPasswordChange}/>
-        </div>
-        <button style={buttonStyle} onClick={this.loginSubmit}>
-          login
-        </button>
-        
-        <div style={titleStyle}>
-          Create account
-        </div>
-        <div>
-          username:
-          <input onChange={this.createUsernameChange}/>
-        </div>
-        <div>
-          password:
-          <input onChange={this.createPasswordChange}/>
-        </div>
-        <button style={buttonStyle} onClick={this.createAccountSubmit}>
-          create account
-        </button>
-        
-      </div>
+      <form style={input_style}>
+
+        <section style={form_style}>
+
+          <p>Login</p>
+            <input
+              placeholder={'Username'}
+              value={this.login_creds.username}
+              onChange={this.login_username_handler}
+              type={'text'}/>
+            <input
+              placeholder={'Password'}
+              value={this.login_creds.password}
+              onChange={this.login_password_handler}
+              type={'password'}/>
+            <input
+              onClick={this.do_login}
+              value={'Login'}
+              type={'button'}
+              />
+            <hr/>
+        </section>
+
+        <section style={form_style}>
+          <p>Create Account</p>
+
+          <input
+            placeholder={'New username'}
+            value={this.create_account.username}
+            onChange={this.create_account_username_handler}
+            type={'text'}/>
+          <input
+            placeholder={'password'}
+            onChange={this.create_account_password_handler}
+            value={this.create_account.password}
+            type={'password'}/>
+          <input
+            onClick={this.do_create_account}
+            value={'Create new account'}
+            type={'button'}
+            />
+        </section>
+
+      </form>
     );
   }
 }

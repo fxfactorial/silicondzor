@@ -22,7 +22,7 @@ const ui_routes =
       new Set(
         [...require('../lib/http-routes').default
          .ui_routes.map(({to}) => to),
-         '/user', '/item', '/faq', '/guidelines', '/news']
+         '/user', '/item', '/faq', '/guidelines', '/news', '/login']
       );
 
 const db_promises = require('./sqlite-promises')('silicondzor.db');
@@ -90,6 +90,8 @@ silicon_dzor.use(async (req, res, next) => {
   <title>Tech community of Armenia</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+        rel="stylesheet"/>
   <link href="react-big-calendar.css" rel="stylesheet" type="text/css"/>
   <link rel="preload" href="bundle.js" as="script"/>
   <style>
@@ -99,6 +101,8 @@ html { box-sizing: border-box; }
 *, *:before, *:after { box-sizing: inherit; }
 /*  Basic resets for modern browsers */
 
+* { font-family: 'Roboto', sans-serif; }
+
 a { text-decoration:none; }
 
 a:hover {
@@ -106,6 +110,7 @@ a:hover {
   color:${colors.site_colors.active_link} !important;
 }
 .faqs > li { margin-bottom:20px;}
+
 i { vertical-align:bottom; cursor:pointer}
 
 </style>

@@ -40,10 +40,9 @@ silicondzor.js
 .tern-port
 silicondzor.db
 lib/*.js
-lib/views/*.js
-lib/containers/*.js
 test.js
 public/bundle.js.map
 we-must-react-ep-04
 # This is created after building the project
 backend/server.js
+backend/scoring.js
