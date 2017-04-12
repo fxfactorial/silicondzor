@@ -28,7 +28,7 @@ class NewsItem extends Component {
 
   up_vote = async (e) => {
     const {id, updateNews} = this.props;
-    const send_to_server = request_opts(JSON.stringify({id}));
+    const send_to_server = request_opts({id});
     const sending = await fetch('/upvote', send_to_server);
     const answer = await sending.json();
     switch (answer.result) {

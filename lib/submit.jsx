@@ -261,7 +261,7 @@ class SDSubmitNews extends Component {
 
   submitPost = async () => {
     const {title, url, content} = this.state;
-    const send_to_server = request_opts(JSON.stringify({title, web_url: url, content}));
+    const send_to_server = request_opts({title, web_url: url, content});
     const answer = await fetch(routes.post.submit_post, send_to_server);
     const answer_json = await answer.json();
     console.log(answer_json);
@@ -269,7 +269,7 @@ class SDSubmitNews extends Component {
 
   submitJob = async () => {
     const {title, url, content} = this.state;
-    const send_to_server = request_opts(JSON.stringify({title, web_url: url, content}));
+    const send_to_server = request_opts({title, web_url: url, content});
     const answer = await fetch(`/submit-job`, send_to_server);
     const answer_json = await answer.json();
     console.log(answer_json);
@@ -277,7 +277,7 @@ class SDSubmitNews extends Component {
 
   submitBugBounty = async () => {
     const {title, url, content} = this.state;
-    const send_to_server = request_opts(JSON.stringify({title, web_url: url, content}));
+    const send_to_server = request_opts({title, web_url: url, content});
     const answer = await fetch(`/submit-job`, send_to_server);
     //need to add bug-bounty to sql and server
     const answer_json = await answer.json();
@@ -286,14 +286,14 @@ class SDSubmitNews extends Component {
 
   submitEvent = async () => {
     const {title, url, content, start, end} = this.state;
-    const send_to_server = request_opts(JSON.stringify({
+    const send_to_server = request_opts({
       event_title: title,
       event_description: content,
       start,
       end,
       web_url: url,
       content
-    }));
+    });
     const answer = await fetch(`/submit-job`, send_to_server);
     //need to add web_url to server and sql
     const answer_json = await answer.json();

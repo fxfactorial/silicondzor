@@ -8,7 +8,7 @@ export const request_opts = body => {
     headers: new Headers({
       'content-type':'application/json'
     }),
-    body
+    body:JSON.stringify(body)
   };
 };
 

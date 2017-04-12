@@ -26,7 +26,7 @@ export default class SDDiscussion extends Component {
     }
   }
   getComments = async () => {
-    const send_to_server = request_opts(JSON.stringify({post_id : this.props.match.params.id}));
+    const send_to_server = request_opts({post_id : this.props.match.params.id});
     const fetched = await fetch('/get-comments', send_to_server);
     const jsoned = await fetched.json();
     store.current_comments = jsoned;
@@ -35,7 +35,7 @@ export default class SDDiscussion extends Component {
   postComment = async () => {
     const {content} = this.state;
     const post_id = this.props.match.params.id;
-    const send_to_server = request_opts(JSON.stringify({content, post_id}));
+    const send_to_server = request_opts({content, post_id});
     const fetched = await fetch('/comment', send_to_server);
     const answer = await fetched.json();
     console.log(answer);
