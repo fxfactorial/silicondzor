@@ -239,17 +239,19 @@ class Application extends Component {
     return (
         <Switch>
           <section>
-            <section style={application_container}>
-              <nav style={nav_s}>
-                <ul style={ul_s}>
-                  <li style={title_style}>🇦🇲 Silicondzor</li>
-                  <ul style={{...ul_s, marginRight:'auto'}}>{nav_items}</ul>
-                  <li style={li_style}>
-                    <NavLink style={link_style} to={"/login"}>login</NavLink>
-                  </li>
-                </ul>
-              </nav>
 
+            <section style={application_container}>
+              <section>
+                <nav style={nav_s}>
+                  <ul style={ul_s}>
+                    <li style={title_style}>🇦🇲 Silicondzor</li>
+                    <ul style={{...ul_s, marginRight:'auto'}}>{nav_items}</ul>
+                    <li style={li_style}>
+                      <NavLink style={link_style} to={"/login"}>login</NavLink>
+                    </li>
+                  </ul>
+                </nav>
+              </section>
               <div style={content_s}>
                 <Route exact path={"/"}        component={SDNews}/>
                 <Route path={'/news'}          component={SDNews}/>
@@ -265,7 +267,11 @@ class Application extends Component {
               </div>
 
             </section>
-            <BottomFooter/>
+
+            <section>
+              <BottomFooter/>
+            </section>
+
           </section>
         </Switch>
     );

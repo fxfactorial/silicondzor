@@ -31,7 +31,7 @@ const profiles_cont = {
 const profiles = names.map(({name, img, descr, origin}) => (
   <div key={name} style={{textAlign:'center'}}>
     <img style={{borderRadius:'10px'}} src={img}/>
-    <p>{name}</p>
+    <h2>{name}</h2>
     <p>{descr}</p>
     <p>{origin}</p>
   </div>
@@ -47,8 +47,10 @@ export default class Resquared extends Component {
         <hr style={{marginTop:'10px', marginBottom:'20px'}}/>
         <section style={{display:'flex', justifyContent:'center'}}>
           <article style={{textAlign:'center', maxWidth:'400px'}}>
-            We are two Armenian programmers based in Yerevan,
-            Armenia, contact us to work on your next software project.
+            <h2>
+              We are two Armenian programmers based in Yerevan,
+              Armenia, contact us to work on your next software project.
+            </h2>
           </article>
         </section>
       </div>

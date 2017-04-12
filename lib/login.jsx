@@ -50,7 +50,7 @@ class SDLogin extends Component {
 
         <section style={form_style}>
 
-          <p>Login</p>
+          <h1>Login</h1>
             <input
               placeholder={'Username'}
               value={this.login_creds.username}
@@ -70,7 +70,7 @@ class SDLogin extends Component {
         </section>
 
         <section style={form_style}>
-          <p>Create Account</p>
+          <h1>Create Account</h1>
 
           <input
             placeholder={'New username'}

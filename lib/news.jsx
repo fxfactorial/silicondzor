@@ -75,13 +75,13 @@ class NewsItem extends Component {
     const byline = (
       <p>
         upvotes:{upvotes} | downvotes:{downvotes} |
-        points by {to_author} | time: {creation_time} |
+        points by {to_author} | <time>time: {creation_time}</time>|
         {flag} | {hide} | {drilldown}
       </p>
     );
     return (
       <div style={news_style}>
-        <div>
+        <article>
           <p style={byline_style}>
             <span>{idx}.</span>
             <i onClick={this.up_vote}
@@ -89,7 +89,7 @@ class NewsItem extends Component {
                className={'material-icons'}>arrow_upward</i>
             {title} {to_website}
           </p>
-        </div>
+        </article>
         <hr/>
         <div style={{marginLeft:'10px'}}>{byline}</div>
       </div>
