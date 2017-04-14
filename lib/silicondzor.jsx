@@ -237,7 +237,7 @@ class Application extends Component {
 
   render () {
     return (
-        <Switch>
+        <div>
           <section>
 
             <section style={application_container}>
@@ -252,19 +252,22 @@ class Application extends Component {
                   </ul>
                 </nav>
               </section>
-              <div style={content_s}>
-                <Route exact path={"/"}        component={SDNews}/>
-                <Route path={'/news'}          component={SDNews}/>
-                <Route path={"/submit"}        component={SDSubmit}/>
-                <Route path={"/tech-calendar"} component={SDCalendar}/>
-                <Route path={"/jobs-board"}    render={this.render_jobs}/>
-                <Route path={"/bug-bounty"}    render={this.render_bug_bounty}/>
-                <Route path={"/resquared"}     component={Resquared}/>
-                <Route path={"/login"}         component={SDLogin}/>
-                <Route path={'/item/:id'}      component={SDDiscussion}/>
-                <Route path={'/guidelines'}    component={Guidelines}/>
-                <Route path={'/faq'}           component={Faq}/>
-              </div>
+
+              <section style={content_s}>
+                <Switch>
+                  <Route exact path={"/"}        component={SDNews}/>
+                  <Route path={'/news'}          component={SDNews}/>
+                  <Route path={"/submit"}        component={SDSubmit}/>
+                  <Route path={"/tech-calendar"} component={SDCalendar}/>
+                  <Route path={"/jobs-board"}    render={this.render_jobs}/>
+                  <Route path={"/bug-bounty"}    render={this.render_bug_bounty}/>
+                  <Route path={"/resquared"}     component={Resquared}/>
+                  <Route path={"/login"}         component={SDLogin}/>
+                  <Route path={'/item/:id'}      component={SDDiscussion}/>
+                  <Route path={'/guidelines'}    component={Guidelines}/>
+                  <Route path={'/faq'}           component={Faq}/>
+                </Switch>
+              </section>
 
             </section>
 
@@ -273,7 +276,7 @@ class Application extends Component {
             </section>
 
           </section>
-        </Switch>
+        </div>
     );
   }
 };
