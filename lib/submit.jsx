@@ -5,6 +5,9 @@ import { request_opts } from './utility';
 import colors from './colors';
 import routes from './http-routes';
 
+const text_area_props = {
+   minLength: 10, rows: 20, autoCapitalize:'sentences'
+ };
 
 const PostSubmit = ({input_change, disabled,
                      url_change, text_change, submit, s}) => (

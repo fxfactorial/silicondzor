@@ -170,8 +170,6 @@ const Faq = () => (
   </section>
 );
 
-
-
 export default
 class Application extends Component {
 
