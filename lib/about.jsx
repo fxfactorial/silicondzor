@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
 
+import styled from 'styled-components';
+
+const test = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
+
 const s = {
 
 };

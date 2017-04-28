@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { observer } from "mobx-react";
 import { observable, action, computed, toJS } from 'mobx';
+
 import { request_opts } from './utility';
+import routes from './http-routes';
 
 const input_style = {
+  marginTop:'20px',
   display:'flex',
   flexDirection:'column',
   alignItems:'center'
@@ -12,37 +15,52 @@ const input_style = {
 const form_style = {
   display:'flex',
   flexDirection:'column',
-  minWidth:'200px',
+  minWidth:'300px',
   textAlign:'center'
 };
+
+const header_s = {marginBottom:'20px', fontSize:'xx-large'};
 
 export default
 @observer
 class SDLogin extends Component {
 
-  @observable login_creds = {username:'', password:''}
-  @observable create_account = {username:'', password:''}
+  @observable login_creds = {username: '', password: ''}
+  // @observable login_creds = {username: '', password: ''}
+  @observable create_account = {
+    email: 'edgar.factorial@gmail.com',
+    username: 'e_d_g_a_r',
+    password: 'iterate'
+  }
+  // @observable create_account = {email: '', username: '', password: ''}
 
+  /** User login handlers */
   @action login_password_handler =
     e => this.login_creds.password = e.target.value;
-
   @action login_username_handler =
     e => this.login_creds.username = e.target.value;
 
-  @action create_account_password_handler =
-    e => this.login_creds.password = e.target.value;
-
+  /** Create account handlers */
   @action create_account_username_handler =
-    e => this.login_creds.username = e.target.value;
+    e => this.create_account.username = e.target.value;
+  @action create_account_email_handler =
+    e => this.create_account.email = e.target.value;
+  @action create_account_password_handler =
+    e => this.create_account.password = e.target.value;
 
   @action do_login = async () => {
-    console.log('fetched', toJS(this.login_creds));
+    const login_result =
+          await fetch(routes.post.sign_in,
+                      request_opts(toJS(this.login_creds)));
+    console.log(login_result);
   };
 
   @action do_create_account = async () => {
-    console.log('Create an account');
+    const create_account =
+          await fetch(routes.post.new_account,
+                      request_opts(toJS(this.create_account)));
+    console.log('Create an account', create_account);
   };
-
 
   render () {
     return (
@@ -50,7 +68,7 @@ class SDLogin extends Component {
 
         <section style={form_style}>
 
-          <h1>Login</h1>
+          <h1 style={header_s}>Login</h1>
             <input
               placeholder={'Username'}
               value={this.login_creds.username}
@@ -66,17 +84,22 @@ class SDLogin extends Component {
               value={'Login'}
               type={'button'}
               />
-            <hr/>
         </section>
 
-        <section style={form_style}>
-          <h1>Create Account</h1>
+        <h2 style={{marginTop:'20px', fontStyle:'italic'}}>OR</h2>
 
+        <section style={form_style}>
+          <h1 style={header_s}>Create Account</h1>
+            <input
+              placeholder={'Username'}
+              value={this.create_account.username}
+              onChange={this.create_account_username_handler}
+              type={'text'}/>
           <input
-            placeholder={'New username'}
-            value={this.create_account.username}
-            onChange={this.create_account_username_handler}
-            type={'text'}/>
+            placeholder={'Email address'}
+            value={this.create_account.email}
+            onChange={this.create_account_email_handler}
+            type={'email'}/>
           <input
             placeholder={'password'}
             onChange={this.create_account_password_handler}

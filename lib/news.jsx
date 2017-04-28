@@ -91,7 +91,7 @@ class NewsItem extends Component {
           </p>
         </article>
         <hr/>
-        <div style={{marginLeft:'10px'}}>{byline}</div>
+        <section style={{marginLeft:'10px'}}>{byline}</section>
       </div>
     );
   }

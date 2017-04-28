@@ -3,9 +3,9 @@ import colors from './colors';
 import { observer } from 'mobx-react';
 
 const bug_card_s = {
-  marginTop:'10px',
   backgroundColor:colors.site_colors.cards
 };
+
 const BugCard = (
   {creator, creation_time, title, content, web_link}) => (
     <div style={bug_card_s}>
@@ -16,6 +16,7 @@ const BugCard = (
       <p>{creation_time}</p>
     </div>
   );
+
 @observer
 export default
 class SDBugBounty extends Component {

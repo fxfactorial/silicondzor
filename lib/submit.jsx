@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 
-import {request_opts} from './utility';
+import { request_opts } from './utility';
 import colors from './colors';
 import routes from './http-routes';
 
@@ -13,7 +14,7 @@ const e = {
 };
 
 const title_style = {
-  textAlign:'center', fontSize:'2em', marginBottom:'10px'
+  textAlign:'center', fontSize:'2em'
 };
 
 const text_area_props = {
@@ -21,10 +22,10 @@ const text_area_props = {
   minLength: 10, rows: 20, autoCapitalize:'sentences'
 };
 
-const titleStyle = {fontSize: 40, marginBottom: 10};
+const titleStyle = {fontSize: 40};
 
 const buttonStyle = {
-  fontSize: 15, padding: 4, borderRadius: 3, marginTop: 10
+  fontSize: 15, padding: 4, borderRadius: 3
 };
 
 const headerButton = {

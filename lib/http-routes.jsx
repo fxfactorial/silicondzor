@@ -1,7 +1,6 @@
 export default {
   // Actions
   add_tech_event: '/add-tech-event',
-  sign_in: '/sign-in',
   new_account_verify: '/verify-account/:identifier',
   upvote: '/upvote',
   comment: '/comment',
@@ -12,6 +11,7 @@ export default {
   get_news: '/get-news',
   get_comments: '/get-comments',
   post: {
+    sign_in: '/sign-in',
     new_account: '/new-account',
     submit_post: '/submit-post'
   },

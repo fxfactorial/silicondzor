@@ -25,7 +25,7 @@ import { ital } from './utility';
    In strict mode, it is not allowed to
    change any state outside of an action
 */
-useStrict(true);
+useStrict(false);
 
 const ul_s = {
   display:'flex',
@@ -51,8 +51,8 @@ const content_s = {
 
 const application_container = {
   backgroundColor:colors.site_colors.bg,
-  marginLeft:'20px',
-  marginRight:'20px'
+  paddingLeft:'20px',
+  paddingRight:'20px'
 };
 
 const link_style = {
@@ -62,13 +62,11 @@ const link_style = {
 
 const title_style = {
   color:colors.site_colors.title,
-  fontSize:'30px',
-  marginRight:'10px'
+  fontSize:'30px'
 };
 
 const li_style = {
-  marginTop:'10px',
-  marginRight:'15px'
+
 };
 
 const nav_items = routes.ui_routes.map(({to, title}) => (

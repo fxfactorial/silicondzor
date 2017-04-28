@@ -1,7 +1,8 @@
 export default {
   success: 'success',
   failure: 'failure',
-  invalid_username_already_picked: `Email used for username already picked`,
+  invalid_email_already_registered:`Email account already registered`,
+  invalid_username_already_picked: `Username already picked`,
   invalid_email: `Email account doesn't appear to be valid`,
   invalid_credentials: `Username or password are incorrect`,
   invalid_session: `Be sure you're logged in in order to create events`,
