@@ -27,4 +27,15 @@ const SiteTitle = styled.li`
   font-weight: 300;
 `;
 
-export { StyledLink, NavLinks, NavBar, SiteTitle }
+const BottomFooter = styled.footer`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const SearchBar = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+export { StyledLink, NavLinks, NavBar, SiteTitle, BottomFooter, SearchBar }
