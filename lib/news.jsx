@@ -9,8 +9,7 @@ import styled from 'styled-components';
 import colors from './colors';
 import { request_opts, document_current_page } from './utility';
 import routes from './http-routes';
-import { StyledLink } from './with-style';
-
+import { StyledLink, NewsWrapper } from './with-style';
 
 class NewsItem extends Component {
 
@@ -85,13 +84,6 @@ class NewsItem extends Component {
   }
 };
 
-const NewsWrapper = styled.div`
-  padding-top: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
-  min-height: 600px;
-  background-color: ${colors.site_colors.cards};
-`;
 
 export default
 @observer
