@@ -19,6 +19,7 @@ import routes from './http-routes';
 import SDUserProfile from './user-profile';
 import SDDiscussion from './discussion';
 import { ital } from './utility';
+import styled from 'styled-components';
 
 /**
    Enables MobX strict mode globally.
@@ -27,56 +28,20 @@ import { ital } from './utility';
 */
 useStrict(false);
 
-const ul_s = {
-  display:'flex',
-  listStyleType: 'none',
-  paddingLeft:'10px',
-  paddingRight:'10px'
-};
-
-const nav_s = {
-  backgroundColor:colors.site_colors.banner,
-  paddingTop:'20px',
-  paddingBottom:'20px'
-};
-
-const content_s = {
-  overflow:'scroll',
-  display:'flex',
-  height:'720px',
-  flexDirection:'column',
-  justifyContent:'space-between',
-  backgroundColor:colors.site_colors.bg
-};
-
-const application_container = {
-  backgroundColor:colors.site_colors.bg,
-  paddingLeft:'20px',
-  paddingRight:'20px'
-};
-
-const link_style = {
-  color:'white',
-  textDecoration:'none'
-};
-
-const title_style = {
-  color:colors.site_colors.title,
-  fontSize:'30px'
-};
-
-const li_style = {
-
-};
+const StyledLink = styled(NavLink)`
+  padding-left: 20px;
+  font-weight: 300;
+  color: ${colors.site_colors.title};
+`;
 
 const nav_items = routes.ui_routes.map(({to, title}) => (
-  <li style={li_style} key={to}>
-    <NavLink style={link_style}
-             exact
-             activeStyle={{color:colors.site_colors.active_link}}
-             to={to}>
+  <li key={to}>
+    <StyledLink exact
+                activeStyle={{color:'black',
+                              textDecoration:'underline'}}
+                to={to}>
       {title}
-    </NavLink>
+    </StyledLink>
   </li>
 ));
 
@@ -135,23 +100,12 @@ const bugs = [
    descr:'Pentest our security system'}
 ];
 
-const message_s = {
-  fontSize:'1.50em',
-  marginTop:'10px',
-  textAlign:'center',
-  marginBottom:'10px',
-  paddingLeft:'15%',
-  paddingRight:'15%',
-  height:'700px',
-  overflow:'scroll'
-};
-
 const Guidelines = () => (
-  <section style={message_s}>
-    <p style={{fontWeight:'bold'}}>Guidelines</p>
+  <section>
+    <p>Guidelines</p>
     <hr/>
-    <section style={{marginTop:'10px', textAlign:'justify'}}>
-      <ul style={{listStyleType:'none'}} className={'faqs'}>
+    <section>
+      <ul className={'faqs'}>
         <li>
           <p>
             Silicondzor is a central place for everything tech in Armenia
@@ -179,11 +133,11 @@ const Guidelines = () => (
 );
 
 const Faq = () => (
-  <section style={message_s}>
-    <p style={{fontWeight:'bold'}}>FAQ</p>
+  <section>
+    <p>FAQ</p>
     <hr/>
-    <section style={{marginTop:'10px', textAlign:'justify'}}>
-      <ul style={{listStyleType:'none'}} className={'faqs'}>
+    <section>
+      <ul>
         <li>
           <p>Q: {ital('Who made this?')}</p>
           <p>A: This was made by {' '}
@@ -222,6 +176,25 @@ const Faq = () => (
   </section>
 );
 
+const NavLinks = styled.ul`
+  display: flex;
+  list-style-type: none;
+`;
+
+const NavBar = styled.nav`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: ${colors.site_colors.bg};
+`;
+
+const SiteTitle = styled.li`
+  padding-left: 20px;
+  font-weight: 300;
+`;
+
 export default
 class Application extends Component {
 
@@ -234,24 +207,25 @@ class Application extends Component {
   }
 
   render () {
+    const elements = [
+      <SiteTitle key={'silicondzor'}>Silicondzor</SiteTitle>,
+      ...nav_items
+    ];
     return (
         <div>
           <section>
 
-            <section style={application_container}>
-              <section>
-                <nav style={nav_s}>
-                  <ul style={ul_s}>
-                    <li style={title_style}>🇦🇲 Silicondzor</li>
-                    <ul style={{...ul_s, marginRight:'auto'}}>{nav_items}</ul>
-                    <li style={li_style}>
-                      <NavLink style={link_style} to={"/login"}>login</NavLink>
-                    </li>
-                  </ul>
-                </nav>
-              </section>
+            <section>
 
-              <section style={content_s}>
+              <NavBar>
+                <NavLinks>{elements}</NavLinks>
+                <NavLink style={{paddingRight: '20px', color: 'black', fontWeight: 300}}
+                         to={"/login"}>
+                  login
+                </NavLink>
+              </NavBar>
+
+              <section>
                 <Switch>
                   <Route exact path={"/"}        component={SDNews}/>
                   <Route path={'/news'}          component={SDNews}/>

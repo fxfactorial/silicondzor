@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import {request_opts} from './utility';
 import store from './sdMobx';
+
 class Comment extends Component {
   render(){
-    console.log(this.props);
     const {creator, creation_time, content, upvotes, downvotes} = this.props;
     return(
       <div>
-        <div style={{color:'#828282'}}>
+        <div>
           creator: {creator} | time:{creation_time} | upvotes: {upvotes} | downvotes: {downvotes}
         </div>
-        <div style={{ margin: 10, fontSize: 20}}>
+        <div>
           {content}
         </div>
       </div>
@@ -49,7 +49,7 @@ export default class SDDiscussion extends Component {
   }
   render() {
     //get post_id from url
-    const post_id = this.props.match.params.id
+    const post_id = this.props.match.params.id;
     //
     //get array of url variables like [{smthreallycool: "123"}, {hey: "123"}]
     //from "?smthreallycool=123&hey=123"
@@ -64,14 +64,19 @@ export default class SDDiscussion extends Component {
       </div>
     ))
     return (
-      <div style={{backgroundColor: '#f6f6ef'}}>
-        <div style={{fontSize: 25, margin : 20}}>should be a title (and web link)</div>
-        <div style={{color:'#828282', margin : 20}}>183 points by walterbell 7 hours ago | hide | past | web | 70 comments | favorite</div>
-        <textarea onChange={this.contentChange} style={{width: 500, height: 200, margin: 20, fontSize: 18}}></textarea>
+      <div>
         <div>
-          <button onClick={this.postComment} style={{fontSize: 20, margin: 20, padding: 5, borderRadius: 5}}>add comment</button>
+          should be a title (and web link)
         </div>
-        <div style={{margin: 20}}>
+        <div>
+          183 points by walterbell 7 hours ago | hide | past |
+          web | 70 comments | favorite
+        </div>
+        <textarea onChange={this.contentChange}></textarea>
+        <div>
+          <button onClick={this.postComment}>add comment</button>
+        </div>
+        <div>
           {renderComments}
         </div>
       </div>

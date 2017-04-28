@@ -5,22 +5,6 @@ import { observable, action, computed, toJS } from 'mobx';
 import { request_opts } from './utility';
 import routes from './http-routes';
 
-const input_style = {
-  marginTop:'20px',
-  display:'flex',
-  flexDirection:'column',
-  alignItems:'center'
-};
-
-const form_style = {
-  display:'flex',
-  flexDirection:'column',
-  minWidth:'300px',
-  textAlign:'center'
-};
-
-const header_s = {marginBottom:'20px', fontSize:'xx-large'};
-
 export default
 @observer
 class SDLogin extends Component {
@@ -64,11 +48,11 @@ class SDLogin extends Component {
 
   render () {
     return (
-      <form style={input_style}>
+      <form>
 
-        <section style={form_style}>
+        <section>
 
-          <h1 style={header_s}>Login</h1>
+          <h1>Login</h1>
             <input
               placeholder={'Username'}
               value={this.login_creds.username}
@@ -86,10 +70,10 @@ class SDLogin extends Component {
               />
         </section>
 
-        <h2 style={{marginTop:'20px', fontStyle:'italic'}}>OR</h2>
+        <h2>OR</h2>
 
-        <section style={form_style}>
-          <h1 style={header_s}>Create Account</h1>
+        <section>
+          <h1>Create Account</h1>
             <input
               placeholder={'Username'}
               value={this.create_account.username}

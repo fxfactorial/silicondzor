@@ -107,7 +107,7 @@ a { text-decoration:none; }
 
 a:hover {
   transition: color 1.0s ease-out;
-  color:${colors.site_colors.active_link} !important;
+  color: black !important;
 }
 .faqs > li { margin-bottom:20px;}
 

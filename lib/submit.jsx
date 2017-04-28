@@ -5,86 +5,29 @@ import { request_opts } from './utility';
 import colors from './colors';
 import routes from './http-routes';
 
-const e = {
-  display:'flex',
-  flexDirection:'column',
-  // Need to adjust this on media query
-  minWidth:'350px',
-  maxWidth:'500px'
-};
-
-const title_style = {
-  textAlign:'center', fontSize:'2em'
-};
-
-const text_area_props = {
-  autoComplete: true, autoFocus: true, spellCheck:true,
-  minLength: 10, rows: 20, autoCapitalize:'sentences'
-};
-
-const titleStyle = {fontSize: 40};
-
-const buttonStyle = {
-  fontSize: 15, padding: 4, borderRadius: 3
-};
-
-const headerButton = {
-  width: '15%', textAlign: 'center', backgroundColor:'#2C3D54',
-  color: 'white', cursor: 'pointer', minHeight:'40px', paddingTop:'10px'
-};
-
-const headerButtonActive = {
-  borderStyle:'outset', fontWeight:'bold',
-  width: '15%', textAlign: 'center', backgroundColor:'#2C3D54',
-  color: 'white', cursor: 'pointer', minHeight:'40px', paddingTop:'7px',
-  color:colors.site_colors.active_link
-};
-
-const s = {
-  display: 'flex', marginTop:'0.75rem',
-  alignItems: 'center', justifyContent: 'center'
-};
-
-const submit_content = {
-  minHeight:'600px',
-  marginLeft:'20%',
-  marginRight:'20%',
-  marginBottom:'1rem',
-  display:'flex',
-  justifyContent:'center',
-  marginTop:'1rem',
-  boxShadow: 'inset 0 0 3px #000000',
-  padding:'1.5em 1.5em 1.5em 1.5em'
-};
-
-const or_style = {
-  fontWeight:'bold', marginTop:'10px',
-  textAlign:'center', marginBottom:'5px'
-};
 
 const PostSubmit = ({input_change, disabled,
                      url_change, text_change, submit, s}) => (
-  <section style={{...e, ...s}}>
-    <p style={title_style}>New Post</p>
-    <hr style={{marginBottom:'5px'}}/>
-    <section style={e}>
+  <section>
+    <p>New Post</p>
+    <hr/>
+    <section>
       <label>Title:</label>
       <input placeholder={'Title for your discussion piece'}
              onChange={input_change}/>
-      <label style={{marginTop:'5px'}}>URL:</label>
+      <label>URL:</label>
       <input
         placeholder={'URL to what you want to link to'}
         onChange={url_change}/>
-      <p style={or_style}>OR</p>
+      <p>OR</p>
       <p>Content:</p>
       <textarea {...text_area_props}
                 placeholder={'New tech discussion in Armenia'}
                 onChange={text_change}/>
-      <p style={{textAlign:'center', fontSize:'0.8em', marginTop:'10px'}}>
+      <p>
         Leave URL field blank if submitting a discussion
       </p>
-      <button style={{marginTop:'10px'}}
-              title={'You must be logged in to be able to submit new posts'}
+      <button title={'You must be logged in to be able to submit new posts'}
               disabled={disabled}
               onClick={submit}>Submit post</button>
     </section>
@@ -99,34 +42,33 @@ const job_post_spiel =
 const JobSubmit = ({s, emply_change, title_change,
                     location_change, contact_change,
                     text_change, disabled, submit}) => (
-  <section style={{...e, ...s}}>
-    <p style={title_style}>New Job Posting</p>
-    <hr style={{marginBottom:'5px'}}/>
-    <section style={e}>
+  <section>
+    <p>New Job Posting</p>
+    <hr/>
+    <section>
       <label>Employer:</label>
       <input placeholder={'Hayastan Tech LLC'}
              onChange={emply_change}/>
-      <label style={{marginTop:'5px'}}>Salary, can be a range:</label>
+      <label>Salary, can be a range:</label>
       <input
         placeholder={'350.000AMD a month'}
         onChange={title_change}/>
 
-      <label style={{marginTop:'5px'}}>Location:</label>
+      <label>Location:</label>
       <input
         placeholder={'Yerevan, Armenia'}
         onChange={location_change}/>
 
-      <label style={{marginTop:'5px'}}>Contact Info:</label>
+      <label>Contact Info:</label>
       <input
         placeholder={'jobs@somehyetechllc.am'}
         onChange={contact_change}/>
 
-      <p style={or_style}>Job description</p>
+      <p>Job description</p>
       <textarea {...text_area_props}
                 placeholder={react_spiel}
                 onChange={text_change}/>
-      <button style={{marginTop:'10px'}}
-              title={job_post_spiel}
+      <button title={job_post_spiel}
               disabled={disabled}
               onClick={submit}>Post job</button>
     </section>
@@ -140,23 +82,22 @@ const tech_event_spiel =
 
 const BugBountySubmit = ({s, bug_poster, bounty_amount,
                           content_change, disabled, submit}) => (
-  <section style={s}>
-    <p style={title_style}>New Bug Bounty</p>
-    <hr style={{marginBottom:'5px'}}/>
-    <section style={e}>
+  <section>
+    <p>New Bug Bounty</p>
+    <hr/>
+    <section>
       <label>Offered by:</label>
       <input placeholder={'Central Bank of Armenia'}
              onChange={bug_poster}/>
-      <label style={{marginTop:'5px'}}>Bounty:</label>
+      <label>Bounty:</label>
       <input
         placeholder={'350.000AMD'}
         onChange={bounty_amount}/>
-      <p style={{marginTop:'5px'}}>Content:</p>
+      <p>Content:</p>
       <textarea {...text_area_props}
                 placeholder={pen_test_spiel}
                 onChange={content_change}/>
-      <button style={{marginTop:'10px'}}
-              title={'You must be logged in to be able to submit new posts.'}
+      <button title={'You must be logged in to be able to submit new posts.'}
               disabled={disabled}
               onClick={submit}>Post bug bounty
       </button>
@@ -165,13 +106,14 @@ const BugBountySubmit = ({s, bug_poster, bounty_amount,
 );
 
 const TechEventSubmit = ({s, time_start, time_end,
-                          creator, content, disabled, submit}) => (
-  <section style={s}>
-    <p style={title_style}>New Tech Event</p>
-    <hr style={{marginBottom:'5px'}}/>
-    <section style={{...e}}>
+                          creator, content, disabled, submit}) =>
+      (
+        <section>
+          <p>New Tech Event</p>
+          <hr/>
+          <section>
 
-      <section style={{display:'inline-flex', justifyContent:'space-around'}}>
+            <section>
 
         <section>
           <label>Start time:</label>
@@ -189,21 +131,17 @@ const TechEventSubmit = ({s, time_start, time_end,
 
       </section>
 
-      <section style={{marginTop:'10px'}}>
+      <section>
         <label>Creator or group name:</label>
         <input placeholder={'Event host'}
-               style={{width:'100%'}}
                onChange={creator}/>
-        <section style={{width:'100%', marginTop:'5px'}}>
-          <label style={{marginTop:'10px'}}>Event Description:</label>
+        <section>
+          <label>Event Description:</label>
           <textarea {...text_area_props}
-                    style={{display:'block', marginTop:'5px', width:'100%'}}
                     placeholder={'ISTC is hosting...'}
                     onChange={content}/>
         </section>
-        <button style={{marginTop:'10px'}}
-                title={tech_event_spiel}
-                style={{width:'100%', marginTop:'10px'}}
+        <button title={tech_event_spiel}
                 disabled={disabled}
                 onClick={submit}>
           Post tech event
@@ -333,33 +271,27 @@ class SDSubmitNews extends Component {
     return (
       <div>
 
-        <section style={s}>
+        <section>
           <p style={this.state.tab === 'post' ? {
-               ...headerButtonActive,
                borderTopLeftRadius: 7,
                borderBottomLeftRadius: 7
                } : {
-                 ...headerButton,
+
                  borderTopLeftRadius: 7,
                  borderBottomLeftRadius: 7
              }} onClick={this.tab_change.bind(null, 'post')}>
             Post
           </p>
-          <p style={this.state.tab === 'job' ? headerButtonActive : headerButton}
-             onClick={this.tab_change.bind(null, 'job')}>
+          <p onClick={this.tab_change.bind(null, 'job')}>
             Job
           </p>
-          <p style={this.state.tab === 'bug-bounty'
-             ? headerButtonActive : headerButton}
-             onClick={this.tab_change.bind(null, 'bug-bounty')}>
+          <p onClick={this.tab_change.bind(null, 'bug-bounty')}>
             Bug Bounty
           </p>
           <p style={this.state.tab === 'event' ? {
-               ...headerButtonActive,
                borderTopRightRadius: 7,
                borderBottomRightRadius: 7
                } : {
-                 ...headerButton,
                  borderTopRightRadius: 7,
                  borderBottomRightRadius: 7
              }} onClick={this.tab_change.bind(null, 'event')}>
@@ -367,7 +299,7 @@ class SDSubmitNews extends Component {
           </p>
         </section>
 
-        <section style={submit_content}>
+        <section>
           <PostSubmit
             s={this.state.tab === 'post'
             ? {display: 'block'} : {display: 'none'}}

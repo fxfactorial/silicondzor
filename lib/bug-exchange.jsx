@@ -2,13 +2,9 @@ import React, { Component } from 'react';
 import colors from './colors';
 import { observer } from 'mobx-react';
 
-const bug_card_s = {
-  backgroundColor:colors.site_colors.cards
-};
-
 const BugCard = (
   {creator, creation_time, title, content, web_link}) => (
-    <div style={bug_card_s}>
+    <div>
       <p>{title}</p>
       <p>{content}</p>
       <p>{web_link}</p>

@@ -1,14 +1,5 @@
 import React, {Component} from 'react';
 
-const close_btn_s = {
-  position:'absolute',
-  top:'0.25em',
-  right:'0.25em',
-  fontSize:'large',
-  width:'10px',
-  cursor:'pointer'
-};
-
 export default class TechEvent extends Component {
 
   state = {
@@ -26,18 +17,13 @@ export default class TechEvent extends Component {
   }
 
   render() {
-    const tech_s = {
-      display:'flex',
-      flexDirection:'column'
-    };
-    const centered = { textAlign:'center'};
     return (
       <div>
 	<form>
-	  <p style={close_btn_s} onClick={_ => this.props.close_modal()}> x </p>
+	  <p onClick={_ => this.props.close_modal()}> x </p>
 	  {this.props.prompt_msg(this.props.start, this.props.end)}
 	  <hr/>
-	  <div style={tech_s} className={'modal-inputs'}>
+	  <div className={'modal-inputs'}>
 	    <label> Event title </label>
 	    <input type={'text'}
 		   value={this.state.event_title}

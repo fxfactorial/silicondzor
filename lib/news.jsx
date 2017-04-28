@@ -9,21 +9,6 @@ import colors from './colors';
 import { request_opts, document_current_page } from './utility';
 import routes from './http-routes';
 
-const news_style = {
-  backgroundColor:colors.site_colors.cards,
-  borderRadius:'5px',
-  margin:'10px',
-  padding:'5px'
-};
-
-const byline_style = {
-  fontSize:'x-large'
-};
-
-const span_s = {
-  cursor:'pointer'
-};
-
 class NewsItem extends Component {
 
   up_vote = async (e) => {
@@ -57,7 +42,7 @@ class NewsItem extends Component {
            content, idx, id} = this.props;
     const to_author = <Link to={`/user?id=${creator}`}>{creator}</Link>;
     const flag =
-      <span style={span_s} onClick={this.flag_post}> flag </span>;
+      <span onClick={this.flag_post}> flag </span>;
     const drilldown = (
       <Link to={`/item/${id}?smthreallycool=123&hey=123`}>
         {comment_count === 0 ? 'discuss' : `${comment_count} comments`}
@@ -65,12 +50,11 @@ class NewsItem extends Component {
     const to_website =
       !web_link ? null
       : (
-        <a style={{color:'black'}}
-           href={web_link}>({web_link})</a>
+        <a href={web_link}>({web_link})</a>
       );
     // Hiding should have a fun animation
     const hide =
-      <span style={span_s} onClick={this.hide_this_post}>hide</span>;
+      <span onClick={this.hide_this_post}>hide</span>;
     // Need to add a favorites in case we are logged in.
     const byline = (
       <p>
@@ -80,9 +64,9 @@ class NewsItem extends Component {
       </p>
     );
     return (
-      <div style={news_style}>
+      <div>
         <article>
-          <p style={byline_style}>
+          <p>
             <span>{idx}.</span>
             <i onClick={this.up_vote}
                id={id}
@@ -91,7 +75,7 @@ class NewsItem extends Component {
           </p>
         </article>
         <hr/>
-        <section style={{marginLeft:'10px'}}>{byline}</section>
+        <section>{byline}</section>
       </div>
     );
   }
@@ -139,7 +123,7 @@ class SDNews extends Component {
     return (
       <section>
         {items}
-        <Link style={{marginLeft:'10px'}} to={link_to}> More </Link>
+        <Link to={link_to}> More </Link>
       </section>
     );
   }

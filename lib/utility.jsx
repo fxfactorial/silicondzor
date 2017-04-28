@@ -1,12 +1,17 @@
 import React from 'react';
+import styled from 'styled-components';
 
-export const ital = s => <span style={{fontStyle:'italic'}}>{s}</span>;
+const Italic = styled.span`
+  font-family: italic;
+`;
+
+export const ital = s => <Italic>{s}</Italic>;
 
 export const request_opts = body => {
   return {
     method:'post',
     headers: new Headers({
-      'content-type':'application/json'
+      'Content-Type':'application/json'
     }),
     body:JSON.stringify(body)
   };
