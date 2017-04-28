@@ -19,7 +19,7 @@ import routes from './http-routes';
 import SDUserProfile from './user-profile';
 import SDDiscussion from './discussion';
 import { ital } from './utility';
-import styled from 'styled-components';
+import { StyledLink, NavLinks, NavBar, SiteTitle } from './with-style';
 
 /**
    Enables MobX strict mode globally.
@@ -27,12 +27,6 @@ import styled from 'styled-components';
    change any state outside of an action
 */
 useStrict(false);
-
-const StyledLink = styled(NavLink)`
-  padding-left: 20px;
-  font-weight: 300;
-  color: ${colors.site_colors.title};
-`;
 
 const nav_items = routes.ui_routes.map(({to, title}) => (
   <li key={to}>
@@ -176,24 +170,7 @@ const Faq = () => (
   </section>
 );
 
-const NavLinks = styled.ul`
-  display: flex;
-  list-style-type: none;
-`;
 
-const NavBar = styled.nav`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  background-color: ${colors.site_colors.bg};
-`;
-
-const SiteTitle = styled.li`
-  padding-left: 20px;
-  font-weight: 300;
-`;
 
 export default
 class Application extends Component {

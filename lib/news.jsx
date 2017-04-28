@@ -4,6 +4,7 @@ import subDays from 'date-fns/sub_days';
 import { fromPromise } from 'mobx-utils';
 import { Link } from 'react-router-dom';
 import { observer } from "mobx-react";
+import styled from 'styled-components';
 
 import colors from './colors';
 import { request_opts, document_current_page } from './utility';
@@ -98,7 +99,7 @@ class SDNews extends Component {
   @action componentDidMount() {
     const page = document_current_page();
     if (page === null || page === 0) {
-      this.news_items.set('0', window.__INIT_NEWS__);
+      this.news_items.set('0', [window.__INIT_NEWS__[0]]);
     } else {
       this._current_page_ = '' + page;
       if (this.news_items.get(this._current_page_) === undefined) {
