@@ -22,7 +22,7 @@ const ByLine = styled.p`
   padding-left: 20px;
   font-size: 14px;
   display: flex;
-  width: 80%;
+  width: 35rem;
   justify-content: space-around;
 `;
 
