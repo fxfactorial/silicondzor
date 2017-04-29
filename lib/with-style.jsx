@@ -68,6 +68,7 @@ const ByLine = styled.p`
 `;
 
 const TextArea = styled.textarea`
+  padding: 5px;
   min-width: 200px;
 `;
 
@@ -120,7 +121,7 @@ const SubmissionBox = styled.div`
   padding-top: 10px;
   box-shadow: 3px 3px 0px 0px ${colors.site_colors.banner};
   background-color: ${colors.site_colors.bg};
-  min-height: 500px;
+  min-height: 570px;
   min-width: 620px;
 `;
 

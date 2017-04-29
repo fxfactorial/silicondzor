@@ -12,9 +12,8 @@ import { ContentWrapper, TextArea, PostSubmission, RowField,
        } from './with-style';
 
 const text_area_props = {
-  minLength: 10, rows: 15, autoCapitalize:'sentences', cols: 80
+  minLength: 10, rows: 15, autoCapitalize:'sentences', cols: 75
 };
-
 
 const b_title = 'You must be logged in to be able to submit new posts';
 
@@ -23,7 +22,7 @@ const PostSubmit =
         url_change, text_change, submit, s}) => {
           return (
             <PostSubmission>
-              <h2 style={{fontWeight: 300}}>New Post</h2>
+              <Message>New Post</Message>
               <hr style={{width: '90%'}}/>
 
               <section>
@@ -45,15 +44,17 @@ const PostSubmit =
                   <Message>OR</Message>
                   <Message>Content</Message>
 
-                  <textarea {...text_area_props}
+                  <TextArea {...text_area_props}
                             placeholder={'New tech discussion in Armenia'}
                             onChange={text_change}/>
-                  <Message>Leave URL field blank if submitting a discussion</Message>
+                  <Message>
+                    Leave URL field blank if submitting a discussion
+                  </Message>
                   <SubmissionButton title={b_title}
                                     disabled={disabled}
-                                    onClick={submit}>Submit post</SubmissionButton>
+                                    onClick={submit}>
+                    Submit post</SubmissionButton>
                 </PostSubmission>
-
 
               </section>
             </PostSubmission>
@@ -65,46 +66,64 @@ const react_spiel =
 const job_post_spiel =
       'You must be logged in to be able to submit new job postings.';
 
+const RowFieldWidth = styled(RowField)`
+  min-width: 500px;
+`;
+
 const JobSubmit = ({s, emply_change, title_change,
       location_change, contact_change,
       text_change, disabled, submit}) => (
-        <section>
-          <p>New Job Posting</p>
-          <hr/>
-          <section>
-            <label>Employer:</label>
-            <input placeholder={'Hayastan Tech LLC'}
-                   onChange={emply_change}/>
-            <label>Salary, can be a range:</label>
-            <input
-              placeholder={'350.000AMD a month'}
-              onChange={title_change}/>
+        <PostSubmission>
+          <Message>New Job Posting</Message>
+          <hr style={{width: '90%'}}/>
+          <PostSubmission>
+            <RowFieldWidth>
+              <label>Employer:</label>
+              <Input placeholder={'Hayastan Tech LLC'}
+                     onChange={emply_change}/>
+            </RowFieldWidth>
+            <RowFieldWidth>
+              <label>Salary</label>
+              <Input
+                placeholder={'350.000AMD a month'}
+                onChange={title_change}/>
+            </RowFieldWidth>
 
-            <label>Location:</label>
-            <input
-              placeholder={'Yerevan, Armenia'}
-              onChange={location_change}/>
+            <RowFieldWidth>
+              <label>Location:</label>
+              <Input
+                placeholder={'Yerevan, Armenia'}
+                onChange={location_change}/>
+            </RowFieldWidth>
 
-            <label>Contact Info:</label>
-            <input
-              placeholder={'jobs@somehyetechllc.am'}
-              onChange={contact_change}/>
+            <RowFieldWidth>
+              <label>Contact Info:</label>
+              <Input
+                placeholder={'jobs@somehyetechllc.am'}
+                onChange={contact_change}/>
+            </RowFieldWidth>
 
-            <p>Job description</p>
-            <textarea {...text_area_props}
-                      placeholder={react_spiel}
-                      onChange={text_change}/>
-            <button title={job_post_spiel}
-                    disabled={disabled}
-                    onClick={submit}>Post job</button>
-          </section>
-        </section>
+            <Message>Job description</Message>
+            <div style={{paddingTop: '10px'}}>
+              <TextArea {...text_area_props}
+                        placeholder={react_spiel}
+                        onChange={text_change}/>
+            </div>
+            <SubmissionButton title={job_post_spiel}
+                              disabled={disabled}
+                              onClick={submit}>
+              Post job
+            </SubmissionButton>
+          </PostSubmission>
+        </PostSubmission>
       );
 
 const pen_test_spiel =
       'Come pentest our system, find a bug and make Armenia more secure.';
 const tech_event_spiel =
       'You must be logged in to be able to submit new tech events.';
+const new_post_spiel =
+      'You must be logged in to be able to submit new posts.';
 
 const BugBountySubmit = ({s, bug_poster, bounty_amount,
                           content_change, disabled, submit}) => (
@@ -123,7 +142,7 @@ const BugBountySubmit = ({s, bug_poster, bounty_amount,
                                 <textarea {...text_area_props}
                                           placeholder={pen_test_spiel}
                                           onChange={content_change}/>
-                                <button title={'You must be logged in to be able to submit new posts.'}
+                                <button title={new_post_spiel}
                                         disabled={disabled}
                                         onClick={submit}>Post bug bounty
                                 </button>
@@ -186,7 +205,7 @@ const all_tabs = [POST_TAB, JOB_TAB, EVENT_TAB, BUG_BOUNTY_TAB];
 
 export default @observer class SDSubmitNews extends Component {
 
-  @observable tab_index = 0;
+  @observable tab_index = 1;
 
   @observable post = {
     title: '', content: ''
