@@ -219,7 +219,10 @@ const TabBar = styled.nav`
 const TabItem = styled.p`
   border-style: ${props => props.selected ? 'inset' : 'outset'};
   border-width: 2px;
-  padding: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
   cursor: pointer;
   color: ${colors.site_colors.title};
 `;
