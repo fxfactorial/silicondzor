@@ -26,6 +26,18 @@ import {
 }
 from './with-style';
 
+const Header = styled(Message)`
+  font-size: 34px;
+`;
+
+const LeftMessage = styled(Message)`
+  text-align: left;
+`;
+
+const Rows = styled(NavLinks)`
+  display: inherit;
+`;
+
 /**
    Enables MobX strict mode globally.
    In strict mode, it is not allowed to
@@ -99,17 +111,7 @@ const bugs = [
    descr:'Pentest our security system'}
 ];
 
-const Rows = styled(NavLinks)`
-  display: inherit;
-`;
 
-const Header = styled(Message)`
-  font-size: 34px;
-`;
-
-const LeftMessage = styled(Message)`
-  text-align: left;
-`;
 
 const Guidelines = () => (
   <ContentWrapper>
@@ -141,47 +143,49 @@ const Guidelines = () => (
 );
 
 const Faq = () => (
-  <section>
-    <p>FAQ</p>
+  <ContentWrapper>
+    <Header>FAQ</Header>
     <hr/>
     <section>
-      <ul>
+      <Rows>
         <li>
-          <p>Q: {ital('Who made this?')}</p>
-          <p>A: This was made by {' '}
+          <LeftMessage>Q: Who made this?</LeftMessage>
+          <LeftMessage>A: This was made by {' '}
             <a href={'https://hyegar.com'}>Edgar Aroutiounian</a>
             {' '}and Edgar Khanzadian along with contributions
             by other programmers.
-          </p>
+          </LeftMessage>
         </li>
         <li>
-          <p>Q: {ital('Why is it called ')}
-            <code>silicondzor</code>{ital('?')}</p>
-          <p>A: Because the domain was given for free</p>
+          <LeftMessage>Q: Why is it called
+            <code> silicondzor</code>{ital('?')}</LeftMessage>
+          <LeftMessage>A: Because the domain was given for free</LeftMessage>
         </li>
         <li>
-          <p>Q: {ital('What languages are acceptable to use?')}</p>
-          <p>A: You are free to use any language but the site preference
+          <LeftMessage>Q: What languages are acceptable to use?</LeftMessage>
+          <LeftMessage>A: You are free to use any language but the site preference
             is that you use either written
             Armenian in the Armenian alphabet or English
-          </p>
+          </LeftMessage>
         </li>
         <li>
-          <p>Q: {ital('The UI/UX sucks, when will you change it?')}</p>
-          <p>A: The source code is open and available, you can submit
+          <LeftMessage>
+            Q: The UI/UX sucks, when will you change it?
+          </LeftMessage>
+          <LeftMessage>A: The source code is open and available, you can submit
             a GitHub pull request and if the changes are good then
             it will be accepted.
-          </p>
+          </LeftMessage>
         </li>
         <li>
-          <p>Q: {ital('Why does this remind of something?')}</p>
-          <p>A: Because it should! It was purposefully modeled after
+          <LeftMessage>Q: Why does this remind of something?</LeftMessage>
+          <LeftMessage>A: Because it should! It was purposefully modeled after
             YCombinator's HackerNews.
-          </p>
+          </LeftMessage>
         </li>
-      </ul>
+      </Rows>
     </section>
-  </section>
+  </ContentWrapper>
 );
 
 export default
