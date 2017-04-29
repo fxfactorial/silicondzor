@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import { request_opts } from './utility';
 import colors from './colors';
 import routes from './http-routes';
+import { observable, computed } from 'mobx';
+import { observer } from 'mobx-react';
+import { ContentWrapper } from './with-style';
 
 const text_area_props = {
    minLength: 10, rows: 20, autoCapitalize:'sentences'
@@ -155,187 +158,68 @@ const TechEventSubmit = ({s, time_start, time_end,
   </section>
 );
 
-export default
-class SDSubmitNews extends Component {
+const POST_TAB = 'post';
+const JOB_TAB = 'job';
+const EVENT_TAB = 'event';
+const BUG_BOUNTY_TAB = 'bug bounty';
+const all_tabs = [POST_TAB, JOB_TAB, EVENT_TAB, BUG_BOUNTY_TAB];
 
-  constructor(){
-    super();
-    this.state = {
-      title: '',
-      url: '',
-      content: '',
-      tab: 'post',
-      start: '',
-      end: '',
-      hoursChoice: []
-    };
-    let makeHoursChoice = [];
-    for (let i = 0; i <= 48; ++i) {
-      if (i === 48) {
-        this.state.hoursChoice = makeHoursChoice;
-      } else if (i-Math.round(i/2) < 10 && i % 2 == 0) {
-        makeHoursChoice.push((
-          <option key={i}
-                  value={`0${i-Math.round(i/2)}:00`}>
-            0{i-Math.round(i/2)}:00
-          </option>));
-      } else if (i-Math.round(i/2) < 10 && i % 2 == 1) {
-        makeHoursChoice.push((
-          <option key={i}
-                  value={`0${i-Math.round(i/2)}:30`}>
-            0{i - Math.round(i / 2)}:30
-          </option>));
-      } else if (i-Math.round(i/2) >= 10 && i % 2 == 0) {
-        makeHoursChoice.push((
-          <option key={i}
-                  value={`${i-Math.round(i/2)}:00`}>
-            {i-Math.round(i/2)}:00
-          </option>));
-      } else if (i-Math.round(i/2) >= 10 && i % 2 == 1) {
-        makeHoursChoice.push((
-          <option key={i}
-                  value={`${i-Math.round(i/2)}:30`}>
-            {i-Math.round(i/2)}:30
-          </option>));
-      }
-    }
+const SubmissionContent = styled(ContentWrapper)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const SubmitBanner = styled.h1`
+  padding-top: 10px;
+  font-weight: 300;
+  font-size: 34px;
+  padding-bottom: 10px;
+`;
+
+// Right down left up
+const SubmissionBox = styled.div`
+  padding-top: 10px;
+  box-shadow: 3px 3px 0px 0px ${colors.site_colors.banner};
+  background-color: red;
+  min-height: 500px;
+  min-width: 420px;
+`;
+
+const TabBar = styled.nav`
+  display: flex;
+  flex-direction: row;
+  background-color: blue;
+  justify-content: space-around;
+`;
+
+const TabItem = styled.p`
+  border-style: dotted;
+`;
+
+export default @observer class SDSubmitNews extends Component {
+
+  @observable tab_index = 0;
+
+  @observable post = {
+    title: '', content: ''
   }
 
-  submitPost = async () => {
-    const {title, url, content} = this.state;
-    const send_to_server = request_opts({title, web_url: url, content});
-    const answer = await fetch(routes.post.submit_post, send_to_server);
-    const answer_json = await answer.json();
-    console.log(answer_json);
-  }
+  @computed get tab() { return all_tabs[this.tab_index]; }
 
-  submitJob = async () => {
-    const {title, url, content} = this.state;
-    const send_to_server = request_opts({title, web_url: url, content});
-    const answer = await fetch(`/submit-job`, send_to_server);
-    const answer_json = await answer.json();
-    console.log(answer_json);
-  }
-
-  submitBugBounty = async () => {
-    const {title, url, content} = this.state;
-    const send_to_server = request_opts({title, web_url: url, content});
-    const answer = await fetch(`/submit-job`, send_to_server);
-    //need to add bug-bounty to sql and server
-    const answer_json = await answer.json();
-    console.log(answer_json);
-  }
-
-  submitEvent = async () => {
-    const {title, url, content, start, end} = this.state;
-    const send_to_server = request_opts({
-      event_title: title,
-      event_description: content,
-      start,
-      end,
-      web_url: url,
-      content
-    });
-    const answer = await fetch(`/submit-job`, send_to_server);
-    //need to add web_url to server and sql
-    const answer_json = await answer.json();
-    console.log(answer_json);
-  }
-
-  titleChange = (e) => {
-    const title = e.currentTarget.value;
-    this.setState({title});
-  }
-
-  urlChange = (e) => {
-    const url = e.currentTarget.value;
-    this.setState({url});
-  }
-
-  contentChange = (e) => {
-    const content = e.currentTarget.value;
-    this.setState({content});
-  }
-
-  onTimeChangeFrom = (e) => {
-    const time = e.currentTarget.value;
-    this.setState({ start: time });
-  }
-
-  onTimeChangeTo = (e) => {
-    const time = e.currentTarget.value;
-    this.setState({ end: time });
-  }
-
-  tab_change = tab => this.setState({tab});
+  check = e => {
+    console.log(e.target.value);
+  };
 
   render () {
-
+    const tabs = all_tabs.map(tab => <TabItem key={tab}>{tab}</TabItem>);
     return (
-      <div>
-
-        <section>
-          <p style={this.state.tab === 'post' ? {
-               borderTopLeftRadius: 7,
-               borderBottomLeftRadius: 7
-               } : {
-
-                 borderTopLeftRadius: 7,
-                 borderBottomLeftRadius: 7
-             }} onClick={this.tab_change.bind(null, 'post')}>
-            Post
-          </p>
-          <p onClick={this.tab_change.bind(null, 'job')}>
-            Job
-          </p>
-          <p onClick={this.tab_change.bind(null, 'bug-bounty')}>
-            Bug Bounty
-          </p>
-          <p style={this.state.tab === 'event' ? {
-               borderTopRightRadius: 7,
-               borderBottomRightRadius: 7
-               } : {
-                 borderTopRightRadius: 7,
-                 borderBottomRightRadius: 7
-             }} onClick={this.tab_change.bind(null, 'event')}>
-            Event
-          </p>
-        </section>
-
-        <section>
-          <PostSubmit
-            s={this.state.tab === 'post'
-            ? {display: 'block'} : {display: 'none'}}
-            url_change={this.urlChange}
-            text_change={this.contentChange}
-            disabled={false}
-            submit={this.submitPost}
-            input_change={this.titleChange}/>
-
-          <JobSubmit
-            s={this.state.tab === 'job'
-            ? {display: 'block'} : {display: 'none'}}
-            emply_change={this.employer_change}
-            title_change={this.job_title_change}
-            text_change={this.contentChange}
-            location_change={this.location_change}
-            contact_change={this.contact_change}
-            disabled={false}
-            submit={this.job_submit}
-            />
-
-          <BugBountySubmit
-            s={this.state.tab === 'bug-bounty'
-            ? {display: 'block'} : {display: 'none'}}
-            />
-
-          <TechEventSubmit
-            s={this.state.tab === 'event'
-            ? {display: 'block'} : {display: 'none'}}
-            />
-
-        </section>
-      </div>
+      <SubmissionContent>
+        <SubmitBanner>Submit Content</SubmitBanner>
+        <SubmissionBox>
+          <TabBar>{tabs}</TabBar>
+        </SubmissionBox>
+      </SubmissionContent>
     );
   }
 };
