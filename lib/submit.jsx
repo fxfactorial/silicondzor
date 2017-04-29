@@ -126,29 +126,37 @@ const new_post_spiel =
       'You must be logged in to be able to submit new posts.';
 
 const BugBountySubmit = ({s, bug_poster, bounty_amount,
-                          content_change, disabled, submit}) => (
-                            <section>
-                              <p>New Bug Bounty</p>
-                              <hr/>
-                              <section>
-                                <label>Offered by:</label>
-                                <input placeholder={'Central Bank of Armenia'}
-                                       onChange={bug_poster}/>
-                                <label>Bounty:</label>
-                                <input
-                                  placeholder={'350.000AMD'}
-                                  onChange={bounty_amount}/>
-                                <p>Content:</p>
-                                <textarea {...text_area_props}
-                                          placeholder={pen_test_spiel}
-                                          onChange={content_change}/>
-                                <button title={new_post_spiel}
-                                        disabled={disabled}
-                                        onClick={submit}>Post bug bounty
-                                </button>
-                              </section>
-                            </section>
-                          );
+                          content_change, disabled, submit}) =>
+      (
+        <PostSubmission>
+          <Message>New Bug Bounty</Message>
+          <hr style={{width: '90%'}}/>
+          <PostSubmission>
+            <RowField>
+              <label>Offered by:</label>
+              <input placeholder={'Central Bank of Armenia'}
+                     style={{minWidth: '200px'}}
+                     onChange={bug_poster}/>
+            </RowField>
+            <RowField>
+              <label>Bounty:</label>
+              <input
+                style={{minWidth: '200px'}}
+                placeholder={'350.000AMD'}
+                onChange={bounty_amount}/>
+            </RowField>
+            <Message>Content:</Message>
+
+            <TextArea {...text_area_props}
+                      placeholder={pen_test_spiel}
+                      onChange={content_change}/>
+            <SubmissionButton title={new_post_spiel}
+                    disabled={disabled}
+                    onClick={submit}>Post bug bounty
+            </SubmissionButton>
+          </PostSubmission>
+        </PostSubmission>
+      );
 
 const TechEventSubmit = ({s, time_start, time_end,
                           creator, content, disabled, submit}) =>
@@ -184,11 +192,11 @@ const TechEventSubmit = ({s, time_start, time_end,
               <TextArea {...text_area_props}
                         placeholder={'Event Description'}
                         onChange={content}/>
-              <button title={tech_event_spiel}
-                      disabled={disabled}
-                      onClick={submit}>
+              <SubmissionButton title={tech_event_spiel}
+                                disabled={disabled}
+                                onClick={submit}>
                 Post tech event
-              </button>
+              </SubmissionButton>
             </PostSubmission>
 
           </PostSubmission>
@@ -203,7 +211,7 @@ const all_tabs = [POST_TAB, JOB_TAB, EVENT_TAB, BUG_BOUNTY_TAB];
 
 export default @observer class SDSubmitNews extends Component {
 
-  @observable tab_index = 2;
+  @observable tab_index = 3;
 
   @observable post = {
     title: '', content: ''
