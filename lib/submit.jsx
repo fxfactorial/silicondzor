@@ -7,7 +7,8 @@ import { request_opts } from './utility';
 import colors from './colors';
 import routes from './http-routes';
 import { ContentWrapper, TextArea, PostSubmission, RowField,
-         Input, Message, SubmissionButton
+         Input, Message, SubmissionButton, SubmissionContent,
+         SubmitBanner, SubmissionBox, TabBar, TabItem
        } from './with-style';
 
 const text_area_props = {
@@ -182,50 +183,6 @@ const JOB_TAB = 'job';
 const EVENT_TAB = 'event';
 const BUG_BOUNTY_TAB = 'bug bounty';
 const all_tabs = [POST_TAB, JOB_TAB, EVENT_TAB, BUG_BOUNTY_TAB];
-
-const SubmissionContent = styled(ContentWrapper)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const SubmitBanner = styled.h1`
-  padding-top: 10px;
-  font-weight: 300;
-  font-size: 34px;
-  padding-bottom: 10px;
-`;
-
-// Right down left up
-// This needs to be a media query
-const SubmissionBox = styled.div`
-  padding-top: 10px;
-  box-shadow: 3px 3px 0px 0px ${colors.site_colors.banner};
-  background-color: ${colors.site_colors.bg};
-  min-height: 500px;
-  min-width: 620px;
-`;
-
-const TabBar = styled.nav`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  margin-left: 5px;
-  margin-right: 5px;
-  padding: 5px;
-  background-color: ${colors.site_colors.bg};
-`;
-
-const TabItem = styled.p`
-  border-style: ${props => props.selected ? 'inset' : 'outset'};
-  border-width: 2px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-left: 20px;
-  padding-right: 20px;
-  cursor: pointer;
-  color: ${colors.site_colors.title};
-`;
 
 export default @observer class SDSubmitNews extends Component {
 

@@ -103,9 +103,52 @@ const SubmissionButton = styled.button`
   margin-bottom: 10px;
 `;
 
+const SubmissionContent = styled(ContentWrapper)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const SubmitBanner = styled.h1`
+  padding-top: 10px;
+  font-weight: 300;
+  font-size: 34px;
+  padding-bottom: 10px;
+`;
+
+const SubmissionBox = styled.div`
+  padding-top: 10px;
+  box-shadow: 3px 3px 0px 0px ${colors.site_colors.banner};
+  background-color: ${colors.site_colors.bg};
+  min-height: 500px;
+  min-width: 620px;
+`;
+
+const TabBar = styled.nav`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 5px;
+  background-color: ${colors.site_colors.bg};
+`;
+
+const TabItem = styled.p`
+  border-style: ${props => props.selected ? 'inset' : 'outset'};
+  border-width: 2px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  cursor: pointer;
+  color: ${colors.site_colors.title};
+`;
+
 export {
   StyledLink, NavLinks, NavBar, NewsHeadLine,
   SiteTitle, BottomFooter, SearchBar, ContentWrapper,
   TextArea, PostSubmission, RowField, Input, Message,
-  SubmissionButton, ByLine
+  SubmissionButton, ByLine, SubmissionContent, SubmitBanner,
+  SubmissionBox, TabBar, TabItem
 }
