@@ -181,7 +181,7 @@ const SubmitBanner = styled.h1`
 const SubmissionBox = styled.div`
   padding-top: 10px;
   box-shadow: 3px 3px 0px 0px ${colors.site_colors.banner};
-  background-color: ${colors.site_colors.text};
+  background-color: ${colors.site_colors.bg};
   min-height: 500px;
   min-width: 420px;
 `;
@@ -198,6 +198,7 @@ const TabBar = styled.nav`
 
 const TabItem = styled.p`
   border-style: ${props => props.selected ? 'inset' : 'outset'};
+  border-width: 2px;
   padding: 5px;
   cursor: pointer;
   color: ${colors.site_colors.title};
@@ -216,6 +217,15 @@ export default @observer class SDSubmitNews extends Component {
   tab_select = e => this.tab_index = all_tabs.indexOf(e.target.textContent);
 
   render () {
+    let content = null;
+    switch(this.tab_index) {
+    case 0: content = <PostSubmit/>; break;
+    case 1: content = <JobSubmit/>; break;
+    case 2: content = <TechEventSubmit/>; break;
+    default:
+      content = <BugBountySubmit/>;
+    }
+
     const tabs =
           all_tabs.map(tab => (
             <TabItem selected={tab === this.tab ? true : false}
@@ -227,6 +237,7 @@ export default @observer class SDSubmitNews extends Component {
         <SubmitBanner>Submit Content</SubmitBanner>
         <SubmissionBox>
           <TabBar>{tabs}</TabBar>
+          {content}
         </SubmissionBox>
       </SubmissionContent>
     );
