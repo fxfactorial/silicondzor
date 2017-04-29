@@ -5,6 +5,7 @@ import { Route, Link, NavLink } from 'react-router-dom';
 import subDays from 'date-fns/sub_days';
 import { observer } from "mobx-react";
 import { observable, useStrict } from "mobx";
+import styled from 'styled-components';
 
 import Resquared from './about';
 import SDBugBounty from './bug-exchange';
@@ -19,7 +20,11 @@ import routes from './http-routes';
 import SDUserProfile from './user-profile';
 import SDDiscussion from './discussion';
 import { ital } from './utility';
-import { StyledLink, NavLinks, NavBar, SiteTitle } from './with-style';
+import {
+  StyledLink, NavLinks, NavBar, SiteTitle, ContentWrapper,
+  Message
+}
+from './with-style';
 
 /**
    Enables MobX strict mode globally.
@@ -94,36 +99,45 @@ const bugs = [
    descr:'Pentest our security system'}
 ];
 
+const Rows = styled(NavLinks)`
+  display: inherit;
+`;
+
+const Header = styled(Message)`
+  font-size: 34px;
+`;
+
+const LeftMessage = styled(Message)`
+  text-align: left;
+`;
+
 const Guidelines = () => (
-  <section>
-    <p>Guidelines</p>
+  <ContentWrapper>
+    <Header>Guidelines</Header>
     <hr/>
-    <section>
-      <ul className={'faqs'}>
+    <section style={{paddingTop: '20px'}}>
+      <Rows className={'faqs'}>
         <li>
-          <p>
+          <LeftMessage>
             Silicondzor is a central place for everything tech in Armenia
             and the Caucasus region writ large. As such any discussion
             should be respectful and without personal insults. Moderators
             reserve the right to delete posts without prior notice.
-          </p>
+          </LeftMessage>
         </li>
         <li>
-          <p>
+          <LeftMessage>
             The jobs board should only include
             jobs related to {ital('tech')} and likewise the
             tech calendar should only have {ital('tech')} events.
-          </p>
+          </LeftMessage>
         </li>
         <li>
-          <p>
-            Spamming is also not allowed, i.e. no posting of
-            paid class offerings.
-          </p>
+          <LeftMessage>Spamming is not allowed</LeftMessage>
         </li>
-      </ul>
+      </Rows>
     </section>
-  </section>
+  </ContentWrapper>
 );
 
 const Faq = () => (
@@ -194,7 +208,8 @@ class Application extends Component {
 
               <NavBar>
                 <NavLinks>{elements}</NavLinks>
-                <NavLink style={{paddingRight: '20px', color: 'black', fontWeight: 300}}
+                <NavLink style={{paddingRight: '20px',
+                         color: 'black', fontWeight: 300}}
                          to={"/login"}>
                   login
                 </NavLink>

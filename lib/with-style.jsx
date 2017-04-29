@@ -94,6 +94,7 @@ const Input = styled.input`
 
 const Message = styled.p`
   padding-top: 10px;
+  text-align: center;
   font-weight: 300;
 `;
 
