@@ -153,48 +153,46 @@ const BugBountySubmit = ({s, bug_poster, bounty_amount,
 const TechEventSubmit = ({s, time_start, time_end,
                           creator, content, disabled, submit}) =>
       (
-        <section>
-          <p>New Tech Event</p>
-          <hr/>
-          <section>
+        <PostSubmission>
+          <Message>New Tech Event</Message>
+          <hr style={{width: '90%'}}/>
+          <PostSubmission>
+            <RowField>
+              <label>Start time:</label>
+              <select
+                style={{minWidth: '150px'}}
+                onChange={time_start}>
+                <option>---</option>
+              </select>
+            </RowField>
 
-            <section>
+            <RowField>
+              <label>End time:</label>
+              <select
+                style={{minWidth: '150px'}}
+                onChange={time_end}>
+                <option>---</option>
+              </select>
+            </RowField>
 
-              <section>
-                <label>Start time:</label>
-                <select onChange={time_start}>
-                  <option>---</option>
-                </select>
-              </section>
-
-              <section>
-                <label>End time:</label>
-                <select onChange={time_end}>
-                  <option>---</option>
-                </select>
-              </section>
-
-            </section>
-
-            <section>
-              <label>Creator or group name:</label>
-              <input placeholder={'Event host'}
-                     onChange={creator}/>
-              <section>
-                <label>Event Description:</label>
-                <textarea {...text_area_props}
-                          placeholder={'ISTC is hosting...'}
-                          onChange={content}/>
-              </section>
+            <PostSubmission>
+              <RowField>
+                <label>Creator or group name:</label>
+                <input placeholder={'Event host'}
+                       onChange={creator}/>
+              </RowField>
+              <TextArea {...text_area_props}
+                        placeholder={'Event Description'}
+                        onChange={content}/>
               <button title={tech_event_spiel}
                       disabled={disabled}
                       onClick={submit}>
                 Post tech event
               </button>
-            </section>
+            </PostSubmission>
 
-          </section>
-        </section>
+          </PostSubmission>
+        </PostSubmission>
       );
 
 const POST_TAB = 'post';
@@ -205,7 +203,7 @@ const all_tabs = [POST_TAB, JOB_TAB, EVENT_TAB, BUG_BOUNTY_TAB];
 
 export default @observer class SDSubmitNews extends Component {
 
-  @observable tab_index = 1;
+  @observable tab_index = 2;
 
   @observable post = {
     title: '', content: ''
