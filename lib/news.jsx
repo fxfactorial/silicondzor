@@ -9,7 +9,22 @@ import styled from 'styled-components';
 import colors from './colors';
 import { request_opts, document_current_page } from './utility';
 import routes from './http-routes';
-import { StyledLink, NewsWrapper } from './with-style';
+import { StyledLink, ContentWrapper } from './with-style';
+
+const NewsHeadLine = styled.article`
+  padding-bottom: 5px;
+  padding-top: 20px;
+  font-weight: 300;
+`;
+
+const ByLine = styled.p`
+  font-weight: 300;
+  padding-left: 20px;
+  font-size: 14px;
+  display: flex;
+  width: 80%;
+  justify-content: space-around;
+`;
 
 class NewsItem extends Component {
 
@@ -43,32 +58,32 @@ class NewsItem extends Component {
            web_link, upvotes, downvotes,
            content, idx, id} = this.props;
     const to_author =
-          <StyledLink to={`/user?id=${creator}`}>{creator}</StyledLink>;
+          <Link to={`/user?id=${creator}`}>{creator}</Link>;
     const flag =
       <span onClick={this.flag_post}> flag </span>;
     const drilldown = (
-      <StyledLink to={`/item/${id}?smthreallycool=123&hey=123`}>
+      <Link to={`/item/${id}?smthreallycool=123&hey=123`}>
         {comment_count === 0 ? 'discuss' : `${comment_count} comments`}
-      </StyledLink>);
+      </Link>);
     const to_website =
-      !web_link ? null
-      : (
-        <a href={web_link}>({web_link})</a>
-      );
+          !web_link ? null
+          : <a href={web_link}>({web_link})</a>;
     // Hiding should have a fun animation
     const hide =
       <span onClick={this.hide_this_post}>hide</span>;
+    /** TODO Make this say how much time ago, use datefns */
+    const date = (new Date(creation_time).toLocaleDateString());
     // Need to add a favorites in case we are logged in.
     const byline = (
-      <p>
-        upvotes:{upvotes} | downvotes:{downvotes} |
-        points by {to_author} | <time>time: {creation_time}</time>|
+      <ByLine>
+        <span>upvotes: {upvotes}</span> | <span>downvotes: {downvotes}</span> |
+        by{to_author} | <time>time: {date}</time>|
         {flag} | {hide} | {drilldown}
-      </p>
+      </ByLine>
     );
     return (
       <div>
-        <article>
+        <NewsHeadLine>
           <p>
             <span>{idx}.</span>
             <i onClick={this.up_vote}
@@ -76,9 +91,9 @@ class NewsItem extends Component {
                className={'material-icons'}>arrow_upward</i>
             {title} {to_website}
           </p>
-        </article>
+        </NewsHeadLine>
         <hr/>
-        <section>{byline}</section>
+        {byline}
       </div>
     );
   }
@@ -102,7 +117,7 @@ class SDNews extends Component {
   @action componentDidMount() {
     const page = document_current_page();
     if (page === null || page === 0) {
-      this.news_items.set('0', [window.__INIT_NEWS__[0]]);
+      this.news_items.set('0', [window.__INIT_NEWS__[0], window.__INIT_NEWS__[1]]);
     } else {
       this._current_page_ = '' + page;
       if (this.news_items.get(this._current_page_) === undefined) {
@@ -125,10 +140,10 @@ class SDNews extends Component {
     );
 
     return (
-      <NewsWrapper>
+      <ContentWrapper>
         {items}
-        <StyledLink to={link_to}>More</StyledLink>
-      </NewsWrapper>
+        <Link style={{fontWeight: 300, color: 'black'}}to={link_to}>More</Link>
+      </ContentWrapper>
     );
   }
 }

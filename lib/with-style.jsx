@@ -13,12 +13,13 @@ const NavLinks = styled.ul`
   list-style-type: none;
 `;
 
-const NewsWrapper = styled.div`
-  padding-top: 20px;
+const ContentWrapper = styled.div`
+  padding-top: 10px;
   padding-left: 20px;
   padding-right: 20px;
   min-height: 625px;
   overflow-y: scroll;
+  box-shadow: 3px 3px 5px 6px #ccc;
   background-color: ${colors.site_colors.cards};
 `;
 
@@ -52,4 +53,4 @@ const SearchBar = styled.div`
 `;
 
 export { StyledLink, NavLinks, NavBar,
-         SiteTitle, BottomFooter, SearchBar, NewsWrapper }
+         SiteTitle, BottomFooter, SearchBar, ContentWrapper }
