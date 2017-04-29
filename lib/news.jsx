@@ -9,22 +9,7 @@ import styled from 'styled-components';
 import colors from './colors';
 import { request_opts, document_current_page } from './utility';
 import routes from './http-routes';
-import { StyledLink, ContentWrapper } from './with-style';
-
-const NewsHeadLine = styled.article`
-  padding-bottom: 5px;
-  padding-top: 20px;
-  font-weight: 300;
-`;
-
-const ByLine = styled.p`
-  font-weight: 300;
-  padding-left: 20px;
-  font-size: 14px;
-  display: flex;
-  width: 35rem;
-  justify-content: space-around;
-`;
+import { StyledLink, ContentWrapper, NewsHeadLine, ByLine } from './with-style';
 
 class NewsItem extends Component {
 

@@ -52,5 +52,22 @@ const SearchBar = styled.div`
   flex-direction: row;
 `;
 
-export { StyledLink, NavLinks, NavBar,
-         SiteTitle, BottomFooter, SearchBar, ContentWrapper }
+const NewsHeadLine = styled.article`
+  padding-bottom: 5px;
+  padding-top: 20px;
+  font-weight: 300;
+`;
+
+const ByLine = styled.p`
+  font-weight: 300;
+  padding-left: 20px;
+  font-size: 14px;
+  display: flex;
+  width: 35rem;
+  justify-content: space-around;
+`;
+
+
+export { StyledLink, NavLinks, NavBar, NewsHeadLine,
+         SiteTitle, BottomFooter, SearchBar, ContentWrapper,
+         ByLine}
