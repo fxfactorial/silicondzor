@@ -17,7 +17,7 @@ const ContentWrapper = styled.div`
   padding-top: 10px;
   padding-left: 20px;
   padding-right: 20px;
-  min-height: 625px;
+  min-height: 650px;
   overflow-y: scroll;
   box-shadow: 3px 3px 5px 6px #ccc;
   background-color: ${colors.site_colors.cards};
@@ -67,7 +67,45 @@ const ByLine = styled.p`
   justify-content: space-around;
 `;
 
+const TextArea = styled.textarea`
+  min-width: 200px;
+`;
 
-export { StyledLink, NavLinks, NavBar, NewsHeadLine,
-         SiteTitle, BottomFooter, SearchBar, ContentWrapper,
-         ByLine}
+const PostSubmission = styled.section`
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const RowField = styled.div`
+  display: flex;
+  flex-direction: row;
+  font-size: 1.5em;
+  font-weight: 300;
+  justify-content: space-between;
+  min-width: 370px;
+`;
+
+const Input = styled.input`
+  min-width:300px
+`;
+
+const Message = styled.p`
+  padding-top: 10px;
+  font-weight: 300;
+`;
+
+const SubmissionButton = styled.button`
+  padding: 7px;
+  min-width: 120px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;
+
+export {
+  StyledLink, NavLinks, NavBar, NewsHeadLine,
+  SiteTitle, BottomFooter, SearchBar, ContentWrapper,
+  TextArea, PostSubmission, RowField, Input, Message,
+  SubmissionButton, ByLine
+}

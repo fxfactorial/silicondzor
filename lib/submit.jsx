@@ -1,44 +1,63 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { observable, computed } from 'mobx';
+import { observer } from 'mobx-react';
 
 import { request_opts } from './utility';
 import colors from './colors';
 import routes from './http-routes';
-import { observable, computed } from 'mobx';
-import { observer } from 'mobx-react';
-import { ContentWrapper } from './with-style';
+import { ContentWrapper, TextArea, PostSubmission, RowField,
+         Input, Message, SubmissionButton
+       } from './with-style';
 
 const text_area_props = {
-   minLength: 10, rows: 20, autoCapitalize:'sentences'
- };
+  minLength: 10, rows: 15, autoCapitalize:'sentences', cols: 80
+};
 
-const PostSubmit = ({input_change, disabled,
-                     url_change, text_change, submit, s}) => (
-  <section>
-    <p>New Post</p>
-    <hr/>
-    <section>
-      <label>Title:</label>
-      <input placeholder={'Title for your discussion piece'}
-             onChange={input_change}/>
-      <label>URL:</label>
-      <input
-        placeholder={'URL to what you want to link to'}
-        onChange={url_change}/>
-      <p>OR</p>
-      <p>Content:</p>
-      <textarea {...text_area_props}
-                placeholder={'New tech discussion in Armenia'}
-                onChange={text_change}/>
-      <p>
-        Leave URL field blank if submitting a discussion
-      </p>
-      <button title={'You must be logged in to be able to submit new posts'}
-              disabled={disabled}
-              onClick={submit}>Submit post</button>
-    </section>
-  </section>
-);
+
+const b_title = 'You must be logged in to be able to submit new posts';
+
+const PostSubmit =
+      ({input_change, disabled,
+        url_change, text_change, submit, s}) => {
+          return (
+            <PostSubmission>
+              <h2 style={{fontWeight: 300}}>New Post</h2>
+              <hr style={{width: '90%'}}/>
+
+              <section>
+                <PostSubmission>
+
+                  <RowField>
+                    <label>Title:</label>
+                    <Input placeholder={'Title for your discussion piece'}
+                           onChange={input_change}/>
+                  </RowField>
+
+                  <RowField>
+                    <label>URL:</label>
+                    <Input
+                      placeholder={'URL to what you want to link to'}
+                      onChange={url_change}/>
+                  </RowField>
+
+                  <Message>OR</Message>
+                  <Message>Content</Message>
+
+                  <textarea {...text_area_props}
+                            placeholder={'New tech discussion in Armenia'}
+                            onChange={text_change}/>
+                  <Message>Leave URL field blank if submitting a discussion</Message>
+                  <SubmissionButton title={b_title}
+                                    disabled={disabled}
+                                    onClick={submit}>Submit post</SubmissionButton>
+                </PostSubmission>
+
+
+              </section>
+            </PostSubmission>
+          );
+        };
 
 const react_spiel =
       'We are looking for great ReactJS programmers in Yerevan.';
@@ -46,40 +65,40 @@ const job_post_spiel =
       'You must be logged in to be able to submit new job postings.';
 
 const JobSubmit = ({s, emply_change, title_change,
-                    location_change, contact_change,
-                    text_change, disabled, submit}) => (
-  <section>
-    <p>New Job Posting</p>
-    <hr/>
-    <section>
-      <label>Employer:</label>
-      <input placeholder={'Hayastan Tech LLC'}
-             onChange={emply_change}/>
-      <label>Salary, can be a range:</label>
-      <input
-        placeholder={'350.000AMD a month'}
-        onChange={title_change}/>
+      location_change, contact_change,
+      text_change, disabled, submit}) => (
+        <section>
+          <p>New Job Posting</p>
+          <hr/>
+          <section>
+            <label>Employer:</label>
+            <input placeholder={'Hayastan Tech LLC'}
+                   onChange={emply_change}/>
+            <label>Salary, can be a range:</label>
+            <input
+              placeholder={'350.000AMD a month'}
+              onChange={title_change}/>
 
-      <label>Location:</label>
-      <input
-        placeholder={'Yerevan, Armenia'}
-        onChange={location_change}/>
+            <label>Location:</label>
+            <input
+              placeholder={'Yerevan, Armenia'}
+              onChange={location_change}/>
 
-      <label>Contact Info:</label>
-      <input
-        placeholder={'jobs@somehyetechllc.am'}
-        onChange={contact_change}/>
+            <label>Contact Info:</label>
+            <input
+              placeholder={'jobs@somehyetechllc.am'}
+              onChange={contact_change}/>
 
-      <p>Job description</p>
-      <textarea {...text_area_props}
-                placeholder={react_spiel}
-                onChange={text_change}/>
-      <button title={job_post_spiel}
-              disabled={disabled}
-              onClick={submit}>Post job</button>
-    </section>
-  </section>
-);
+            <p>Job description</p>
+            <textarea {...text_area_props}
+                      placeholder={react_spiel}
+                      onChange={text_change}/>
+            <button title={job_post_spiel}
+                    disabled={disabled}
+                    onClick={submit}>Post job</button>
+          </section>
+        </section>
+      );
 
 const pen_test_spiel =
       'Come pentest our system, find a bug and make Armenia more secure.';
@@ -88,28 +107,28 @@ const tech_event_spiel =
 
 const BugBountySubmit = ({s, bug_poster, bounty_amount,
                           content_change, disabled, submit}) => (
-  <section>
-    <p>New Bug Bounty</p>
-    <hr/>
-    <section>
-      <label>Offered by:</label>
-      <input placeholder={'Central Bank of Armenia'}
-             onChange={bug_poster}/>
-      <label>Bounty:</label>
-      <input
-        placeholder={'350.000AMD'}
-        onChange={bounty_amount}/>
-      <p>Content:</p>
-      <textarea {...text_area_props}
-                placeholder={pen_test_spiel}
-                onChange={content_change}/>
-      <button title={'You must be logged in to be able to submit new posts.'}
-              disabled={disabled}
-              onClick={submit}>Post bug bounty
-      </button>
-    </section>
-  </section>
-);
+                            <section>
+                              <p>New Bug Bounty</p>
+                              <hr/>
+                              <section>
+                                <label>Offered by:</label>
+                                <input placeholder={'Central Bank of Armenia'}
+                                       onChange={bug_poster}/>
+                                <label>Bounty:</label>
+                                <input
+                                  placeholder={'350.000AMD'}
+                                  onChange={bounty_amount}/>
+                                <p>Content:</p>
+                                <textarea {...text_area_props}
+                                          placeholder={pen_test_spiel}
+                                          onChange={content_change}/>
+                                <button title={'You must be logged in to be able to submit new posts.'}
+                                        disabled={disabled}
+                                        onClick={submit}>Post bug bounty
+                                </button>
+                              </section>
+                            </section>
+                          );
 
 const TechEventSubmit = ({s, time_start, time_end,
                           creator, content, disabled, submit}) =>
@@ -121,42 +140,42 @@ const TechEventSubmit = ({s, time_start, time_end,
 
             <section>
 
-        <section>
-          <label>Start time:</label>
-          <select onChange={time_start}>
-            <option>---</option>
-          </select>
+              <section>
+                <label>Start time:</label>
+                <select onChange={time_start}>
+                  <option>---</option>
+                </select>
+              </section>
+
+              <section>
+                <label>End time:</label>
+                <select onChange={time_end}>
+                  <option>---</option>
+                </select>
+              </section>
+
+            </section>
+
+            <section>
+              <label>Creator or group name:</label>
+              <input placeholder={'Event host'}
+                     onChange={creator}/>
+              <section>
+                <label>Event Description:</label>
+                <textarea {...text_area_props}
+                          placeholder={'ISTC is hosting...'}
+                          onChange={content}/>
+              </section>
+              <button title={tech_event_spiel}
+                      disabled={disabled}
+                      onClick={submit}>
+                Post tech event
+              </button>
+            </section>
+
+          </section>
         </section>
-
-        <section>
-          <label>End time:</label>
-          <select onChange={time_end}>
-            <option>---</option>
-          </select>
-        </section>
-
-      </section>
-
-      <section>
-        <label>Creator or group name:</label>
-        <input placeholder={'Event host'}
-               onChange={creator}/>
-        <section>
-          <label>Event Description:</label>
-          <textarea {...text_area_props}
-                    placeholder={'ISTC is hosting...'}
-                    onChange={content}/>
-        </section>
-        <button title={tech_event_spiel}
-                disabled={disabled}
-                onClick={submit}>
-          Post tech event
-        </button>
-      </section>
-
-    </section>
-  </section>
-);
+      );
 
 const POST_TAB = 'post';
 const JOB_TAB = 'job';
@@ -178,12 +197,13 @@ const SubmitBanner = styled.h1`
 `;
 
 // Right down left up
+// This needs to be a media query
 const SubmissionBox = styled.div`
   padding-top: 10px;
   box-shadow: 3px 3px 0px 0px ${colors.site_colors.banner};
   background-color: ${colors.site_colors.bg};
   min-height: 500px;
-  min-width: 420px;
+  min-width: 620px;
 `;
 
 const TabBar = styled.nav`
@@ -227,11 +247,11 @@ export default @observer class SDSubmitNews extends Component {
     }
 
     const tabs =
-          all_tabs.map(tab => (
-            <TabItem selected={tab === this.tab ? true : false}
-                     onClick={this.tab_select}
-                     key={tab}>{tab}</TabItem>
-          ));
+      all_tabs.map(tab => (
+        <TabItem selected={tab === this.tab ? true : false}
+                 onClick={this.tab_select}
+                 key={tab}>{tab}</TabItem>
+      ));
     return (
       <SubmissionContent>
         <SubmitBanner>Submit Content</SubmitBanner>
