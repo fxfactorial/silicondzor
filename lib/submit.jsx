@@ -181,7 +181,7 @@ const SubmitBanner = styled.h1`
 const SubmissionBox = styled.div`
   padding-top: 10px;
   box-shadow: 3px 3px 0px 0px ${colors.site_colors.banner};
-  background-color: red;
+  background-color: ${colors.site_colors.text};
   min-height: 500px;
   min-width: 420px;
 `;
@@ -189,12 +189,18 @@ const SubmissionBox = styled.div`
 const TabBar = styled.nav`
   display: flex;
   flex-direction: row;
-  background-color: blue;
   justify-content: space-around;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 5px;
+  background-color: ${colors.site_colors.bg};
 `;
 
 const TabItem = styled.p`
-  border-style: dotted;
+  border-style: ${props => props.selected ? 'inset' : 'outset'};
+  padding: 5px;
+  cursor: pointer;
+  color: ${colors.site_colors.title};
 `;
 
 export default @observer class SDSubmitNews extends Component {
@@ -207,12 +213,15 @@ export default @observer class SDSubmitNews extends Component {
 
   @computed get tab() { return all_tabs[this.tab_index]; }
 
-  check = e => {
-    console.log(e.target.value);
-  };
+  tab_select = e => this.tab_index = all_tabs.indexOf(e.target.textContent);
 
   render () {
-    const tabs = all_tabs.map(tab => <TabItem key={tab}>{tab}</TabItem>);
+    const tabs =
+          all_tabs.map(tab => (
+            <TabItem selected={tab === this.tab ? true : false}
+                     onClick={this.tab_select}
+                     key={tab}>{tab}</TabItem>
+          ));
     return (
       <SubmissionContent>
         <SubmitBanner>Submit Content</SubmitBanner>
