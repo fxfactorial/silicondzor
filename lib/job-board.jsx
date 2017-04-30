@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import colors from './colors';
 import { ital } from './utility';
+import { ContentWrapper } from './with-style';
 
 const JobCard = (
   {contact_info, employer, downvote_handler, idx,
@@ -26,7 +26,6 @@ const JobCard = (
     </section>
   );
 
-
 export default class SDJobs extends Component {
 
   downvote = () => {
@@ -49,7 +48,11 @@ export default class SDJobs extends Component {
                      key={props.job_descr}
                      />
           ));
-    return <div>{postings}</div>;
+    return (
+      <ContentWrapper>
+        {postings}
+      </ContentWrapper>
+    );
   }
 
 };

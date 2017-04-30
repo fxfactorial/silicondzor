@@ -17,7 +17,6 @@ const CalendarWrapper = styled.div`
   box-shadow: 3px 3px 0px 0px ${colors.site_colors.banner};
   font-weight: 300;
   padding: 20px;
-  border-radius: 10px;
 `;
 
 export default class SDTechCalendar extends Component {

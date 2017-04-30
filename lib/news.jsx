@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import colors from './colors';
 import { request_opts, document_current_page } from './utility';
 import routes from './http-routes';
-import { StyledLink, ContentWrapper, NewsHeadLine, ByLine } from './with-style';
+import { StyledLink, ContentWrapper, NewsHeadLine, ByLine, Icon } from './with-style';
 
 class NewsItem extends Component {
 
@@ -71,9 +71,9 @@ class NewsItem extends Component {
         <NewsHeadLine>
           <p>
             <span>{idx}.</span>
-            <i onClick={this.up_vote}
-               id={id}
-               className={'material-icons'}>arrow_upward</i>
+            <Icon onClick={this.up_vote}
+                  id={id}
+                  className={'material-icons'}>arrow_upward</Icon>
             {title} {to_website}
           </p>
         </NewsHeadLine>

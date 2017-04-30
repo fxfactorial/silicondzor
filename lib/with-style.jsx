@@ -2,6 +2,13 @@ import colors from './colors';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
+const Icon = styled.i`
+  font-size: 16px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+`;
+
 const StyledLink = styled(NavLink)`
   padding-left: 20px;
   font-weight: 300;
@@ -152,5 +159,5 @@ export {
   SiteTitle, BottomFooter, SearchBar, ContentWrapper,
   TextArea, PostSubmission, RowField, Input, Message,
   SubmissionButton, ByLine, SubmissionContent, SubmitBanner,
-  SubmissionBox, TabBar, TabItem
+  SubmissionBox, TabBar, TabItem, Icon
 }
