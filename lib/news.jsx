@@ -54,7 +54,7 @@ class NewsItem extends Component {
       </Link>);
     const to_website =
           !web_link ? null
-          : <a href={web_link}>({web_link})</a>;
+          : <a style={{paddingLeft: '5px'}} href={web_link}>({web_link})</a>;
     // Hiding should have a fun animation
     const hide =
       <span onClick={this.hide_this_post}>hide</span>;
@@ -134,7 +134,8 @@ class SDNews extends Component {
       <ContentWrapper>
         <NewsWrap>
           {items}
-          <Link style={{fontWeight: 300, color: 'black'}}to={link_to}>More</Link>
+          <Link style={{paddingTop: '10px', fontWeight: 300, color: 'black'}}
+                to={link_to}>More</Link>
         </NewsWrap>
       </ContentWrapper>
     );

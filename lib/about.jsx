@@ -44,7 +44,7 @@ export default () => (
   <ContentWrapper>
     <SubmitBanner>
       We are two Armenian programmers based in Yerevan,
-      Armenia, contact us to work on your next software project.
+      Armenia; contact us to work on your next software project.
     </SubmitBanner>
     <ProfilesWrapper>{profiles}</ProfilesWrapper>
   </ContentWrapper>

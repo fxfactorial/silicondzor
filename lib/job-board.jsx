@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+import colors from './colors';
 import { ContentWrapper, Icon, Message, SubmitBanner } from './with-style';
 
 const JobCard = (
@@ -27,6 +28,13 @@ const JobCard = (
      </section>
    );
 
+const JobsWrap = styled.div`
+  box-shadow: 3px 3px 0px 0px ${colors.site_colors.banner};
+  background-color: ${colors.site_colors.bg};
+  min-height: 560px;
+  padding: 10px;
+`;
+
 export default class SDJobs extends Component {
 
   downvote = () => {
@@ -51,7 +59,9 @@ export default class SDJobs extends Component {
     return (
       <ContentWrapper>
         <SubmitBanner>Tech jobs board</SubmitBanner>
-        {postings}
+        <JobsWrap>
+          {postings}
+        </JobsWrap>
       </ContentWrapper>
     );
   }
