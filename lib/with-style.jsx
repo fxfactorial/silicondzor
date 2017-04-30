@@ -157,10 +157,17 @@ const TabItem = styled.p`
   color: ${colors.site_colors.title};
 `;
 
+const BoxShadowWrap = styled.div`
+  box-shadow: 3px 3px 0px 0px ${colors.site_colors.banner};
+  background-color: ${colors.site_colors.bg};
+  min-height: 560px;
+  padding: 10px;
+`;
+
 export {
   StyledLink, NavLinks, NavBar, NewsHeadLine,
   SiteTitle, BottomFooter, SearchBar, ContentWrapper,
   TextArea, PostSubmission, RowField, Input, Message,
   SubmissionButton, ByLine, SubmissionContent, SubmitBanner,
-  SubmissionBox, TabBar, TabItem, Icon
+  SubmissionBox, TabBar, TabItem, Icon, BoxShadowWrap
 }

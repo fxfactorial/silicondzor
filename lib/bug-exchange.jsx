@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
+import styled from 'styled-components';
 
-import { ContentWrapper, Icon, Message, NewsHeadLine, SubmitBanner }
+import colors from './colors';
+import { ContentWrapper, Icon, Message, NewsHeadLine, SubmitBanner, BoxShadowWrap }
 from './with-style';
+
+
 
 const BugCard = (
   {creator, creation_time, title, content, web_link}) => (
@@ -22,7 +26,9 @@ export default @observer class SDBugBounty extends Component {
     return (
       <ContentWrapper>
         <SubmitBanner>Bug Exchange</SubmitBanner>
-        {all_bugs}
+        <BoxShadowWrap>
+          {all_bugs}
+        </BoxShadowWrap>
       </ContentWrapper>
     );
   }

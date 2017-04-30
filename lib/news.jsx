@@ -10,7 +10,8 @@ import colors from './colors';
 import { request_opts, document_current_page } from './utility';
 import routes from './http-routes';
 import { StyledLink, ContentWrapper, NewsHeadLine,
-         ByLine, Icon }
+         ByLine, Icon, BoxShadowWrap
+       }
 from './with-style';
 
 class NewsItem extends Component {
@@ -86,11 +87,6 @@ class NewsItem extends Component {
   }
 };
 
-const NewsWrap = styled(ContentWrapper)`
-  box-shadow: 3px 3px 0px 0px ${colors.site_colors.banner};
-  background-color: ${colors.site_colors.bg};
-`;
-
 export default
 @observer
 class SDNews extends Component {
@@ -132,11 +128,11 @@ class SDNews extends Component {
 
     return (
       <ContentWrapper>
-        <NewsWrap>
+        <BoxShadowWrap>
           {items}
           <Link style={{paddingTop: '10px', fontWeight: 300, color: 'black'}}
                 to={link_to}>More</Link>
-        </NewsWrap>
+        </BoxShadowWrap>
       </ContentWrapper>
     );
   }
