@@ -1,30 +1,31 @@
 import React, { Component } from 'react';
-import { ital } from './utility';
-import { ContentWrapper } from './with-style';
+import styled from 'styled-components';
+
+import { ContentWrapper, Icon, Message } from './with-style';
 
 const JobCard = (
   {contact_info, employer, downvote_handler, idx,
    upvotes, downvotes, upvote_handler, job_title,
    job_descr, location, salary}) => (
-    <section key={job_descr}>
-      <p>
-        {upvotes}
-        <i onClick={upvote_handler}
-           className={'material-icons'}>arrow_upward</i>
-        <span>{downvotes}</span>
-        <i onClick={downvote_handler}
-           className={'material-icons'}>arrow_downward</i>
-        {ital('Posted by: ')} {employer}, {ital('location: ')} {location}
-      </p>
-      <hr/>
-      <details open={false}>
-        <summary>
-          <span>{job_title}</span>
-        </summary>
-        {job_descr}
-      </details>
-    </section>
-  );
+     <section key={job_descr} style={{paddingBottom: '5px'}}>
+       <Message>
+         {upvotes}
+         <Icon onClick={upvote_handler}
+               className={'material-icons'}>arrow_upward</Icon>
+         <span>{downvotes}</span>
+         <Icon onClick={downvote_handler}
+               className={'material-icons'}>arrow_downward</Icon>
+         Posted by: {employer}, location: {location}
+       </Message>
+       <hr/>
+       <details open={false}>
+         <summary>
+           <span style={{fontWeight: 300}}>{job_title}</span>
+         </summary>
+         <span style={{fontWeight: 300}}>{job_descr}</span>
+       </details>
+     </section>
+   );
 
 export default class SDJobs extends Component {
 
@@ -38,7 +39,6 @@ export default class SDJobs extends Component {
 
   render () {
     const { all_jobs } = this.props;
-    console.log(this.props);
     const postings =
           all_jobs.map((props, idx) => (
             <JobCard upvote_handler={this.upvote}

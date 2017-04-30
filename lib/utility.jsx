@@ -1,11 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const Italic = styled.span`
-  font-family: italic;
-`;
-
-export const ital = s => <Italic>{s}</Italic>;
 
 export const request_opts = body => {
   return {
