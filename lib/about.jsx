@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-const test = styled.div`
-  width: 100%;
-  position: relative;
-`;
+import colors from './colors';
+import { ContentWrapper, Icon, Message, NewsHeadLine, SubmitBanner }
+from './with-style';
 
 // Should come from a query
 const names = [
 
   {name: 'Edgar Aroutiounian',
-   descr:'Founder - Truly full stack developer',
+   descr:'Founder - programmer from San Francisco',
    origin:'Raised in America',
    img:'/edgar-arout.jpg'},
 
@@ -22,32 +21,31 @@ const names = [
   // {name: 'Robert Gevorgyan', img:'/robert.png'}
 ];
 
+const ImageWrapper = styled.img`
+  box-shadow: 3px 3px 0px 0px ${colors.site_colors.banner};
+`;
+
 const profiles = names.map(({name, img, descr, origin}) => (
   <div key={name}>
-    <img src={img}/>
-    <h2>{name}</h2>
-    <p>{descr}</p>
-    <p>{origin}</p>
+    <ImageWrapper src={img}/>
+    <SubmitBanner>{name}</SubmitBanner>
+    <p style={{fontWeight: 300}}>{descr}</p>
+    <p style={{fontWeight: 300}}>{origin}</p>
   </div>
 ));
 
-export default class Resquared extends Component {
-  render () {
-    return (
-      <div>
-        <section>
-          {profiles}
-        </section>
-        <hr/>
-        <section>
-          <article>
-            <h2>
-              We are two Armenian programmers based in Yerevan,
-              Armenia, contact us to work on your next software project.
-            </h2>
-          </article>
-        </section>
-      </div>
-    );
-  }
-}
+const ProfilesWrapper = styled.section`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+`;
+
+export default () => (
+  <ContentWrapper>
+    <SubmitBanner>
+      We are two Armenian programmers based in Yerevan,
+      Armenia, contact us to work on your next software project.
+    </SubmitBanner>
+    <ProfilesWrapper>{profiles}</ProfilesWrapper>
+  </ContentWrapper>
+);

@@ -19,7 +19,6 @@ import colors from './colors';
 import routes from './http-routes';
 import SDUserProfile from './user-profile';
 import SDDiscussion from './discussion';
-import { ital } from './utility';
 import {
   StyledLink, NavLinks, NavBar, SiteTitle, ContentWrapper,
   Message
@@ -128,8 +127,8 @@ const Guidelines = () => (
         <li>
           <LeftMessage>
             The jobs board should only include
-            jobs related to {ital('tech')} and likewise the
-            tech calendar should only have {ital('tech')} events.
+            jobs related to tech and likewise the
+            tech calendar should only have tech events.
           </LeftMessage>
         </li>
         <li>
@@ -156,7 +155,8 @@ const Faq = () => (
         </li>
         <li>
           <LeftMessage>Q: Why is it called
-            <code> silicondzor</code>{ital('?')}</LeftMessage>
+            <code> silicondzor</code>?
+          </LeftMessage>
           <LeftMessage>A: Because the domain was given for free</LeftMessage>
         </li>
         <li>

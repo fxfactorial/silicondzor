@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 
-import { ContentWrapper, Icon, Message, NewsHeadLine } from './with-style';
+import { ContentWrapper, Icon, Message, NewsHeadLine, SubmitBanner }
+from './with-style';
 
 const BugCard = (
   {creator, creation_time, title, content, web_link}) => (
@@ -20,7 +21,7 @@ export default @observer class SDBugBounty extends Component {
     const all_bugs = bugs.map(p => <BugCard key={p.descr} {...p}/>);
     return (
       <ContentWrapper>
-        <NewsHeadLine>Bug Exchange</NewsHeadLine>
+        <SubmitBanner>Bug Exchange</SubmitBanner>
         {all_bugs}
       </ContentWrapper>
     );
