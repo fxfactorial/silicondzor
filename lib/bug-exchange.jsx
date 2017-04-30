@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import colors from './colors';
 import { observer } from 'mobx-react';
+
+import { ContentWrapper, Icon, Message, NewsHeadLine } from './with-style';
 
 const BugCard = (
   {creator, creation_time, title, content, web_link}) => (
@@ -13,17 +14,15 @@ const BugCard = (
     </div>
   );
 
-@observer
-export default
-class SDBugBounty extends Component {
+export default @observer class SDBugBounty extends Component {
   render () {
     const { bugs } = this.props;
     const all_bugs = bugs.map(p => <BugCard key={p.descr} {...p}/>);
     return (
-      <div>
-        Bug Exchange
+      <ContentWrapper>
+        <NewsHeadLine>Bug Exchange</NewsHeadLine>
         {all_bugs}
-      </div>
+      </ContentWrapper>
     );
   }
 }

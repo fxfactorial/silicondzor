@@ -12,7 +12,7 @@ import { ContentWrapper, TextArea, PostSubmission, RowField,
        } from './with-style';
 
 const text_area_props = {
-  minLength: 10, rows: 15, autoCapitalize:'sentences', cols: 75
+  minLength: 10, rows: 12, autoCapitalize:'sentences', cols: 75
 };
 
 const b_title = 'You must be logged in to be able to submit new posts';
@@ -44,9 +44,11 @@ const PostSubmit =
                   <Message>OR</Message>
                   <Message>Content</Message>
 
-                  <TextArea {...text_area_props}
-                            placeholder={'New tech discussion in Armenia'}
-                            onChange={text_change}/>
+                  <div style={{padding: '10px'}}>
+                    <TextArea {...text_area_props}
+                              placeholder={'New tech discussion in Armenia'}
+                              onChange={text_change}/>
+                  </div>
                   <Message>
                     Leave URL field blank if submitting a discussion
                   </Message>
@@ -71,52 +73,53 @@ const RowFieldWidth = styled(RowField)`
 `;
 
 const JobSubmit = ({s, emply_change, title_change,
-      location_change, contact_change,
-      text_change, disabled, submit}) => (
-        <PostSubmission>
-          <Message>New Job Posting</Message>
-          <hr style={{width: '90%'}}/>
-          <PostSubmission>
-            <RowFieldWidth>
-              <label>Employer:</label>
-              <Input placeholder={'Hayastan Tech LLC'}
-                     onChange={emply_change}/>
-            </RowFieldWidth>
-            <RowFieldWidth>
-              <label>Salary</label>
-              <Input
-                placeholder={'350.000AMD a month'}
-                onChange={title_change}/>
-            </RowFieldWidth>
+                    location_change, contact_change,
+                    text_change, disabled, submit}) => (
+                      <PostSubmission>
+                        <Message>New Job Posting</Message>
+                        <hr style={{width: '90%'}}/>
+                        <PostSubmission>
+                          <RowFieldWidth>
+                            <label>Employer:</label>
+                            <Input placeholder={'Hayastan Tech LLC'}
+                                   onChange={emply_change}/>
+                          </RowFieldWidth>
+                          <RowFieldWidth>
+                            <label>Salary</label>
+                            <Input
+                              placeholder={'350.000AMD a month'}
+                              onChange={title_change}/>
+                          </RowFieldWidth>
 
-            <RowFieldWidth>
-              <label>Location:</label>
-              <Input
-                placeholder={'Yerevan, Armenia'}
-                onChange={location_change}/>
-            </RowFieldWidth>
+                          <RowFieldWidth>
+                            <label>Location:</label>
+                            <Input
+                              placeholder={'Yerevan, Armenia'}
+                              onChange={location_change}/>
+                          </RowFieldWidth>
 
-            <RowFieldWidth>
-              <label>Contact Info:</label>
-              <Input
-                placeholder={'jobs@somehyetechllc.am'}
-                onChange={contact_change}/>
-            </RowFieldWidth>
+                          <RowFieldWidth>
+                            <label>Contact Info:</label>
+                            <Input
+                              placeholder={'jobs@somehyetechllc.am'}
+                              onChange={contact_change}/>
+                          </RowFieldWidth>
 
-            <Message>Job description</Message>
-            <div style={{paddingTop: '10px'}}>
-              <TextArea {...text_area_props}
-                        placeholder={react_spiel}
-                        onChange={text_change}/>
-            </div>
-            <SubmissionButton title={job_post_spiel}
-                              disabled={disabled}
-                              onClick={submit}>
-              Post job
-            </SubmissionButton>
-          </PostSubmission>
-        </PostSubmission>
-      );
+                          <Message>Job description</Message>
+
+                          <div style={{padding: '10px'}}>
+                            <TextArea {...text_area_props}
+                                      placeholder={react_spiel}
+                                      onChange={text_change}/>
+                          </div>
+                          <SubmissionButton title={job_post_spiel}
+                                            disabled={disabled}
+                                            onClick={submit}>
+                            Post job
+                          </SubmissionButton>
+                        </PostSubmission>
+                      </PostSubmission>
+                    );
 
 const pen_test_spiel =
       'Come pentest our system, find a bug and make Armenia more secure.';
@@ -147,12 +150,15 @@ const BugBountySubmit = ({s, bug_poster, bounty_amount,
             </RowField>
             <Message>Content:</Message>
 
-            <TextArea {...text_area_props}
-                      placeholder={pen_test_spiel}
-                      onChange={content_change}/>
+            <div style={{padding: '10px'}}>
+              <TextArea {...text_area_props}
+                        placeholder={pen_test_spiel}
+                        onChange={content_change}/>
+            </div>
+
             <SubmissionButton title={new_post_spiel}
-                    disabled={disabled}
-                    onClick={submit}>Post bug bounty
+                              disabled={disabled}
+                              onClick={submit}>Post bug bounty
             </SubmissionButton>
           </PostSubmission>
         </PostSubmission>
@@ -189,9 +195,13 @@ const TechEventSubmit = ({s, time_start, time_end,
                 <input placeholder={'Event host'}
                        onChange={creator}/>
               </RowField>
-              <TextArea {...text_area_props}
-                        placeholder={'Event Description'}
-                        onChange={content}/>
+
+              <div style={{padding: '10px'}}>
+                <TextArea {...text_area_props}
+                          placeholder={'Event Description'}
+                          onChange={content}/>
+              </div>
+
               <SubmissionButton title={tech_event_spiel}
                                 disabled={disabled}
                                 onClick={submit}>
@@ -232,11 +242,11 @@ export default @observer class SDSubmitNews extends Component {
     }
 
     const tabs =
-      all_tabs.map(tab => (
-        <TabItem selected={tab === this.tab ? true : false}
-                 onClick={this.tab_select}
-                 key={tab}>{tab}</TabItem>
-      ));
+          all_tabs.map(tab => (
+            <TabItem selected={tab === this.tab ? true : false}
+                     onClick={this.tab_select}
+                     key={tab}>{tab}</TabItem>
+          ));
     return (
       <SubmissionContent>
         <SubmitBanner>Submit Content</SubmitBanner>

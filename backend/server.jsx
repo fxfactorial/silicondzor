@@ -102,17 +102,11 @@ html { box-sizing: border-box; }
 /*  Basic resets for modern browsers */
 
 * { font-family: 'Roboto', sans-serif; }
-
 a { text-decoration:none; }
-
 a:hover {
   transition: color 1.0s ease-out;
   color: black !important;
 }
-.faqs > li { margin-bottom:20px;}
-
-i { vertical-align:bottom; cursor:pointer}
-
 </style>
 <script>
   // Bootstrap the process up

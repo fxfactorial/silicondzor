@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-import { ContentWrapper, Icon, Message } from './with-style';
+import { ContentWrapper, Icon, Message, SubmitBanner } from './with-style';
 
 const JobCard = (
   {contact_info, employer, downvote_handler, idx,
@@ -50,6 +50,7 @@ export default class SDJobs extends Component {
           ));
     return (
       <ContentWrapper>
+        <SubmitBanner>Tech jobs board</SubmitBanner>
         {postings}
       </ContentWrapper>
     );

@@ -9,7 +9,9 @@ import styled from 'styled-components';
 import colors from './colors';
 import { request_opts, document_current_page } from './utility';
 import routes from './http-routes';
-import { StyledLink, ContentWrapper, NewsHeadLine, ByLine, Icon } from './with-style';
+import { StyledLink, ContentWrapper, NewsHeadLine,
+         ByLine, Icon }
+from './with-style';
 
 class NewsItem extends Component {
 

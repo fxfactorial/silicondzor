@@ -111,8 +111,6 @@ const bugs = [
    descr:'Pentest our security system'}
 ];
 
-
-
 const Guidelines = () => (
   <ContentWrapper>
     <Header>Guidelines</Header>

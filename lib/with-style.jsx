@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 const Icon = styled.i`
+  vertical-align:bottom;
+  cursor:pointer;
   font-size: 16px;
   padding-bottom: 3px;
   padding-left: 5px;
@@ -121,6 +123,7 @@ const SubmitBanner = styled.h1`
   padding-top: 10px;
   font-weight: 300;
   font-size: 34px;
+  text-align: center;
   padding-bottom: 10px;
 `;
 
