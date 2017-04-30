@@ -26,7 +26,8 @@ const ContentWrapper = styled.div`
   padding-top: 10px;
   padding-left: 20px;
   padding-right: 20px;
-  min-height: 650px;
+  padding-bottom: 10px;
+  min-height: 630px;
   overflow-y: scroll;
   box-shadow: 3px 3px 5px 6px #ccc;
   background-color: ${colors.site_colors.cards};
