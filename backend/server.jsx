@@ -37,9 +37,7 @@ setInterval(() => register_email_users = {}, 60 * 1000 * 60 * 24);
 require('./tweet-bot-service')(db_promises);
 // Getting the tech events every 24 Hours
 require('./fb-events')
-  .events_every(60 * 1000 * 60 * 24,
-		db_promises,
-		require('./tweet-events'));
+  .events_every(60 * 1000 * 60 * 24, db_promises, require('./tweet-events'));
 // Add helmet, serve static in public, favicon, morgan, sessions
 require('./middleware')(silicon_dzor);
 require('./post-routes')(silicon_dzor, db_promises);
@@ -61,10 +59,14 @@ silicon_dzor.use(async (req, res, next) => {
     const context = {};
     let data = [];
 
-    if (g === '/news' && req.query.p !== undefined) {
+    if (req.query.p !== undefined) {
       console.log(req.query.p);
       data = sorted.slice(+req.query.p * 10, (+req.query.p * 10) + 10);
-    } else if (g === '/'){
+    } else {
+      // Okay fine, we always giving the data, client can just do a
+      // fetch to the data they need, but this is easier for the time
+      // being. Later on when too many news stories then client can
+      // pick what they need.
       data = sorted.slice(0, 10);
     }
 
@@ -75,14 +77,12 @@ silicon_dzor.use(async (req, res, next) => {
         <Application/>
       </StaticRouter>
     );
-
     // Is Math.{floor, ceil} useful here?
     if (+req.query.p > (sorted.length / 10)) {
       console.warn(`Page requested, ${+req.query.p}, outside data range`);
       res.redirect('/');
     } else {
-    // console.log(data);
-    res.end(`
+      res.end(`
 <!doctype html>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -118,7 +118,7 @@ a:hover {
   <script src='bundle.js'></script>
 </body>
 `);
-  }
+    }
   }
 });
 
@@ -174,33 +174,33 @@ function approveDomains(options, certs, cb) {
   if (env.debug) {
     silicon_dzor
       .listen(env.port, () =>
-	      console.log(`Started debug server on ${env.port}, no HTTPS`));
+	            console.log(`Started debug server on ${env.port}, no HTTPS`));
   } else {
     //letsencrypt https
     const lex = leExpress.create({
       server: 'https://acme-v01.api.letsencrypt.org/directory',
       approveDomains,
       challenges: {
-	'http-01':
-	require('le-challenge-fs')
-	  .create({ webrootPath: '/tmp/acme-challenges' })
+	      'http-01':
+	      require('le-challenge-fs')
+	        .create({ webrootPath: '/tmp/acme-challenges' })
       },
       store:
       require('le-store-certbot')
-	.create({ webrootPath: '/tmp/acme-challenges' })
+	      .create({ webrootPath: '/tmp/acme-challenges' })
     });
 
     // handles acme-challenge and redirects to https
     require('http')
       .createServer(lex.middleware(require('redirect-https')()))
       .listen(env.port, () =>
-	      console.log("Listening for ACME http-01 challenges on", env.port));
+	            console.log("Listening for ACME http-01 challenges on", env.port));
 
     // handles silicon_dzor app
     require('https')
       .createServer(lex.httpsOptions, lex.middleware(silicon_dzor))
       .listen(env.port_https, () =>
-	      console.log("Listening for ACME tls-sni-01 challenges and serve app on",
-			  env.port_https));
+	            console.log("Listening for ACME tls-sni-01 challenges and serve app on",
+			                    env.port_https));
   }
 })();
