@@ -234,8 +234,8 @@ export default @observer class SDSubmitNews extends Component {
   render () {
     let content = null;
     switch(this.tab_index) {
-    case 0: content = <PostSubmit/>; break;
-    case 1: content = <JobSubmit/>; break;
+    case 0: content = <PostSubmit/>;      break;
+    case 1: content = <JobSubmit/>;       break;
     case 2: content = <TechEventSubmit/>; break;
     default:
       content = <BugBountySubmit/>;

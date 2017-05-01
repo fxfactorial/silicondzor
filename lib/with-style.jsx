@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 const Icon = styled.i`
-  vertical-align:bottom;
-  cursor:pointer;
+  vertical-align: bottom;
+  cursor: pointer;
   font-size: 16px;
   padding-bottom: 3px;
   padding-left: 5px;
@@ -164,10 +164,18 @@ const BoxShadowWrap = styled.div`
   padding: 10px;
 `;
 
+const CalendarWrapper = styled.div`
+  background-color: ${colors.site_colors.bg};
+  height: 550px;
+  box-shadow: 3px 3px 0px 0px ${colors.site_colors.banner};
+  font-weight: 300;
+  padding: 20px;
+`;
+
 export {
   StyledLink, NavLinks, NavBar, NewsHeadLine,
   SiteTitle, BottomFooter, SearchBar, ContentWrapper,
   TextArea, PostSubmission, RowField, Input, Message,
   SubmissionButton, ByLine, SubmissionContent, SubmitBanner,
-  SubmissionBox, TabBar, TabItem, Icon, BoxShadowWrap
+  SubmissionBox, TabBar, TabItem, Icon, BoxShadowWrap, CalendarWrapper
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import subDays from 'date-fns/sub_days';
 import { fromPromise } from 'mobx-utils';
 import { Link } from 'react-router-dom';
@@ -10,7 +10,7 @@ import colors from './colors';
 import { request_opts, document_current_page } from './utility';
 import routes from './http-routes';
 import { StyledLink, ContentWrapper, NewsHeadLine,
-         ByLine, Icon, BoxShadowWrap
+         ByLine, Icon, BoxShadowWrap, SubmitBanner
        }
 from './with-style';
 
@@ -87,9 +87,7 @@ class NewsItem extends Component {
   }
 };
 
-export default
-@observer
-class SDNews extends Component {
+export default @observer class SDNews extends Component {
 
   // Need to use the map so that mobx tracks the NEW pairs added, with
   // plain object it only tracks the ones done initially
@@ -128,6 +126,7 @@ class SDNews extends Component {
 
     return (
       <ContentWrapper>
+        <SubmitBanner>Տեխնոլոգիաների մասին քննարկում</SubmitBanner>
         <BoxShadowWrap>
           {items}
           <Link style={{paddingTop: '10px', fontWeight: 300, color: 'black'}}

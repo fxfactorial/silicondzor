@@ -8,7 +8,8 @@ class Comment extends Component {
     return(
       <div>
         <div>
-          creator: {creator} | time:{creation_time} | upvotes: {upvotes} | downvotes: {downvotes}
+          creator: {creator} | time:{creation_time} |
+          upvotes: {upvotes} | downvotes: {downvotes}
         </div>
         <div>
           {content}
@@ -22,8 +23,8 @@ export default class SDDiscussion extends Component {
   constructor(){
     super();
     this.state = {
-      content: '',
-    }
+      content: ''
+    };
   }
   getComments = async () => {
     const send_to_server = request_opts({post_id : this.props.match.params.id});
@@ -62,7 +63,7 @@ export default class SDDiscussion extends Component {
       <div>
         <Comment {...value}/>
       </div>
-    ))
+    ));
     return (
       <div>
         <div>
