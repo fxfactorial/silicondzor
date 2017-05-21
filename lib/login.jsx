@@ -57,24 +57,38 @@ const Login = observer(() => {
 
 const new_user_registration = new (class {
   constructor() {
-    extendObservable(this, {email: '', username: '', password: ''});
+    extendObservable(this, {
+      email: '', username: '', password: '', color: 'black'
+    });
   }
 });
 
 const email_regex =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+const register_account = () => {
+  console.log(toJS(new_user_registration));
+};
+
+const not_valid = () => {
+  if (email_regex.test(new_user_registration.email) === false) {
+    new_user_registration.color = 'red';
+  } else new_user_registration.color = 'black';
+};
+
 const Register = observer(() => {
   return (
     <PostSubmission>
       <SubmitBanner>Register a new account</SubmitBanner>
       <CenteredWrapper>
-
         <RowField>
           <FieldName>Email account:</FieldName>
           <Input placeholder={'hayek@armenia.com'}
+                 style={{color: new_user_registration.color}}
+                 onBlur={not_valid}
                  type={'email'}
                  required={true}
+                 value={new_user_registration.email}
                  onChange={e => new_user_registration.email = e.target.value}/>
         </RowField>
 
@@ -82,7 +96,9 @@ const Register = observer(() => {
 
         <RowField>
           <FieldName>Username:</FieldName>
-          <Input onChange={e => new_user_registration.username = e.target.value}/>
+          <Input
+            value={new_user_registration.username}
+            onChange={e => new_user_registration.username = e.target.value}/>
         </RowField>
 
         <div style={{paddingTop:'5px', paddingBottom: '5px'}}/>
@@ -90,11 +106,12 @@ const Register = observer(() => {
         <RowField>
           <FieldName>Password:</FieldName>
           <Input type={'password'}
+                 value={new_user_registration.password}
                  onChange={e => new_user_registration.password = e.target.value}/>
         </RowField>
 
-        <SubmissionButton onClick={() => console.log('finished')}>
-          register
+        <SubmissionButton onClick={register_account}>
+          Create Account
         </SubmissionButton>
 
       </CenteredWrapper>
@@ -106,7 +123,7 @@ const Register = observer(() => {
 
 export default @observer class SDLogin extends Component {
 
-  @observable tab_index = 0;
+  @observable tab_index = 1;
 
   @computed get tab() { return all_tabs[this.tab_index]; }
 
