@@ -17,70 +17,70 @@ const uuid_v4 = require('uuid/v4');
 module.exports = (silicon_dzor, db, register_email_users) => {
 
   silicon_dzor.post(REST.post.new_account, json_pr, form_pr, async (req, res) => {
+
+    res.setHeader('content-type', 'application/json');
+
     let { email, username, password } = req.body;
     email = email.trim();
     username = username.trim();
     password = password.trim();
-    console.log(req.body);
+
     const email_query =
           await db.get(`select email from account where email = $e`, {$e:email});
-    console.log(email_query);
-    // Catch already used usernma eas well
-    if (email_query) res.end(replies.fail(replies.invalid_username_already_picked));
-    else {
+
+    const username_query =
+          await db.get(`select display_name from account where display_name = $e`,
+                       {$e:username});
+
+    if (email_query) {
+      res.end(replies.fail(replies.invalid_email_already_registered));
+      return;
+    } else if (username_query) {
+      res.end(replies.fail(replies.invalid_username_already_picked));
+      return;
+    } else {
       const hash = await bcrypt_promises.hash(password, 10);
-      console.log(hash);
       await db.run(`
 insert into account (display_name, email, hashed_password)
-values ($d_name, $e, $h)`,
-                   {$d_name:username, $e: email, $h: hash});
-      res.end();
+values ($d_name, $e, $h)`, {$d_name:username, $e: email, $h: hash});
     }
-    // const identifier = uuid_v4();
-    // register_email_users[identifier] = {username, identifier};
-    // const verify_link = email_verify_link(identifier);
+    const identifier = uuid_v4();
+    register_email_users[identifier] = {username, identifier};
+    const verify_link = email_verify_link(identifier);
 
-    // try {
-    //   const mail_opts = {
-    //     from: 'Silicondzor.com <iteratehackerspace@gmail.com> ',
-    //     to: username,
-    //     subject: 'Verify account -- Silicondzor.com',
-    //     text: email_message(username, verify_link, false),
-    //     html: email_message(username, verify_link)
-    //   };
-    //   await send_mail(mail_opts);
-    //   res.setHeader('content-type', 'application/json');
-    //   res.end(replies.ok());
-    // } catch (err) {
-    //   res.end(replies.fail(err.msg));
-    // }
+    try {
+      // const mail_opts = {
+      //   from: 'Silicondzor.com <iteratehackerspace@gmail.com> ',
+      //   to: username,
+      //   subject: 'Verify account -- Silicondzor.com',
+      //   text: email_message(username, verify_link, false),
+      //   html: email_message(username, verify_link)
+      // };
+      // await send_mail(mail_opts);
+      res.end(replies.ok());
+    } catch (err) {
+      res.end(replies.fail(err.msg));
+    }
+
   });
 
   silicon_dzor.post(REST.post.sign_in, json_pr, form_pr, async (req, res) => {
     const { username, password } = req.body;
     const hash = await bcrypt_promises.hash(password, 10);
-    console.log(req.body);
-    console.log('Trying to sign in');
-    // req.session.logged_in = false;
     try {
-      const row =
-	          await db.get(`
-select hashed_password from account where email = $e and is_verified = 1`,
+      const row = await db.get(`
+select hashed_password from account where display_name = $e and is_verified = 1`,
 	                       {$e:username});
-      console.log(row);
       try {
         await bcrypt_promises.compare(password, row.hashed_password);
-        console.log('Logged in!');
         req.session.logged_in = true;
         req.session.username = username;
         res.end(replies.ok());
       }
       catch (err) {
-        console.log('Error', err);
         res.end(replies.fail(replies.invalid_credentials));
       }
     } catch (err) {
-      console.log('Error', err);
       res.end(replies.fail(replies.invalid_email));
     }
   });

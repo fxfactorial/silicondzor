@@ -28,11 +28,11 @@ const ui_routes =
 const db_promises = require('./sqlite-promises')('silicondzor.db');
 
 const silicon_dzor = express();
-let register_email_users = {};
 
 // daemons
-// Drop everyone left every 24 hour, aka link is only good for 24 hour
-setInterval(() => register_email_users = {}, 60 * 1000 * 60 * 24);
+let register_email_users = {};
+// Drop everyone left every 24 hour, aka link is only good for 48 hour
+setInterval(() => register_email_users = {}, 60 * 1000 * 60 * 48);
 // Kick off the twitter bot
 require('./tweet-bot-service')(db_promises);
 // Getting the tech events every 24 Hours
@@ -40,7 +40,7 @@ require('./fb-events')
   .events_every(60 * 1000 * 60 * 24, db_promises, require('./tweet-events'));
 // Add helmet, serve static in public, favicon, morgan, sessions
 require('./middleware')(silicon_dzor);
-require('./post-routes')(silicon_dzor, db_promises);
+require('./post-routes')(silicon_dzor, db_promises, register_email_users);
 require('./get-routes')(silicon_dzor, db_promises);
 
 // Handle the UI requests

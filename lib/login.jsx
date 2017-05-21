@@ -27,6 +27,27 @@ const FieldName = styled.label`
   padding-right: 5px;
 `;
 
+const login_handler = async () => {
+  const result = await fetch(routes.post.sign_in,
+                             request_opts(toJS(store.credentials)));
+  const answer = await result.json();
+  switch (answer.result) {
+  case replies.success:
+    error_condition_store.error = false;
+    store.logged_in = true;
+    store.credentials.username = '';
+    store.credentials.password = '';
+    break;
+  case replies.failure:
+    error_condition_store.error = true;
+    error_condition_store.reason = answer.reason;
+    break;
+  default:
+    console.error('Unknown reply from server', answer);
+  }
+
+};
+
 const Login = observer(() => {
   return (
     <PostSubmission>
@@ -43,10 +64,10 @@ const Login = observer(() => {
         <RowField>
           <FieldName>Password:</FieldName>
           <Input type={'password'}
-                 onChange={e => store.credentials.username = e.target.value}/>
+                 onChange={e => store.credentials.password = e.target.value}/>
         </RowField>
 
-        <SubmissionButton onClick={() => console.log('finished')}>
+        <SubmissionButton onClick={login_handler}>
           Login
         </SubmissionButton>
 
@@ -59,7 +80,7 @@ const Login = observer(() => {
 const new_user_registration = new (class {
   constructor() {
     extendObservable(this, {
-      email: '', username: '', password: '', color: 'black'
+      email: '', username: '', password: '', color: 'black', success: false
     });
   }
 });
@@ -76,15 +97,19 @@ const register_account = async () => {
   const resp = await fetch(routes.post.new_account,
                            request_opts(toJS(new_user_registration)));
   const answer = await resp.json();
-  console.log(replies);
+  console.log(answer);
   switch (answer.result) {
   case replies.success:
     store.logged_in = true;
     new_user_registration.email = '';
     new_user_registration.username = '';
     new_user_registration.password = '';
+    new_user_registration.success = true;
     break;
   case replies.failure:
+    error_condition_store.error = true;
+    error_condition_store.reason = answer.reason;
+    break;
   default:console.error(`Unknown reply from server`, answer);
   }
 
@@ -155,6 +180,10 @@ const ErrorBox = styled.section`
   padding-bottom: 30px;
 `;
 
+const SuccessBox = styled(ErrorBox)`
+  background-color: #94e064;
+`;
+
 const Error = observer(() => (
   <ErrorBox>
     <SubmitBanner>Error</SubmitBanner>
@@ -162,9 +191,16 @@ const Error = observer(() => (
   </ErrorBox>
 ));
 
+const CheckEmailPrompt = observer(() => (
+  <SuccessBox>
+    <SubmitBanner>Registered!</SubmitBanner>
+    <p>Check your email for the verification link</p>
+  </SuccessBox>
+));
+
 export default @observer class SDLogin extends Component {
 
-  @observable tab_index = 1;
+  @observable tab_index = 0;
 
   @computed get tab() { return all_tabs[this.tab_index]; }
 
@@ -214,6 +250,7 @@ export default @observer class SDLogin extends Component {
           <TabBar>{tabs}</TabBar>
           {content}
           {error_condition_store.error && <Error/>}
+          {new_user_registration.success && <CheckEmailPrompt/>}
         </SubmissionBox>
       </SubmissionContent>
     );

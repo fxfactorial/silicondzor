@@ -10,7 +10,8 @@ CREATE TABLE account (
     email TEXT NOT NULL,
     -- Holds a bcrypted hash
     hashed_password TEXT NOT NULL,
-    is_verified INTEGER NOT NULL default 0
+    is_verified INTEGER NOT NULL default 0,
+    verified_at INTEGER
 );
 
 CREATE TABLE event (
