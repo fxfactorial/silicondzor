@@ -99,7 +99,8 @@ const RowField = styled.div`
 `;
 
 const Input = styled.input`
-  min-width:300px
+  padding: 5px;
+  min-width: 300px
 `;
 
 const Message = styled.p`

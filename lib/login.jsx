@@ -16,7 +16,14 @@ const all_tabs = [LOGIN_TAB, REGISTER_TAB];
 
 const CenteredWrapper = styled(ContentWrapper)`
   display: flex;
+  flex-direction: column;
+  background-color: #f6f6ef;
+  min-height: 0px;
   justify-content: center;
+`;
+
+const FieldName = styled.label`
+  padding-right: 5px;
 `;
 
 const Login = observer(() => {
@@ -26,15 +33,25 @@ const Login = observer(() => {
       <CenteredWrapper>
 
         <RowField>
-          <label>Username</label>
+          <FieldName>Username:</FieldName>
           <Input placeholder={'username'}
                  onChange={e => store.credentials.username = e.target.value}/>
         </RowField>
 
+        <div style={{paddingTop:'5px', paddingBottom: '5px'}}/>
+
+        <RowField>
+          <FieldName>Password:</FieldName>
+          <Input placeholder={'password'}
+                 type={'password'}
+                 onChange={e => store.credentials.username = e.target.value}/>
+        </RowField>
+
+        <SubmissionButton onClick={() => console.log('finished')}>
+          Login
+        </SubmissionButton>
+
       </CenteredWrapper>
-      <SubmissionButton onPress={() => console.log('finished')}>
-        Login
-      </SubmissionButton>
 
     </PostSubmission>
   );
