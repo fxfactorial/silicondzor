@@ -24,6 +24,7 @@ import {
   Message
 }
 from './with-style';
+import store from './store';
 
 const Header = styled(Message)`
   font-size: 34px;
@@ -213,7 +214,7 @@ class Application extends Component {
                 <NavLink style={{paddingRight: '20px',
                          color: 'black', fontWeight: 300}}
                          to={"/login"}>
-                  login
+                  {store.logged_in === true ? store.credentials.username : 'login' }
                 </NavLink>
               </NavBar>
 

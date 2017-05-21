@@ -2,26 +2,54 @@ import React, { Component } from 'react';
 import { observer } from "mobx-react";
 import { observable, action, computed, toJS } from 'mobx';
 import styled from 'styled-components';
-
 import { StyledLink, ContentWrapper, NewsHeadLine,
          ByLine, BoxShadowWrap, SubmitBanner, SubmissionBox,
-         TabBar, TabItem
-       }
+         TabBar, TabItem, RowField, Input, SubmissionButton,
+         SubmissionContent, PostSubmission}
 from './with-style';
 import { request_opts } from './utility';
 import routes from './http-routes';
+import store from './store';
 
 const LOGIN_TAB = 'login', REGISTER_TAB = 'register';
 const all_tabs = [LOGIN_TAB, REGISTER_TAB];
-
-const NarrowLogin = styled(BoxShadowWrap)`
-  min-width: 400px;
-`;
 
 const CenteredWrapper = styled(ContentWrapper)`
   display: flex;
   justify-content: center;
 `;
+
+const Login = observer(() => {
+  return (
+    <PostSubmission>
+      <SubmitBanner>Login</SubmitBanner>
+      <CenteredWrapper>
+
+        <RowField>
+          <label>Username</label>
+          <Input placeholder={'username'}
+                 onChange={e => store.credentials.username = e.target.value}/>
+        </RowField>
+
+      </CenteredWrapper>
+      <SubmissionButton onPress={() => console.log('finished')}>
+        Login
+      </SubmissionButton>
+
+    </PostSubmission>
+  );
+});
+
+const Register = observer(() => {
+  return (
+    <section>
+      <SubmitBanner>Register a new account</SubmitBanner>
+      <CenteredWrapper>
+
+      </CenteredWrapper>
+    </section>
+  );
+});
 
 export default @observer class SDLogin extends Component {
 
@@ -29,20 +57,11 @@ export default @observer class SDLogin extends Component {
 
   @computed get tab() { return all_tabs[this.tab_index]; }
 
-  @observable login_creds = {username: '', password: ''}
-  // @observable login_creds = {username: '', password: ''}
-  @observable create_account = {
-    email: 'edgar.factorial@gmail.com',
-    username: 'e_d_g_a_r',
-    password: 'iterate'
-  }
-  // @observable create_account = {email: '', username: '', password: ''}
-
   /** User login handlers */
   @action login_password_handler =
-    e => this.login_creds.password = e.target.value;
+    e => store.credentials.password = e.target.value;
   @action login_username_handler =
-    e => this.login_creds.username = e.target.value;
+    e => store.credentials.username = e.target.value;
 
   /** Create account handlers */
   @action create_account_username_handler =
@@ -66,57 +85,12 @@ export default @observer class SDLogin extends Component {
     console.log('Create an account', create_account);
   };
 
-            // <section>
-
-            //   <h1>Login</h1>
-            //   <input
-            //     placeholder={'Username'}
-            //     value={this.login_creds.username}
-            //     onChange={this.login_username_handler}
-            //     type={'text'}/>
-            //   <input
-            //     placeholder={'Password'}
-            //     value={this.login_creds.password}
-            //     onChange={this.login_password_handler}
-            //     type={'password'}/>
-            //   <input
-            //     onClick={this.do_login}
-            //     value={'Login'}
-            //     type={'button'}
-            //     />
-            // </section>
-
-            // <h2>OR</h2>
-
-            // <section>
-            //   <h1>Create Account</h1>
-            //   <input
-            //     placeholder={'Username'}
-            //     value={this.create_account.username}
-            //     onChange={this.create_account_username_handler}
-            //     type={'text'}/>
-            //   <input
-            //     placeholder={'Email address'}
-            //     value={this.create_account.email}
-            //     onChange={this.create_account_email_handler}
-            //     type={'email'}/>
-            //   <input
-            //     placeholder={'password'}
-            //     onChange={this.create_account_password_handler}
-            //     value={this.create_account.password}
-            //     type={'password'}/>
-            //   <input
-            //     onClick={this.do_create_account}
-            //     value={'Create new account'}
-            //     type={'button'}
-            //     />
-            // </section>
   tab_select = e => this.tab_index = all_tabs.indexOf(e.target.textContent);
 
   render () {
     let content = null;
-    if (this.tab_index === 0) content = <p>login</p>;
-    else content = <p>register</p>;
+    if (this.tab_index === 0) content = <Login/>;
+    else                      content = <Register/>;
     const tabs =
           all_tabs.map(tab => (
             <TabItem selected={tab === this.tab ? true : false}
@@ -124,12 +98,12 @@ export default @observer class SDLogin extends Component {
                      key={tab}>{tab}</TabItem>
           ));
     return (
-      <CenteredWrapper>
-        <NarrowLogin>
+      <SubmissionContent>
+        <SubmissionBox>
           <TabBar>{tabs}</TabBar>
-          <form>{content}</form>
-        </NarrowLogin>
-      </CenteredWrapper>
+          {content}
+        </SubmissionBox>
+      </SubmissionContent>
     );
   }
 }

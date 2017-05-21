@@ -11,6 +11,13 @@ import { ContentWrapper, TextArea, PostSubmission, RowField,
          SubmitBanner, SubmissionBox, TabBar, TabItem
        } from './with-style';
 
+const CenteredWrapper = styled(ContentWrapper)`
+  display: flex;
+  margin: 35px;
+  background-color: #f6f6ef;
+  justify-content: center;
+`;
+
 const text_area_props = {
   minLength: 10, rows: 12, autoCapitalize:'sentences', cols: 75
 };
@@ -252,7 +259,9 @@ export default @observer class SDSubmitNews extends Component {
         <SubmitBanner>Submit Content</SubmitBanner>
         <SubmissionBox>
           <TabBar>{tabs}</TabBar>
-          {content}
+          <CenteredWrapper>
+            {content}
+          </CenteredWrapper>
         </SubmissionBox>
       </SubmissionContent>
     );
