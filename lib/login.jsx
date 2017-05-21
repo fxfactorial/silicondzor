@@ -10,6 +10,7 @@ from './with-style';
 import { request_opts } from './utility';
 import routes from './http-routes';
 import store from './store';
+import replies from './replies';
 
 const LOGIN_TAB = 'login', REGISTER_TAB = 'register';
 const all_tabs = [LOGIN_TAB, REGISTER_TAB];
@@ -63,17 +64,42 @@ const new_user_registration = new (class {
   }
 });
 
+const error_condition_store = new (class {
+  constructor() { extendObservable(this, {reason: '', error: false}); }
+});
+
+
 const email_regex =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const register_account = () => {
-  console.log(toJS(new_user_registration));
+const register_account = async () => {
+  const resp = await fetch(routes.post.new_account,
+                           request_opts(toJS(new_user_registration)));
+  const answer = await resp.json();
+  console.log(replies);
+  switch (answer.result) {
+  case replies.success:
+    store.logged_in = true;
+    new_user_registration.email = '';
+    new_user_registration.username = '';
+    new_user_registration.password = '';
+    break;
+  case replies.failure:
+  default:console.error(`Unknown reply from server`, answer);
+  }
+
 };
 
 const not_valid = () => {
   if (email_regex.test(new_user_registration.email) === false) {
-    new_user_registration.color = 'red';
-  } else new_user_registration.color = 'black';
+    new_user_registration.color = '#ff3f3f';
+    error_condition_store.error = true;
+    error_condition_store.reason = 'Invalid email address';
+  } else {
+    new_user_registration.color = 'black';
+    error_condition_store.error = false;
+    error_condition_store.reason = '';
+  }
 };
 
 const Register = observer(() => {
@@ -120,6 +146,21 @@ const Register = observer(() => {
 
   );
 });
+
+const ErrorBox = styled.section`
+  text-align: center;
+  background-color: #ff3f3f;
+  color: black;
+  margin-top: 30px;
+  padding-bottom: 30px;
+`;
+
+const Error = observer(() => (
+  <ErrorBox>
+    <SubmitBanner>Error</SubmitBanner>
+    <p>{error_condition_store.reason}</p>
+  </ErrorBox>
+));
 
 export default @observer class SDLogin extends Component {
 
@@ -172,6 +213,7 @@ export default @observer class SDLogin extends Component {
         <SubmissionBox>
           <TabBar>{tabs}</TabBar>
           {content}
+          {error_condition_store.error && <Error/>}
         </SubmissionBox>
       </SubmissionContent>
     );
