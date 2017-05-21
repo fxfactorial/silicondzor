@@ -187,11 +187,25 @@ const Faq = () => (
   </ContentWrapper>
 );
 
-const DisplayName =
-  observer(() => <p>{store.display_name}{' '}({store.karma_points})</p>);
+const TopRightCorner = observer(() => {
+  let content = null;
+  if (store.logged_in === true)
+    content = (
+    <NavLink style={{paddingRight: '20px',color: 'black', fontWeight: 300}}
+             to={"/profile"}>
+      <p>{store.display_name}{' '}({store.karma_points})</p>
+    </NavLink>
+  );
+  else content = (
+    <NavLink style={{paddingRight: '20px',color: 'black', fontWeight: 300}}
+             to={"/login"}>
+      login
+    </NavLink>
+  );
+  return content;
+});
 
 export default
-@observer
 class Application extends Component {
 
   render_jobs = () => {
@@ -215,11 +229,7 @@ class Application extends Component {
 
               <NavBar>
                 <NavLinks>{elements}</NavLinks>
-                <NavLink style={{paddingRight: '20px',
-                         color: 'black', fontWeight: 300}}
-                         to={"/login"}>
-                  {store.logged_in === true ? <DisplayName/> : 'login' }
-                </NavLink>
+                <TopRightCorner/>
               </NavBar>
 
               <section>
@@ -235,6 +245,7 @@ class Application extends Component {
                   <Route path={'/item/:id'}      component={SDDiscussion}/>
                   <Route path={'/guidelines'}    component={Guidelines}/>
                   <Route path={'/faq'}           component={Faq}/>
+                  <Route path={'/profile'}       component={SDUserProfile}/>
                 </Switch>
               </section>
 
