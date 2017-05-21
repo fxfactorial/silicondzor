@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer } from "mobx-react";
-import { observable, action, computed, toJS } from 'mobx';
+import { observable, action, computed, toJS, extendObservable } from 'mobx';
 import styled from 'styled-components';
 import { StyledLink, ContentWrapper, NewsHeadLine,
          ByLine, BoxShadowWrap, SubmitBanner, SubmissionBox,
@@ -34,16 +34,14 @@ const Login = observer(() => {
 
         <RowField>
           <FieldName>Username:</FieldName>
-          <Input placeholder={'username'}
-                 onChange={e => store.credentials.username = e.target.value}/>
+          <Input onChange={e => store.credentials.username = e.target.value}/>
         </RowField>
 
         <div style={{paddingTop:'5px', paddingBottom: '5px'}}/>
 
         <RowField>
           <FieldName>Password:</FieldName>
-          <Input placeholder={'password'}
-                 type={'password'}
+          <Input type={'password'}
                  onChange={e => store.credentials.username = e.target.value}/>
         </RowField>
 
@@ -57,14 +55,52 @@ const Login = observer(() => {
   );
 });
 
+const new_user_registration = new (class {
+  constructor() {
+    extendObservable(this, {email: '', username: '', password: ''});
+  }
+});
+
+const email_regex =
+  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 const Register = observer(() => {
   return (
-    <section>
+    <PostSubmission>
       <SubmitBanner>Register a new account</SubmitBanner>
       <CenteredWrapper>
 
+        <RowField>
+          <FieldName>Email account:</FieldName>
+          <Input placeholder={'hayek@armenia.com'}
+                 type={'email'}
+                 required={true}
+                 onChange={e => new_user_registration.email = e.target.value}/>
+        </RowField>
+
+        <div style={{paddingTop:'5px', paddingBottom: '5px'}}/>
+
+        <RowField>
+          <FieldName>Username:</FieldName>
+          <Input onChange={e => new_user_registration.username = e.target.value}/>
+        </RowField>
+
+        <div style={{paddingTop:'5px', paddingBottom: '5px'}}/>
+
+        <RowField>
+          <FieldName>Password:</FieldName>
+          <Input type={'password'}
+                 onChange={e => new_user_registration.password = e.target.value}/>
+        </RowField>
+
+        <SubmissionButton onClick={() => console.log('finished')}>
+          register
+        </SubmissionButton>
+
       </CenteredWrapper>
-    </section>
+
+    </PostSubmission>
+
   );
 });
 
