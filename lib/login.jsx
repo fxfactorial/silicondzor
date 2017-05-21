@@ -35,6 +35,7 @@ const login_handler = async () => {
   case replies.success:
     error_condition_store.error = false;
     store.logged_in = true;
+    store.display_name = store.credentials.username;
     store.credentials.username = '';
     store.credentials.password = '';
     break;
@@ -56,7 +57,9 @@ const Login = observer(() => {
 
         <RowField>
           <FieldName>Username:</FieldName>
-          <Input onChange={e => store.credentials.username = e.target.value}/>
+          <Input
+            value={store.credentials.username}
+            onChange={e => store.credentials.username = e.target.value}/>
         </RowField>
 
         <div style={{paddingTop:'5px', paddingBottom: '5px'}}/>
@@ -64,6 +67,7 @@ const Login = observer(() => {
         <RowField>
           <FieldName>Password:</FieldName>
           <Input type={'password'}
+                 value={store.credentials.password}
                  onChange={e => store.credentials.password = e.target.value}/>
         </RowField>
 

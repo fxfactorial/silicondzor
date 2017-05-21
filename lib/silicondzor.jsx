@@ -187,7 +187,11 @@ const Faq = () => (
   </ContentWrapper>
 );
 
+const DisplayName =
+  observer(() => <p>{store.display_name}{' '}({store.karma_points})</p>);
+
 export default
+@observer
 class Application extends Component {
 
   render_jobs = () => {
@@ -214,7 +218,7 @@ class Application extends Component {
                 <NavLink style={{paddingRight: '20px',
                          color: 'black', fontWeight: 300}}
                          to={"/login"}>
-                  {store.logged_in === true ? store.credentials.username : 'login' }
+                  {store.logged_in === true ? <DisplayName/> : 'login' }
                 </NavLink>
               </NavBar>
 

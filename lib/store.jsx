@@ -8,6 +8,7 @@ export default new (class {
         username: '', password: ''
       },
       logged_in: false,
+      display_name: '',
       karma_points: 0,
       user_articles: []
     });
