@@ -46,3 +46,7 @@ we-must-react-ep-04
 # This is created after building the project
 backend/server.js
 backend/scoring.js
+
+#hmr
+*.hot-update.js
+*.hot-update.json
