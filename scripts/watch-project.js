@@ -6,11 +6,12 @@ const watching = [
   {service: "babel-watch"},
   {service: "webpack-watch"},
   // {service: "sass-watch"},
-  {service: "server-watch"}
+  // {service: "server-watch"},
+  {service: "start-hot"}
 ];
 
 watching.forEach(({service}) => {
-  const child = spawn('npm', ['run', service]);
+  const child = spawn('yarn', ['run', service]);
   child.stdout.on('data', d => console.log(d.toString()));
   child.stderr.on('data', d => console.log(d.toString()));
 });
