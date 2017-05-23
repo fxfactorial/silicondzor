@@ -1,6 +1,13 @@
+const webpack = require('webpack');
 module.exports = {
   devtool: 'cheap-module-source-map',
-  entry: ['babel-polyfill', 'whatwg-fetch', './frontend/app.jsx'],
+  entry: [
+    'babel-polyfill', 
+    'react-hot-loader/patch',
+		'webpack-hot-middleware/client',
+    'whatwg-fetch', 
+    './frontend/app.jsx'
+  ],
   devServer:{
     inline:true,
     progress:true,
@@ -30,5 +37,12 @@ module.exports = {
           presets: ['es2015', 'react', 'stage-3']
         }
       }]
-  }
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development')
+    }),
+  ]
 };
