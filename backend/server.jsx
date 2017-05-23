@@ -29,6 +29,15 @@ const db_promises = require('./sqlite-promises')('silicondzor.db');
 
 const silicon_dzor = express();
 
+//webpack
+import webpack from 'webpack';
+const config = require('../webpack.config');
+const compiler = webpack(config);
+silicon_dzor.use(require("webpack-dev-middleware")(compiler, {
+    noInfo: true, publicPath: config.output.publicPath
+}));
+silicon_dzor.use(require('webpack-hot-middleware')(compiler));
+
 // daemons
 let register_email_users = {};
 // Drop everyone left every 24 hour, aka link is only good for 48 hour
