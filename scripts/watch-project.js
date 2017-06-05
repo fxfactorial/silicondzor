@@ -6,8 +6,7 @@ const watching = [
   {service: "babel-watch"},
   {service: "webpack-watch"},
   // {service: "sass-watch"},
-  // {service: "server-watch"},
-  {service: "start-hot"}
+  {service: "server-watch"},
 ];
 
 watching.forEach(({service}) => {
