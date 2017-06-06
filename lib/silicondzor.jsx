@@ -242,7 +242,7 @@ class Application extends Component {
                   <Route path={"/bug-bounty"}    render={this.render_bug_bounty}/>
                   <Route path={"/resquared"}     component={Resquared}/>
                   <Route path={"/login"}         component={SDLogin}/>
-                  <Route path={'/item/:id'}      component={SDDiscussion}/>
+                  <Route path={'/item'}      component={SDDiscussion}/>
                   <Route path={'/guidelines'}    component={Guidelines}/>
                   <Route path={'/faq'}           component={Faq}/>
                   <Route path={'/profile'}       component={SDUserProfile}/>
