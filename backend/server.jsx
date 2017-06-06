@@ -70,7 +70,8 @@ silicon_dzor.use(async (req, res, next) => {
 
     if (req.query.p !== undefined) {
       console.log(req.query.p);
-      data = sorted.slice(+req.query.p * 10, (+req.query.p * 10) + 10);
+      const startingPostNumber = +req.query.p * 10 // get a number from string
+      data = sorted.slice(startingPostNumber, startingPostNumber + 10);
     } else {
       // Okay fine, we always giving the data, client can just do a
       // fetch to the data they need, but this is easier for the time
