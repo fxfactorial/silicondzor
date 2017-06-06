@@ -10,7 +10,9 @@ export const request_opts = body => {
   };
 };
 
-export const document_current_page = () => {
-  try { return +(new URLSearchParams(document.location.search)).get('p'); }
+export const get_query_param_value = (query_param = 'p') => {
+  try {
+    return +(new URLSearchParams(document.location.search)).get(query_param);
+  }
   catch (e) { return 0; }
 };

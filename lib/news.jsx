@@ -7,7 +7,7 @@ import { observer } from "mobx-react";
 import styled from 'styled-components';
 
 import colors from './colors';
-import { request_opts, document_current_page } from './utility';
+import { request_opts, get_query_param_value } from './utility';
 import routes from './http-routes';
 import { StyledLink, ContentWrapper, NewsHeadLine,
          ByLine, Icon, BoxShadowWrap, SubmitBanner
@@ -100,9 +100,9 @@ export default @observer class SDNews extends Component {
   }
 
   @action componentDidMount() {
-    const page = document_current_page();
+    const page = get_query_param_value();
     if (page === null || page === 0) {
-      this.news_items.set('0', [window.__INIT_NEWS__[0], window.__INIT_NEWS__[1]]);
+      this.news_items.set('0', window.__INIT_NEWS__);
     } else {
       this._current_page_ = '' + page;
       if (this.news_items.get(this._current_page_) === undefined) {
