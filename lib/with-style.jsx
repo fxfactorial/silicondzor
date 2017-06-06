@@ -173,10 +173,25 @@ const CalendarWrapper = styled.div`
   padding: 20px;
 `;
 
+const PaddedTextArea = styled.textarea`
+  margin: 10px 0;
+`
+
+const SubmitCommentButton = styled.button`
+  padding: 3px 5px;
+  font-family: monospace;
+  font-size: 10pt;
+  color: #000000;
+`
+const CommentHeader = styled.div`
+  display: flex;
+`
+
 export {
   StyledLink, NavLinks, NavBar, NewsHeadLine,
   SiteTitle, BottomFooter, SearchBar, ContentWrapper,
   TextArea, PostSubmission, RowField, Input, Message,
   SubmissionButton, ByLine, SubmissionContent, SubmitBanner,
-  SubmissionBox, TabBar, TabItem, Icon, BoxShadowWrap, CalendarWrapper
+  SubmissionBox, TabBar, TabItem, Icon, BoxShadowWrap, CalendarWrapper,
+  PaddedTextArea, SubmitCommentButton, CommentHeader
 }

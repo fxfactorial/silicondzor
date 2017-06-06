@@ -3,7 +3,8 @@ import { extendObservable } from 'mobx';
 import {request_opts, get_query_param_value} from './utility';
 import store from './sdMobx';
 import { StyledLink, ContentWrapper, NewsHeadLine,
-         ByLine, Icon, BoxShadowWrap, SubmitBanner
+         ByLine, Icon, BoxShadowWrap, SubmitBanner,
+         PaddedTextArea, SubmitCommentButton, CommentHeader
        }
 from './with-style';
 
@@ -19,17 +20,23 @@ const localStore = new (class {
 
 class Comment extends Component {
   render(){
-    const {creator, creation_time, content, upvotes, downvotes} = this.props;
+    const {
+      content, creation_time, creator,
+      downvotes, id, parrent_comment, upvotes
+    } = this.props;
     return(
-      <div>
+      <CommentHeader>
+        <Icon onClick={this.up_vote}
+              className={'material-icons'}>arrow_upward</Icon>
         <div>
-          creator: {creator} | time:{creation_time} |
-          upvotes: {upvotes} | downvotes: {downvotes}
+          <p>
+            <a href='#'>{creator}</a> <a>creation_time</a>
+          </p>
+          <div>
+            {content}
+          </div>
         </div>
-        <div>
-          {content}
-        </div>
-      </div>
+      </CommentHeader>
     );
   }
 }
@@ -57,8 +64,10 @@ export default class SDDiscussion extends Component {
     localStore.content = e.currentTarget.value;
   }
 
-  componentDidMount(){
+  componentWillMount(){
     this.getComments();
+  }
+  componentDidMount() {
     localStore.current_post_data = this.props.location.state;
   }
   render() {
@@ -102,11 +111,19 @@ export default class SDDiscussion extends Component {
           </div>
 
 
-          <textarea onChange={this.contentChange}></textarea>
+          <PaddedTextArea
+            onChange={this.contentChange}
+            rows='6'
+            cols='60'
+          ></PaddedTextArea>
 
           <div>
-            <button onClick={this.postComment}>add comment</button>
+            <SubmitCommentButton onClick={this.postComment}>
+              add comment
+            </SubmitCommentButton>
           </div>
+          <br />
+          <br />
           <div>
             {renderComments}
           </div>
