@@ -50,7 +50,13 @@ class NewsItem extends Component {
     const flag =
       <span onClick={this.flag_post}> flag </span>;
     const drilldown = (
-      <Link to={`/item?id=${id}`}>
+      <Link
+        to={{
+          pathname: '/item',
+          search: `?id=${id}`,
+          state: { ...this.props }
+        }}
+      >
         {comment_count === 0 ? 'discuss' : `${comment_count} comments`}
       </Link>);
     const to_website =
