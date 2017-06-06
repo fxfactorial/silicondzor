@@ -1,6 +1,21 @@
 import React, { Component } from 'react';
-import {request_opts} from './utility';
+import { extendObservable } from 'mobx';
+import {request_opts, get_query_param_value} from './utility';
 import store from './sdMobx';
+import { StyledLink, ContentWrapper, NewsHeadLine,
+         ByLine, Icon, BoxShadowWrap, SubmitBanner
+       }
+from './with-style';
+
+const localStore = new (class {
+  constructor() {
+    extendObservable(this, {
+      content: '',
+      current_post_data: {},
+      current_comments: [],
+    });
+  }
+});
 
 class Comment extends Component {
   render(){
@@ -20,21 +35,18 @@ class Comment extends Component {
 }
 
 export default class SDDiscussion extends Component {
-  constructor(){
-    super();
-    this.state = {
-      content: ''
-    };
-  }
   getComments = async () => {
-    const send_to_server = request_opts({post_id : this.props.match.params.id});
+    const {search} = this.props.location;
+    const post_id = get_query_param_value('id');
+    const send_to_server = request_opts({post_id});
     const fetched = await fetch('/get-comments', send_to_server);
     const jsoned = await fetched.json();
     store.current_comments = jsoned;
     this.forceUpdate();
   }
+
   postComment = async () => {
-    const {content} = this.state;
+    const {content} = localStore;
     const post_id = this.props.match.params.id;
     const send_to_server = request_opts({content, post_id});
     const fetched = await fetch('/comment', send_to_server);
@@ -42,45 +54,64 @@ export default class SDDiscussion extends Component {
     console.log(answer);
   }
   contentChange = (e) => {
-    const content = e.currentTarget.value;
-    this.setState({content});
+    localStore.content = e.currentTarget.value;
   }
-  componentWillMount(){
+
+  componentDidMount(){
     this.getComments();
+    localStore.current_post_data = this.props.location.state;
   }
   render() {
-    //get post_id from url
-    const post_id = this.props.match.params.id;
+    const {
+      creator, title, comment_count,
+      creation_time, web_link,
+      upvotes, id
+    } = localStore.current_post_data;
     //
-    //get array of url variables like [{smthreallycool: "123"}, {hey: "123"}]
-    //from "?smthreallycool=123&hey=123"
-
-    const query_params = [...new URLSearchParams(search).entries()];
-
-    const {search} = this.props.location;
-    //
-    const renderComments = store.current_comments.map((value) => (
-      <div>
-        <Comment {...value}/>
+    const renderComments = store.current_comments.map((value, idx) => (
+      <div key={idx}>
+        <Comment {...value} />
       </div>
     ));
+
+    const byline = (
+      <ByLine>
+        <span>
+          {upvotes} points by <a href='#'>{creator}</a> 7 hours ago
+        </span> |
+        <a href='#'>hide</a> |
+        <a href='#'>past</a> |
+        <a href={web_link}>web</a> |
+        <a href='#'>{comment_count} comments</a> |
+        <a href='#'>favorite</a>
+      </ByLine>
+    );
     return (
-      <div>
-        <div>
-          should be a title (and web link)
-        </div>
-        <div>
-          183 points by walterbell 7 hours ago | hide | past |
-          web | 70 comments | favorite
-        </div>
-        <textarea onChange={this.contentChange}></textarea>
-        <div>
-          <button onClick={this.postComment}>add comment</button>
-        </div>
-        <div>
-          {renderComments}
-        </div>
-      </div>
+      <ContentWrapper>
+        <BoxShadowWrap>
+          <div>
+            <NewsHeadLine>
+              <p>
+                <Icon onClick={this.up_vote}
+                      className={'material-icons'}>arrow_upward</Icon>
+                {title} (<a href={web_link}>{web_link}</a>)
+              </p>
+            </NewsHeadLine>
+            <hr/>
+            {byline}
+          </div>
+
+
+          <textarea onChange={this.contentChange}></textarea>
+
+          <div>
+            <button onClick={this.postComment}>add comment</button>
+          </div>
+          <div>
+            {renderComments}
+          </div>
+        </BoxShadowWrap>
+      </ContentWrapper>
     );
   }
 };
