@@ -22,14 +22,14 @@ CREATE TABLE event (
     description TEXT NOT NULL,
     creator INTEGER NOT NULL,
     url TEXT NOT NULL,
-    id TEXT NOT NULL,
+    id INTEGER NOT NULL,
     FOREIGN KEY (creator) REFERENCES account(ID),
     UNIQUE (id)
 );
 
 CREATE TABLE post (
    creator INTEGER NOT NULL,
-   id TEXT NOT NULL,
+   id INTEGER NOT NULL,
    creation_time INTEGER NOT NULL,
    title TEXT NOT NULL,
    content TEXT,
@@ -43,7 +43,7 @@ CREATE TABLE post (
 
 CREATE TABLE job_post (
    creator INTEGER NOT NULL,
-   id TEXT NOT NULL,
+   id INTEGER NOT NULL,
    creation_time INTEGER NOT NULL,
    title TEXT NOT NULL,
    content TEXT,
@@ -55,7 +55,7 @@ CREATE TABLE job_post (
 
 CREATE TABLE bug_post (
    creator INTEGER NOT NULL,
-   id TEXT NOT NULL,
+   id INTEGER NOT NULL,
    creation_time INTEGER NOT NULL,
    title TEXT NOT NULL,
    content TEXT,
@@ -70,11 +70,11 @@ CREATE TABLE comment (
 
    --Make sure this goes through XSS Filter first before entering the
    --DB
-   under_post_id TEXT NOT NULL,
-   id TEXT NOT NULL,
+   under_post_id INTEGER NOT NULL,
+   id INTEGER NOT NULL,
    creation_time INTEGER NOT NULL,
    content TEXT NOT NULL,
-   parent_comment TEXT,
+   parent_comment INTEGER,
    upvotes INTEGER NOT NULL DEFAULT 0,
    downvotes INTEGER NOT NULL DEFAULT 0,
 
