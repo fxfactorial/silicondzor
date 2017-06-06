@@ -218,6 +218,14 @@ insert into comment
     }
   });
 
+  silicon_dzor.post(REST.get_comments, json_pr, form_pr, async (req, res) => {
+    const comments =
+          await db
+          .all(`select * from comment where under_post_id = $post_id`,
+               {$post_id: req.body.post_id});
+    console.log({comments});
+    res.end(JSON.stringify(comments));
+  });
 
   silicon_dzor.post(REST.upvote, json_pr, async (req, res) => {
     try {

@@ -151,16 +151,6 @@ a:hover {
 // });
 
 
-// silicon_dzor.post(REST.get_comments, json_pr, form_pr, async (req, res) => {
-//   const comments =
-//         await db_promises
-//         .all(`select * from comment where under_post_id = $post_id`,
-//              {$post_id: req.body.post_id});
-//   console.log({comments});
-//   res.end(JSON.stringify(comments));
-// });
-
-
 // No other handler picked it up yet, so this is our 404 handler
 silicon_dzor.use((req, res, next) => {
   res
