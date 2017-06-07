@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { extendObservable } from 'mobx';
-import {request_opts, get_query_param_value} from './utility';
+import {request_opts, get_query_param_value,
+        calculate_time} from './utility';
 import store from './sdMobx';
 import { StyledLink, ContentWrapper, NewsHeadLine,
          ByLine, Icon, BoxShadowWrap, SubmitBanner,
@@ -30,7 +31,7 @@ class Comment extends Component {
               className={'material-icons'}>arrow_upward</Icon>
         <div>
           <p>
-            <a href='#'>{creator}</a> <a>creation_time</a>
+            <a href='#'>{creator}</a> <a>{calculate_time(creation_time)}</a>
           </p>
           <div>
             {content}
@@ -86,7 +87,8 @@ export default class SDDiscussion extends Component {
     const byline = (
       <ByLine>
         <span>
-          {upvotes} points by <a href='#'>{creator}</a> 7 hours ago
+          {upvotes} points by <a href='#'>{creator}</a>{' '}
+          <a>{calculate_time(creation_time)}</a>
         </span> |
         <a href='#'>hide</a> |
         <a href='#'>past</a> |

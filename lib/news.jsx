@@ -7,7 +7,8 @@ import { observer } from "mobx-react";
 import styled from 'styled-components';
 
 import colors from './colors';
-import { request_opts, get_query_param_value } from './utility';
+import { request_opts, get_query_param_value,
+          calculate_time } from './utility';
 import routes from './http-routes';
 import { StyledLink, ContentWrapper, NewsHeadLine,
          ByLine, Icon, BoxShadowWrap, SubmitBanner
@@ -71,7 +72,7 @@ class NewsItem extends Component {
     const byline = (
       <ByLine>
         <span>upvotes: {upvotes}</span> | <span>downvotes: {downvotes}</span> |
-        by{to_author} | <time>time: {date}</time>|
+        by{to_author} | <a>{calculate_time(creation_time)}</a> |
         {flag} | {hide} | {drilldown}
       </ByLine>
     );
