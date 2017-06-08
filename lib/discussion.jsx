@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { extendObservable } from 'mobx';
 import {request_opts, get_query_param_value,
-        calculate_time} from './utility';
+        calculate_time, nest_comments} from './utility';
 import store from './sdMobx';
 import { StyledLink, ContentWrapper, NewsHeadLine,
          ByLine, Icon, BoxShadowWrap, SubmitBanner,
@@ -48,8 +48,9 @@ export default class SDDiscussion extends Component {
     const post_id = get_query_param_value('id');
     const send_to_server = request_opts({post_id});
     const fetched = await fetch('/get-comments', send_to_server);
-    const jsoned = await fetched.json();
-    store.current_comments = jsoned;
+    const flat_comments = await fetched.json();
+    console.log(nest_comments(flat_comments));
+    store.current_comments = nest_comments(flat_comments);
     this.forceUpdate();
   }
 

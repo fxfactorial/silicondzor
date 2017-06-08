@@ -23,6 +23,7 @@
     "helmet": "^3.6.1",
     "le-challenge-fs": "^2.0.8",
     "le-store-certbot": "^2.0.5",
+    "lodash": "^4.17.4",
     "mobx": "^3.1.11",
     "mobx-react": "^4.2.1",
     "mobx-utils": "^2.0.1",

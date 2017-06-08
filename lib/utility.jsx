@@ -1,4 +1,5 @@
 import React from 'react';
+import {filter} from 'lodash';
 
 export const request_opts = body => {
   return {
@@ -17,7 +18,24 @@ export const get_query_param_value = (query_param = 'p') => {
   catch (e) { return 0; }
 };
 
-export const calculate_time = (timestamp) => {
+export const nest_comments = (comments, parent_id = null) => {
+  // defaults to null just to make it easier to call
+  const current_children = filter(comments, {'parent_comment': parent_id});
+  // first find the children by current parent_id
+  if (current_children.length !== 0) { // if it's not empty (termination case)
+    // then for each add new field called children which is actually again is
+    // chunk of comments, so can be nested, that's why we recurse over
+    // array again
+    return current_children.map(current_comment => {
+      current_comment.children = nest_comments(comments, current_comment.id)
+      return current_comment
+    })
+  }
+  else return undefined // undefined as in this case js will ignore the field
+  // I think it needs to be other value though
+}
+
+export const calculate_time = timestamp => {
   const now = Math.floor(Date.now() / 1000); // Get timestamp in seconds
   const time_difference = now - timestamp; // Calculate time passed
   // Date now is in milliseconds but timestamps we got are in seconds
