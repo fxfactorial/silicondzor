@@ -23,8 +23,10 @@ class Comment extends Component {
   render(){
     const {
       content, creation_time, creator,
-      downvotes, id, parrent_comment, upvotes
+      downvotes, id, parent_comment, upvotes, children
     } = this.props;
+    const children_comments = !children ? null :
+      children.map(comment => <Comment key={comment.id} {...comment} />)
     return(
       <CommentHeader>
         <Icon onClick={this.up_vote}
@@ -35,6 +37,7 @@ class Comment extends Component {
           </p>
           <div>
             {content}
+            {children_comments}
           </div>
         </div>
       </CommentHeader>
@@ -49,7 +52,6 @@ export default class SDDiscussion extends Component {
     const send_to_server = request_opts({post_id});
     const fetched = await fetch('/get-comments', send_to_server);
     const flat_comments = await fetched.json();
-    console.log(nest_comments(flat_comments));
     store.current_comments = nest_comments(flat_comments);
     this.forceUpdate();
   }

@@ -108,64 +108,64 @@ INSERT INTO comment
 INSERT INTO comment
     (creator, under_post_id, id, parent_comment, creation_time, content, upvotes, downvotes)
     VALUES (2, 130, 4, 3, 1496636666,
-			'aaaa lloooooffff teeeext', 9, 3);
+			'First level nesting of comment 3', 9, 3);
 
 INSERT INTO comment
     (creator, under_post_id, id, parent_comment, creation_time, content, upvotes, downvotes)
     VALUES (2, 130, 5, 3, 1496636666,
-			'aaaa lloooooffff teeeext', 9, 3);
+			'First level nesting of comment 3', 9, 3);
 
 INSERT INTO comment
     (creator, under_post_id, id, parent_comment, creation_time, content, upvotes, downvotes)
     VALUES (2, 130, 6, 3, 1496636666,
-			'aaaa lloooooffff teeeext', 9, 3);
+			'First level nesting of comment 3', 9, 3);
 
 INSERT INTO comment
     (creator, under_post_id, id, parent_comment, creation_time, content, upvotes, downvotes)
     VALUES (2, 130, 7, 2, 1496636666,
-			'aaaa lloooooffff teeeext', 9, 3);
+			'First level nesting of comment 2', 9, 3);
 
 INSERT INTO comment
     (creator, under_post_id, id, parent_comment, creation_time, content, upvotes, downvotes)
     VALUES (2, 130, 8, 4, 1496636666,
-			'aaaa lloooooffff teeeext', 9, 3);
+			'Second level nesting of comment 3(under 4)', 9, 3);
 
 
 INSERT INTO comment
     (creator, under_post_id, id, parent_comment, creation_time, content, upvotes, downvotes)
     VALUES (2, 130, 9, 8, 1496636666,
-      			'aaaa lloooooffff teeeext', 9, 3);
+      			'Third level nesting of comment (3 -> 4 -> 8)', 9, 3);
 
 INSERT INTO comment
     (creator, under_post_id, id, parent_comment, creation_time, content, upvotes, downvotes)
     VALUES (2, 130, 10, 4, 1496636666,
-			'aaaa lloooooffff teeeext', 9, 3);
+			'Second level nesting of comment 3(under 4)', 9, 3);
 
 INSERT INTO comment
     (creator, under_post_id, id, parent_comment, creation_time, content, upvotes, downvotes)
     VALUES (2, 130, 11, 10, 1496636666,
-			'aaaa lloooooffff teeeext', 9, 3);
+			'Third level nesting of comment (3 -> 4 -> 10)', 9, 3);
 
 INSERT INTO comment
     (creator, under_post_id, id, parent_comment, creation_time, content, upvotes, downvotes)
     VALUES (2, 130, 12, 1, 1496636666,
-			'aaaa lloooooffff teeeext', 9, 3);
+			'First level nesting of comment 1', 9, 3);
 
 INSERT INTO comment
     (creator, under_post_id, id, parent_comment, creation_time, content, upvotes, downvotes)
     VALUES (2, 130, 13, 8, 1496636666,
-			'aaaa lloooooffff teeeext', 9, 3);
+			'Third level nesting of comment (3 -> 4 -> 8)', 9, 3);
 
 INSERT INTO comment
     (creator, under_post_id, id, parent_comment, creation_time, content, upvotes, downvotes)
     VALUES (2, 130, 14, 10, 1496636666,
-			'aaaa lloooooffff teeeext', 9, 3);
+			'Third level nesting of comment (3 -> 4 -> 10)', 9, 3);
 
 
 INSERT INTO comment
     (creator, under_post_id, id, parent_comment, creation_time, content, upvotes, downvotes)
     VALUES (2, 130, 15, 12, 1496636666,
-      			'aaaa lloooooffff teeeext', 9, 3);
+      			'Second level nesting of comment 1(under 12)', 9, 3);
 
 INSERT INTO job_post
     (creator, id, creation_time, title, content, web_link)
