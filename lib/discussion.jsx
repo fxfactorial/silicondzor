@@ -81,10 +81,11 @@ export default class SDDiscussion extends Component {
       upvotes, id
     } = localStore.current_post_data;
     //
-    const renderComments = store.current_comments.map((value, idx) => (
-      <div key={idx}>
-        <Comment {...value} />
-      </div>
+    const renderComments = !store.current_comments ? null :
+    store.current_comments.map((value, idx) => (
+        <div key={idx}>
+          <Comment {...value} />
+        </div>
     ));
 
     const byline = (
