@@ -28,8 +28,8 @@ const translateAll = require('./yandex-translate');
 
 const email_verify_link = identifier =>
       env.production
-      ? `http://localhost:9090/verify-account/${identifier}`
-      : `http://silicondzor.com/verify-account/${identifier}`;
+      ? `http://silicondzor.com/verify-account/${identifier}`
+      : `http://localhost:9090/verify-account/${identifier}`;
 
 const email_transporter =
       email_password !== null
